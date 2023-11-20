@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "82476075413",
+    "firebase_url": "https://point-1ca6a-default-rtdb.firebaseio.com",
+    "project_id": "point-1ca6a",
+    "storage_bucket": "point-1ca6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:82476075413:android:6c6f30cd80205d3dc78e9c",
+        "android_client_info": {
+          "package_name": "com.example.evira"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "82476075413-e02ljupvudeevcj3hpu46pd075oee79u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAS45cz_Int5qm99swq2K2u5fFAn-QpiLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "82476075413-e02ljupvudeevcj3hpu46pd075oee79u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

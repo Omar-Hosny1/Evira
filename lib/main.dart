@@ -9,6 +9,5 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // getProductsFromDS
   runApp(const App());
 }

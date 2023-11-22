@@ -10,7 +10,7 @@ class ProductController extends GetxController {
 
   @override
   void onInit() {
-     _productRepository = ProductRepository(ProductDS());
+    _productRepository = ProductRepository(ProductDS());
     _listenAndGetProducts();
     super.onInit();
   }
@@ -25,9 +25,13 @@ class ProductController extends GetxController {
   }
 
   void _listenAndGetProducts() {
-    _productRepository.listenToProducts((data) {
-      _prods = data ?? [];
-      update([Strings.productsGetBuilderId]);
-    });
+    _productRepository.listenToProducts(
+      (data, fetchingState) {
+        _prods = data ?? _prods;
+        print('snackbar /////////////////////////');
+        Get.snackbar(fetchingState.name, fetchingState.name);
+        update([Strings.productsGetBuilderId]);
+      }
+    );
   }
 }

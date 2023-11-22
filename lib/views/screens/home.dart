@@ -9,20 +9,42 @@ import 'package:get/get.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
-  static const routeName = '/';
+  static const routeName = '/home';
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              ListTile(
+                title: const Text(
+                  'Logout'
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  'Add Blog',
+                ),
+              ),
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          centerTitle: true,
+          titleTextStyle:
+              TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
+          title: Logo(),
+        ),
         body: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: Dimens.horizontal_padding,
-              vertical: Dimens.vertical_padding),
+          padding: EdgeInsets.only(
+              left: Dimens.horizontal_padding,
+              right: Dimens.horizontal_padding,
+              bottom: Dimens.vertical_padding),
           child: Column(
             children: [
-              Logo(),
-             Toggle(),
+              Toggle(),
               GetBuilder<ProductController>(
                 id: Strings.productsGetBuilderId,
                 builder: (controller) => Expanded(

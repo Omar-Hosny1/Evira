@@ -10,7 +10,7 @@ class AuthController extends GetxController {
   }
 
 
-  signUp(User user) {
-    _authRepository.signUp(user);
+  Future<void> signUp(User user)async {
+    await _authRepository.signUp(user);
   }
 }

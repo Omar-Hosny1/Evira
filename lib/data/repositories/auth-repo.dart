@@ -5,9 +5,12 @@ class AuthRepo {
   final AuthDS authDataSource;
   AuthRepo({required this.authDataSource});
 
-  signUp(User user) {
+  Future<void> signUp(User user) async{
+    print('CALLED 2');
     try {
-      authDataSource.signUp(user);
-    } catch (e) {}
+      await authDataSource.signUp(user);
+    } catch (e) {
+      print(e);
+    }
   }
 }

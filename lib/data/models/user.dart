@@ -1,12 +1,6 @@
-enum UserDataEnum {
-  age,
-  height,
-  weight,
-  email,
-  name,
-  password,
-  token,
-}
+import 'dart:io';
+
+enum UserDataEnum { age, height, weight, email, name, password, token, image }
 
 class User {
   User({
@@ -17,6 +11,7 @@ class User {
     String? name,
     String? password,
     String? token,
+    File? image,
   }) {
     _age = age;
     _height = height;
@@ -25,6 +20,7 @@ class User {
     _name = name;
     _password = password;
     _token = token;
+    _image = image;
   }
 
   String? _name;
@@ -34,6 +30,7 @@ class User {
   int? _weight;
   int? _age;
   String? _token;
+  File? _image;
 
   Map<UserDataEnum, dynamic> getUserData() {
     return {
@@ -44,6 +41,7 @@ class User {
       UserDataEnum.name: _name,
       UserDataEnum.password: _password,
       UserDataEnum.token: _token,
+      UserDataEnum.image: _image,
     };
   }
 
@@ -73,5 +71,9 @@ class User {
 
   set token(String token) {
     _token = token;
+  }
+
+  set image(File image) {
+    _image = image;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
@@ -19,6 +20,17 @@ class Home extends StatelessWidget {
           child: ListView(
             children: [
               ListTile(
+                onTap: (){
+                  // AuthController.get.();
+                },
+                title: const Text(
+                  'Logout'
+                ),
+              ),
+              ListTile(
+                onTap: (){
+                  AuthController.get.logOut();
+                },
                 title: const Text(
                   'Logout'
                 ),

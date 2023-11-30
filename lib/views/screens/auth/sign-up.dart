@@ -8,6 +8,7 @@ import 'package:evira/utils/validations/common.dart';
 import 'package:evira/utils/validations/sign-up.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
+import 'package:evira/views/screens/auth/sign-in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,8 +16,7 @@ import 'package:image_picker/image_picker.dart';
 // ignore: must_be_immutable
 class SignUp extends StatelessWidget {
   SignUp({super.key});
-  // static const routeName = '/sign-up';
-  static const routeName = '/';
+  static const routeName = '/sign-up';
 
   // form validation
   Rx<XFile?>? _photo;
@@ -240,7 +240,7 @@ class SignUp extends StatelessWidget {
                     () => SizedBox(
                         width: double.infinity,
                         child: BaseButton(
-                          onPressed: _submit,
+                          onPressed: _isLoading.isTrue ? null : _submit,
                           text: _isLoading.isTrue ? 'Loading...' :'Sign Up',
                           textStyle: TextStyle(color: Colors.white),
                           buttonStyle: ButtonStyle(
@@ -265,6 +265,9 @@ class SignUp extends StatelessWidget {
                       width: double.infinity,
                       child: BaseButton(
                         text: 'Sign In',
+                        onPressed: (){
+                          Get.offNamed(SignIn.routeName);
+                        },
                         textStyle: TextStyle(color: Colors.black),
                         buttonStyle: ButtonStyle(
                           padding: MaterialStateProperty.all(

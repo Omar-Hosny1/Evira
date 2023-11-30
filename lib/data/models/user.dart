@@ -1,6 +1,15 @@
 import 'dart:io';
 
-enum UserDataEnum { age, height, weight, email, name, password, token, image }
+enum UserDataEnum {
+  age,
+  height,
+  weight,
+  email,
+  name,
+  password,
+  image,
+  imagePath
+}
 
 class User {
   User({
@@ -10,8 +19,8 @@ class User {
     String? email,
     String? name,
     String? password,
-    String? token,
     File? image,
+    String? imagePath,
   }) {
     _age = age;
     _height = height;
@@ -19,8 +28,8 @@ class User {
     _email = email;
     _name = name;
     _password = password;
-    _token = token;
     _image = image;
+    _imagePath = imagePath;
   }
 
   String? _name;
@@ -29,8 +38,18 @@ class User {
   int? _height;
   int? _weight;
   int? _age;
-  String? _token;
   File? _image;
+  String? _imagePath;
+
+  Map<String, dynamic> toJson() => {
+        'age': _age,
+        'height': _height,
+        'weight': _weight,
+        'email': _email,
+        'name': _name,
+        'password': _password,
+        'imagePath': _imagePath,
+      };
 
   Map<UserDataEnum, dynamic> getUserData() {
     return {
@@ -40,8 +59,8 @@ class User {
       UserDataEnum.email: _email,
       UserDataEnum.name: _name,
       UserDataEnum.password: _password,
-      UserDataEnum.token: _token,
       UserDataEnum.image: _image,
+      UserDataEnum.imagePath: _imagePath,
     };
   }
 
@@ -51,6 +70,10 @@ class User {
 
   set height(int height) {
     _height = height;
+  }
+
+  set imagePath(String imagePath) {
+    _imagePath = imagePath;
   }
 
   set weight(int weight) {
@@ -67,10 +90,6 @@ class User {
 
   set password(String password) {
     _password = password;
-  }
-
-  set token(String token) {
-    _token = token;
   }
 
   set image(File image) {

@@ -2,6 +2,7 @@ import 'package:evira/utils/binding/app-binding.dart';
 import 'package:evira/utils/constants/app_theme.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/routes/routes.dart';
+import 'package:evira/views/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,9 +16,10 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppThemeData.themeData(
         AppThemeData.lightColorScheme,
-        Color(0xFF1F1929),
+        Color.fromARGB(0, 121, 82, 184),
       ),
       initialBinding: AppBinding(),
+      initialRoute: Splash.routeName,
       getPages: Routes.routes,
     );
   }

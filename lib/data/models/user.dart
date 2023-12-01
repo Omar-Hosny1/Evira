@@ -51,6 +51,26 @@ class User {
         'imagePath': _imagePath,
       };
 
+  Map<String, dynamic> toJsonToFireStore() => {
+        'age': _age,
+        'height': _height,
+        'weight': _weight,
+        'email': _email,
+        'name': _name,
+        'imagePath': _imagePath,
+      };
+
+  factory User.fromJson(Map userData) => User(
+        age: userData['age'],
+        email: userData['email'],
+        height: userData['height'],
+        image: userData['image'],
+        imagePath: userData['imagePath'],
+        name: userData['name'],
+        password: userData['password'],
+        weight: userData['weight'],
+      );
+
   Map<UserDataEnum, dynamic> getUserData() {
     return {
       UserDataEnum.age: _age,
@@ -94,5 +114,29 @@ class User {
 
   set image(File image) {
     _image = image;
+  }
+
+  String? get getEmail {
+    return _email;
+  }
+
+  String? get getPassword {
+    return _password;
+  }
+
+  String? get getName {
+    return _name;
+  }
+
+  int? get getAge {
+    return _age;
+  }
+
+  int? get getHeight {
+    return _height;
+  }
+
+  int? get getWeight {
+    return _weight;
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:evira/controllers/auth-controller.dart';
@@ -78,19 +79,20 @@ class SignUp extends StatelessWidget {
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Gallery'),
                 onTap: () {
+                  Get.back(closeOverlays: true);
                   imgFromGallery();
-                  Get.back();
                 }),
             ListTile(
                 leading: const Icon(Icons.camera),
                 title: const Text('Camera'),
                 onTap: () {
+                  Get.back(closeOverlays: true);
                   imgFromCamera();
-                  Get.back();
                 }),
           ],
         ),
       ),
+      isDismissible: true,
     );
   }
 
@@ -241,15 +243,15 @@ class SignUp extends StatelessWidget {
                         width: double.infinity,
                         child: BaseButton(
                           onPressed: _isLoading.isTrue ? null : _submit,
-                          text: _isLoading.isTrue ? 'Loading...' :'Sign Up',
+                          text: _isLoading.isTrue ? 'Loading...' : 'Sign Up',
                           textStyle: TextStyle(color: Colors.white),
                           buttonStyle: ButtonStyle(
                             padding: MaterialStateProperty.all(
                                 EdgeInsets.symmetric(vertical: 25)),
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.black),
-                            shape:
-                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50),
                                 side: BorderSide(color: Colors.black),
@@ -265,7 +267,7 @@ class SignUp extends StatelessWidget {
                       width: double.infinity,
                       child: BaseButton(
                         text: 'Sign In',
-                        onPressed: (){
+                        onPressed: () {
                           Get.offNamed(SignIn.routeName);
                         },
                         textStyle: TextStyle(color: Colors.black),

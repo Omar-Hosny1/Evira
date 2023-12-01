@@ -19,26 +19,25 @@ class Home extends StatelessWidget {
         drawer: Drawer(
           child: ListView(
             children: [
-              ListTile(
-                onTap: (){
-                  // AuthController.get.();
-                },
-                title: const Text(
-                  'Logout'
+              Obx(
+                () => ListTile(
+                  onTap: () {
+                    // AuthController.get.();
+                  },
+                  title: Text(AuthController.get.userData?.getName ?? 'N/A'),
                 ),
               ),
               ListTile(
-                onTap: (){
+                onTap: () {
                   AuthController.get.logOut();
                 },
-                title: const Text(
-                  'Logout'
-                ),
+                title: const Text('Logout'),
               ),
               ListTile(
-                title: const Text(
-                  'Add Blog',
-                ),
+                onTap: () {
+                  AuthController.get.logOut();
+                },
+                title: const Text('Logout'),
               ),
             ],
           ),
@@ -46,30 +45,32 @@ class Home extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           titleTextStyle:
-              TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
-          title: Logo(),
+              const TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
+          title: const Logo(),
         ),
-        body: Container(
-          padding: EdgeInsets.only(
-              left: Dimens.horizontal_padding,
-              right: Dimens.horizontal_padding,
-              bottom: Dimens.vertical_padding),
+        body: Padding(
+          padding: const EdgeInsets.only(
+            left: Dimens.horizontal_padding,
+            right: Dimens.horizontal_padding,
+            bottom: Dimens.vertical_padding,
+          ),
           child: Column(
             children: [
               Toggle(),
-              GetBuilder<ProductController>(
-                id: Strings.productsGetBuilderId,
-                builder: (controller) => Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 4 / 7),
+              Expanded(
+                child: GetBuilder<ProductController>(
+                  id: Strings.productsGetBuilderId,
+                  builder: (controller) => GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 4 / 7,
+                    ),
                     itemCount: controller.products.length,
-                    itemBuilder: (context, index) {
-                      return ProductView(product: controller.products[index]);
-                    },
+                    itemBuilder: (context, index) => ProductView(
+                      product: controller.products[index],
+                    ),
                   ),
                 ),
               ),

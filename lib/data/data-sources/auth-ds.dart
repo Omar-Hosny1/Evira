@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:evira/utils/constants/strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart' as U;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,47 +42,36 @@ class AuthDS {
     }
   }
 
-  Future<void> _saveDataInPrefs(Object userData) async {
-    try {
-      final SP = await SharedPreferences.getInstance();
-      final encodedData = json.encode(userData);
-      final isSavedSuccessfully =
-          await SP.setString(Strings.userDataKeySharedPrefrences, encodedData);
-      if (isSavedSuccessfully == false) {
-        throw Exception('Data Can\'t Saved Locally in this Device');
-      }
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future _addUserToFireStore(U.User user) async {
     try {
-      return await _usersCollection.add(user.toJson());
+      return await _usersCollection.add(user.toJsonToFireStore());
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> signIn(String email, String password) async {
+  Future<Object> getUserDatafromFireStore(String email) async {
+    final userDataSnapShot = await _usersCollection
+        .where(
+          'email',
+          isEqualTo: email,
+        )
+        .get();
+    final userData = userDataSnapShot.docs[0].data();
+    if (userData == null) {
+      throw FirebaseException(plugin: 'Can\'t find The User Data');
+    }
+    return userData;
+  }
+
+  Future<void> signIn(
+    String email,
+    String password,
+    Future<void> Function(Object userData) saveInPrefs,
+  ) async {
     try {
-      final userDataSnapShot =
-          await _usersCollection.where('email', isEqualTo: email).get();
-      final userData = userDataSnapShot.docs[0].data();
-      if (userData == null) {
-        throw FirebaseException(plugin: 'Can\'t find The User Data');
-      }
-      await _saveDataInPrefs(userData);
-      final userDataAsMap = userData as Map;
-      _currentUserData = U.User(
-        imagePath: userDataAsMap['imagePath'],
-        password: userDataAsMap['password'],
-        age: userDataAsMap['age'],
-        name: userDataAsMap['name'],
-        weight: userDataAsMap['weight'],
-        email: userDataAsMap['email'],
-        height: userDataAsMap['height'],
-      );
+      final userData = await getUserDatafromFireStore(email);
+      await saveInPrefs(userData as Map);
       await _authInstance.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -94,19 +81,29 @@ class AuthDS {
     }
   }
 
+  Future<bool> _isUserAlreadyExist(String email) async {
+    final userQuerySnapshot =
+        await _usersCollection.where('email', isEqualTo: email).get();
+    if (userQuerySnapshot.docs.length.isEqual(0)) {
+      return false;
+    }
+    return true;
+  }
+
   Future<void> signUp(U.User user) async {
-    final userData = user.getUserData();
     try {
+      final userData = user.getUserData();
+      final isUserAlreadyExist = await _isUserAlreadyExist(user.getEmail!);
+      print('******* isUserAlreadyExist *******');
+      print(isUserAlreadyExist);
+      if (isUserAlreadyExist == true) {
+        throw FirebaseAuthException(code: 'email-already-in-use');
+      }
       final fileUrl = await _uploadFile(userData[U.UserDataEnum.image]);
       user.imagePath = fileUrl;
       await _addUserToFireStore(user);
-      
-      await _signUpWithEmailAndPassword(
-        userData[U.UserDataEnum.email],
-        userData[U.UserDataEnum.password],
-      );
 
-      await signIn(
+      await _signUpWithEmailAndPassword(
         userData[U.UserDataEnum.email],
         userData[U.UserDataEnum.password],
       );

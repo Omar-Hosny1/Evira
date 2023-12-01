@@ -1,3 +1,4 @@
+import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/validations/common.dart';
 import 'package:evira/views/components/base/base-button.dart';
@@ -6,21 +7,26 @@ import 'package:evira/views/screens/auth/sign-up.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class SignIn extends StatelessWidget {
   SignIn({super.key});
   static const routeName = '/sign-in';
   String _enteredPassword = '';
   String _enteredEmail = '';
-  
+
   final _isLoading = false.obs;
   final _formKey = GlobalKey<FormState>();
 
-  _submit() {
+  _submit() async {
     final isValid = _formKey.currentState?.validate();
-
     if (isValid != true) {
       return;
     }
+
+    _formKey.currentState?.save();
+    _isLoading.value = true;
+    await AuthController.get.signIn(_enteredEmail, _enteredPassword);
+    _isLoading.value = false;
   }
 
   @override

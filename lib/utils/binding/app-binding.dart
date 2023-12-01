@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class AppBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<ProductController>(() => ProductController());
+    Get.lazyPut<ProductController>(() => ProductController(), fenix: true);
     Get.put(AuthController(), permanent: true);
   }
 }

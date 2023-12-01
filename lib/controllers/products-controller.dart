@@ -11,8 +11,21 @@ class ProductController extends GetxController {
   @override
   void onInit() {
     _productRepository = ProductRepository(ProductDS());
+    print('*************** GETTING THE PRODUCTS ***************');
     _listenAndGetProducts();
     super.onInit();
+  }
+
+  @override
+  Future onReady() async {
+    // time to open some resources
+    print('****************** READY **************');
+  }
+
+  @override
+  void onClose() {
+    // time to close some resources and to do other cleanings
+    print('****************** CLOSED **************');
   }
 
   List<Product> get products {
@@ -25,13 +38,11 @@ class ProductController extends GetxController {
   }
 
   void _listenAndGetProducts() {
-    _productRepository.listenToProducts(
-      (data, fetchingState) {
-        _prods = data ?? _prods;
-        print('snackbar /////////////////////////');
-        Get.snackbar(fetchingState.name, fetchingState.name);
-        update([Strings.productsGetBuilderId]);
-      }
-    );
+    _productRepository.listenToProducts((data, fetchingState) {
+      _prods = data ?? _prods;
+      print('snackbar /////////////////////////');
+      Get.snackbar(fetchingState.name, fetchingState.name);
+      update([Strings.productsGetBuilderId]);
+    });
   }
 }

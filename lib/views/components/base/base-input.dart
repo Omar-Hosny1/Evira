@@ -24,7 +24,9 @@ class BaseInput extends StatelessWidget {
       cursorColor: Colors.white,
       keyboardType: keyboardType,
       obscureText: isPassword ?? false,
+      
       decoration: InputDecoration(
+        prefixIcon: isPassword == true ? Icon(Icons.remove_red_eye_outlined,) : null,
         errorBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.red,
@@ -35,9 +37,7 @@ class BaseInput extends StatelessWidget {
           ),
         ),
         hintText: label,
-        // hintStyle: const TextStyle(
-        //   color: SecondaryColor,
-        // ),
+      
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.black,

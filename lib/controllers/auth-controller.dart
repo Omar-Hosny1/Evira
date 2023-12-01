@@ -1,6 +1,7 @@
 import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/data/repositories/auth-repo.dart';
+import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/views/screens/auth/sign-up.dart';
 import 'package:evira/views/screens/home.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,7 @@ import 'package:get/get.dart';
 class AuthController extends GetxController {
   late final AuthRepo _authRepository;
   static AuthController get get => Get.find();
-  Rx<User?> _userData = Rx(null);
+  final Rx<User?> _userData = Rx(null);
 
   User? get userData {
     return _userData.value;
@@ -25,12 +26,22 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUp(User user) async {
-    await _authRepository.signUp(user);
-    await _getUserDataFromPrefsAndSetCurrentUserData();
+    try {
+      await _authRepository.signUp(user);
+      await _getUserDataFromPrefsAndSetCurrentUserData();
+    } catch (e) {
+      print('************* SHOWING SNACKBAR *************');
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', 'e.toString()');
+    }
   }
 
   Future<void> signIn(String email, String password) async {
-    await _authRepository.signIn(email, password);
+    try {
+      await _authRepository.signIn(email, password);
+    } catch (e) {
+      print('************* SHOWING SNACKBAR *************');
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', 'e.toString()');
+    }
   }
 
   Future<void> _getUserDataFromPrefsAndSetCurrentUserData() async {
@@ -45,7 +56,6 @@ class AuthController extends GetxController {
         Get.offAllNamed(SignUp.routeName);
         return;
       }
-      print('***************** LOGGED IN *****************');
       await _getUserDataFromPrefsAndSetCurrentUserData();
       Get.offAllNamed(Home.routeName);
     });

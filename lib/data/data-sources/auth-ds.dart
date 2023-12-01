@@ -22,11 +22,15 @@ class AuthDS {
     String email,
     String password,
   ) async {
-    final credential = await _authInstance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return credential;
+    try {
+      final credential = await _authInstance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return credential;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<String> _uploadFile(File photo) async {
@@ -51,17 +55,21 @@ class AuthDS {
   }
 
   Future<Object> getUserDatafromFireStore(String email) async {
-    final userDataSnapShot = await _usersCollection
-        .where(
-          'email',
-          isEqualTo: email,
-        )
-        .get();
-    final userData = userDataSnapShot.docs[0].data();
-    if (userData == null) {
-      throw FirebaseException(plugin: 'Can\'t find The User Data');
+    try {
+      final userDataSnapShot = await _usersCollection
+          .where(
+            'email',
+            isEqualTo: email,
+          )
+          .get();
+      final userData = userDataSnapShot.docs[0].data();
+      if (userData == null) {
+        throw FirebaseException(plugin: 'Can\'t find The User Data');
+      }
+      return userData;
+    } catch (e) {
+      rethrow;
     }
-    return userData;
   }
 
   Future<void> signIn(
@@ -82,12 +90,16 @@ class AuthDS {
   }
 
   Future<bool> _isUserAlreadyExist(String email) async {
-    final userQuerySnapshot =
-        await _usersCollection.where('email', isEqualTo: email).get();
-    if (userQuerySnapshot.docs.length.isEqual(0)) {
-      return false;
+    try {
+      final userQuerySnapshot =
+          await _usersCollection.where('email', isEqualTo: email).get();
+      if (userQuerySnapshot.docs.length.isEqual(0)) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      rethrow;
     }
-    return true;
   }
 
   Future<void> signUp(U.User user) async {
@@ -97,7 +109,7 @@ class AuthDS {
       print('******* isUserAlreadyExist *******');
       print(isUserAlreadyExist);
       if (isUserAlreadyExist == true) {
-        throw FirebaseAuthException(code: 'email-already-in-use');
+        throw FirebaseAuthException(code: 'email-already-exists');
       }
       final fileUrl = await _uploadFile(userData[U.UserDataEnum.image]);
       user.imagePath = fileUrl;
@@ -107,16 +119,7 @@ class AuthDS {
         userData[U.UserDataEnum.email],
         userData[U.UserDataEnum.password],
       );
-    }
-    // on FirebaseAuthException catch (e) {
-    //   var errMsg = 'Something Went Wrong';
-    //   if (e.code == 'weak-password') {
-    //     errMsg = 'The password provided is too weak.';
-    //   } else if (e.code == 'email-already-in-use') {
-    //     errMsg = 'The account already exists for that email.';
-    //   }
-    // }
-    catch (e) {
+    } catch (e) {
       rethrow;
     }
   }

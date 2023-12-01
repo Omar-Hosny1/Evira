@@ -2,6 +2,7 @@ import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
+import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/views/components/logo.dart';
 import 'package:evira/views/components/product.dart';
 import 'package:evira/views/components/toggle.dart';
@@ -14,6 +15,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
@@ -22,6 +24,7 @@ class Home extends StatelessWidget {
               Obx(
                 () => ListTile(
                   onTap: () {
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', "e.toString()");
                     // AuthController.get.();
                   },
                   title: Text(AuthController.get.userData?.getName ?? 'N/A'),

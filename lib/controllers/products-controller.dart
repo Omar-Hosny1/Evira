@@ -41,7 +41,7 @@ class ProductController extends GetxController {
     _productRepository.listenToProducts((data, fetchingState) {
       _prods = data ?? _prods;
       print('snackbar /////////////////////////');
-      Get.snackbar(fetchingState.name, fetchingState.name);
+      // Get.snackbar(fetchingState.name, fetchingState.name);
       update([Strings.productsGetBuilderId]);
     });
   }

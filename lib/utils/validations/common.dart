@@ -7,7 +7,7 @@ String? validateEmail(String? value) {
   if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$').hasMatch(value)) {
     return 'Invalid email format';
   }
-
+  
   return null;
 }
 
@@ -24,4 +24,3 @@ String? validatePassword(String? value) {
 
   return null;
 }
-

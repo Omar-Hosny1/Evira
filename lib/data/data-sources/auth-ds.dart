@@ -75,15 +75,16 @@ class AuthDS {
   Future<void> signIn(
     String email,
     String password,
-    Future<void> Function(Object userData) saveInPrefs,
+    Future<void> Function(Object userData, String token) saveInPrefs,
   ) async {
     try {
-      final userData = await getUserDatafromFireStore(email);
-      await saveInPrefs(userData as Map);
-      await _authInstance.signInWithEmailAndPassword(
+      final credentials = await _authInstance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      final userData = await getUserDatafromFireStore(email);
+      final token = await credentials.user!.getIdToken();
+      await saveInPrefs(userData as Map, token!);
     } catch (e) {
       rethrow;
     }
@@ -105,27 +106,22 @@ class AuthDS {
   Future<void> signUp(U.User user) async {
     try {
       final userData = user.getUserData();
-      final isUserAlreadyExist = await _isUserAlreadyExist(user.getEmail!);
-      print('******* isUserAlreadyExist *******');
-      print(isUserAlreadyExist);
-      if (isUserAlreadyExist == true) {
-        throw FirebaseAuthException(code: 'email-already-exists');
-      }
-      final fileUrl = await _uploadFile(userData[U.UserDataEnum.image]);
-      user.imagePath = fileUrl;
-      await _addUserToFireStore(user);
+      // final isUserAlreadyExist = await _isUserAlreadyExist(user.getEmail!);
+      // if (isUserAlreadyExist == true) {
+      //   throw FirebaseAuthException(code: 'email-already-exists');
+      // }
 
       await _signUpWithEmailAndPassword(
         userData[U.UserDataEnum.email],
         userData[U.UserDataEnum.password],
       );
+      final fileUrl = await _uploadFile(userData[U.UserDataEnum.image]);
+      user.imagePath = fileUrl;
+      await _addUserToFireStore(user);
     } catch (e) {
       rethrow;
     }
   }
-
-  void listenToUserStates(void Function(User?)? onData) =>
-      _authInstance.authStateChanges().listen(onData);
 
   Future<void> signOut() async {
     await _authInstance.signOut();

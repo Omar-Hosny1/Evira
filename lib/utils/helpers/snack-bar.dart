@@ -20,9 +20,15 @@ showSnackbar(SnackbarState snackbarState, String title, String subTitle) {
   Get.snackbar(
     title,
     subTitle,
+    colorText:
+        snackbarState == SnackbarState.wait ? Colors.black : Colors.white,
     snackPosition: SnackPosition.BOTTOM,
-    colorText: Colors.white,
+    borderRadius: 10,
+    icon: const Icon(Icons.message, color: Colors.white),
+    snackStyle: SnackStyle.FLOATING,
+    duration: const Duration(seconds: 5),
     backgroundColor: _getSnackbarStateColor(snackbarState),
-    margin: const EdgeInsets.all(5),
+    padding: const EdgeInsets.all(10),
+    margin: const EdgeInsets.all(15),
   );
 }

@@ -8,7 +8,9 @@ enum UserDataEnum {
   name,
   password,
   image,
-  imagePath
+  imagePath,
+  token,
+  tokenExpiresIn
 }
 
 class User {
@@ -21,6 +23,8 @@ class User {
     String? password,
     File? image,
     String? imagePath,
+    String? token,
+    String? tokenExpiresIn,
   }) {
     _age = age;
     _height = height;
@@ -30,6 +34,8 @@ class User {
     _password = password;
     _image = image;
     _imagePath = imagePath;
+    _token = token;
+    _tokenExpiresIn = tokenExpiresIn;
   }
 
   String? _name;
@@ -40,6 +46,8 @@ class User {
   int? _age;
   File? _image;
   String? _imagePath;
+  String? _token;
+  String? _tokenExpiresIn;
 
   Map<String, dynamic> toJson() => {
         'age': _age,
@@ -69,6 +77,8 @@ class User {
         name: userData['name'],
         password: userData['password'],
         weight: userData['weight'],
+        token: userData['token'],
+        tokenExpiresIn: userData['tokenExpiresIn'],
       );
 
   Map<UserDataEnum, dynamic> getUserData() {
@@ -81,6 +91,8 @@ class User {
       UserDataEnum.password: _password,
       UserDataEnum.image: _image,
       UserDataEnum.imagePath: _imagePath,
+      UserDataEnum.token: _token,
+      UserDataEnum.tokenExpiresIn: _tokenExpiresIn,
     };
   }
 
@@ -116,6 +128,14 @@ class User {
     _image = image;
   }
 
+  set token(String token) {
+    _token = token;
+  }
+
+  set tokenExpiresIn(String tokenExpiresIn) {
+    _tokenExpiresIn = tokenExpiresIn;
+  }
+
   String? get getEmail {
     return _email;
   }
@@ -138,5 +158,17 @@ class User {
 
   int? get getWeight {
     return _weight;
+  }
+
+  String? get getImagePath {
+    return _imagePath;
+  }
+
+  String? get getToken {
+    return _token;
+  }
+
+  String? get getTokenExpiresIn {
+    return _tokenExpiresIn;
   }
 }

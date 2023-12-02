@@ -1,9 +1,8 @@
-import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/views/components/logo.dart';
+import 'package:evira/views/components/main-drawer.dart';
 import 'package:evira/views/components/product.dart';
 import 'package:evira/views/components/toggle.dart';
 import 'package:flutter/material.dart';
@@ -15,36 +14,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              Obx(
-                () => ListTile(
-                  onTap: () {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', "e.toString()");
-                    // AuthController.get.();
-                  },
-                  title: Text(AuthController.get.userData?.getName ?? 'N/A'),
-                ),
-              ),
-              ListTile(
-                onTap: () {
-                  AuthController.get.logOut();
-                },
-                title: const Text('Logout'),
-              ),
-              ListTile(
-                onTap: () {
-                  AuthController.get.logOut();
-                },
-                title: const Text('Logout'),
-              ),
-            ],
-          ),
-        ),
+        drawer: const MainDrawer(),
         appBar: AppBar(
           centerTitle: true,
           titleTextStyle:
@@ -64,7 +36,8 @@ class Home extends StatelessWidget {
                 child: GetBuilder<ProductController>(
                   id: Strings.productsGetBuilderId,
                   builder: (controller) => GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 16,
                       crossAxisSpacing: 10,

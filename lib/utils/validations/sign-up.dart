@@ -20,6 +20,9 @@ String? validateName(String? value) {
   if (value == null || value.isEmpty) {
     return 'Name is required';
   }
+  if(value.length > 14){
+    return 'The Name Should not Exceed 14 Charachter Length';
+  }
   return null;
 }
 

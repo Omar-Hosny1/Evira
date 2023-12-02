@@ -20,7 +20,7 @@ class SignUp extends StatelessWidget {
   static const routeName = '/sign-up';
 
   // form validation
-  Rx<XFile?>? _photo;
+  final Rx<XFile?> _photo = Rx(null);
 
   final ImagePicker _picker = ImagePicker();
 
@@ -37,13 +37,13 @@ class SignUp extends StatelessWidget {
     if (isValid != true) {
       return;
     }
-    if (_photo == null || _photo!.value == null) {
+    if (_photo.value == null) {
       _photoErrMsg.value = 'Please Pick up an profile image';
       return;
     }
 
     _photoErrMsg.value = '';
-    _enteredUserData.image = File(_photo!.value!.path);
+    _enteredUserData.image = File(_photo.value!.path);
 
     _formKey.currentState?.save();
     final authController = Get.find<AuthController>();
@@ -54,7 +54,7 @@ class SignUp extends StatelessWidget {
 
   Future imgFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    _photo = pickedFile.obs;
+    _photo.value = pickedFile;
     if (pickedFile != null) {
       _photoErrMsg.value = '';
     }
@@ -62,7 +62,7 @@ class SignUp extends StatelessWidget {
 
   Future imgFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-    _photo = pickedFile.obs;
+    _photo.value = pickedFile;
     if (pickedFile != null) {
       _photoErrMsg.value = '';
     }
@@ -208,16 +208,25 @@ class SignUp extends StatelessWidget {
                           ),
                         ),
                       )),
-                  // if (_photo != null)
-                  //   Obx(
-                  //     () {
-                  //       return TextButton(
-                  //           onPressed: () {
+                  Obx(
+                    () {
+                      if (_photo.value == null) {
+                        return const SizedBox();
+                      }
 
-                  //           },
-                  //           child: Text('See The Selected Image'));
-                  //     },
-                  //   ),
+                      return TextButton(
+                          onPressed: () {
+                            Get.bottomSheet(
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                padding: const EdgeInsets.all(10),
+                                child: Image.file(File(_photo.value!.path)),
+                              ),
+                            );
+                          },
+                          child: Text('See The Selected Image'));
+                    },
+                  ),
                   Obx(
                     () {
                       if (_photoErrMsg.value == '') {

@@ -4,43 +4,55 @@ import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:firebase_auth/firebase_auth.dart' as FA;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
   final AuthDS authDataSource;
   AuthRepo({required this.authDataSource});
 
-  listenToUserStates(void Function(FA.User?)? onData) {
-    authDataSource.listenToUserStates(onData);
-  }
-
   Future<void> cleanUserDataFromSharedPrefs() async {
     await errorHandler(tryLogic: () async {
       final sharedPreferences = await SharedPreferences.getInstance();
-      await sharedPreferences.remove(Strings.userDataKeySharedPrefrences);
+      final isRemoved = await sharedPreferences.remove(Strings.userDataKeySharedPrefrences);
+      print('************* sharedPreferences.remove isRemoved *************');
+      print(isRemoved);
     });
   }
 
-  Future<User> getUserDataFromSharedPrefs() async {
+  Future<User?> getUserDataFromSharedPrefs() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final getedUserData = sharedPreferences.getString(
       Strings.userDataKeySharedPrefrences,
     );
-    return User.fromJson(json.decode(getedUserData!));
+    if (getedUserData == null) {
+      print('************* CANT FIND USER DATA *************');
+      return null;
+    }
+    print('******************* GETTED USER DATA *******************');
+    print(User.fromJson(json.decode(getedUserData)).getUserData());
+    return User.fromJson(json.decode(getedUserData));
   }
 
-  Future<void> _saveUserDataInPrefs(Object userData) async {
+  Future<void> _saveUserDataInPrefs(Object userData, String token) async {
     await errorHandler(tryLogic: () async {
+      print('************_saveUserDataInPrefs Called ************');
       final sharedPreferences = await SharedPreferences.getInstance();
-      final encodedData = json.encode(userData);
+      final userDataAsMap = (userData as Map);
+      userDataAsMap['token'] = token;
+      userDataAsMap['tokenExpiresIn'] =
+          DateTime.now().add(Duration(hours: 1)).toIso8601String();
+      final encodedData = json.encode(userDataAsMap);
+      print('******************** encodedData ********************');
+      print(encodedData);
       final isSavedSuccessfully = await sharedPreferences.setString(
         Strings.userDataKeySharedPrefrences,
         encodedData,
       );
       if (isSavedSuccessfully == false) {
+        print('***************** isSavedSuccessfully *****************');
         throw Exception('Data Can\'t Saved Locally in this Device');
       }
+        print('***************** isSavedSuccessfully = TRUE *****************');
     });
   }
 
@@ -60,7 +72,6 @@ class AuthRepo {
   Future<void> signUp(User user) async {
     await errorHandler(tryLogic: () async {
       await authDataSource.signUp(user);
-      await signIn(user.getEmail!, user.getPassword!);
     });
   }
 }

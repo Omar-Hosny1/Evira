@@ -3,6 +3,7 @@ import 'package:evira/views/screens/auth/sign-up.dart';
 import 'package:evira/views/screens/home.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:evira/views/screens/splash.dart';
+import 'package:evira/views/screens/wishlist.dart';
 import 'package:get/get.dart';
 
 class Routes {
@@ -27,6 +28,10 @@ class Routes {
     GetPage(
       name: Splash.routeName,
       page: () => Splash(),
+    ),
+    GetPage(
+      name: Wishlist.routeName,
+      page: () => Wishlist(),
     ),
   ];
 }

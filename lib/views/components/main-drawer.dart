@@ -1,6 +1,8 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/views/components/user-list-tile.dart';
+import 'package:evira/views/screens/wishlist.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -19,9 +21,10 @@ class MainDrawer extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-              AuthController.get.logOut();
+              Get.back(closeOverlays: true);
+              Get.toNamed(Wishlist.routeName);
             },
-            title: const Text('Logout'),
+            title: const Text('Wishlist'),
           ),
         ],
       ),

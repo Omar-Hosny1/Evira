@@ -1,4 +1,5 @@
 import 'package:evira/controllers/products-controller.dart';
+import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/logo.dart';
@@ -34,6 +35,10 @@ class Home extends StatelessWidget {
               Toggle(),
               Expanded(
                 child: GetBuilder<ProductController>(
+                  initState: (_) async {
+                    await WishlistController.get.getUserWishlistFromRepo();
+                    print('SHOW NOW');
+                  },
                   id: Strings.productsGetBuilderId,
                   builder: (controller) => GridView.builder(
                     gridDelegate:
@@ -46,6 +51,8 @@ class Home extends StatelessWidget {
                     itemCount: controller.products.length,
                     itemBuilder: (context, index) => ProductView(
                       product: controller.products[index],
+                      isFavourite: WishlistController.get.currentUserWishlist!.wishlist[controller.products[index].id.toString()] == true,
+                      
                     ),
                   ),
                 ),

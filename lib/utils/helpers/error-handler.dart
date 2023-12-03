@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> errorHandler({required Function tryLogic}) async {
+Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
   try {
-    await tryLogic();
+    return await tryLogic();
   } on FirebaseAuthException catch (e) {
     print('******************** Firebase Error Message ********************');
     print(e.code);

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 class ProductController extends GetxController {
   late final ProductRepository _productRepository;
   List<Product> _prods = [];
+  static ProductController get get => Get.find();
 
   @override
   void onInit() {
@@ -35,6 +36,16 @@ class ProductController extends GetxController {
   Future<Product?> getProduct(int id) async {
     final product = await _productRepository.getProductById(id);
     return product;
+  }
+
+  List<Product> getWishlistProducts(Map<String, bool> ids) {
+    final List<Product> wishlistProducts = [];
+    for (var i = 0; i < _prods.length; i++) {
+      if (ids[_prods[i].id.toString()] == true) {
+        wishlistProducts.add(_prods[i]);
+      }
+    }
+    return wishlistProducts;
   }
 
   void _listenAndGetProducts() {

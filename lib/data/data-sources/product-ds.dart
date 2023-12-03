@@ -9,9 +9,6 @@ class ProductDS {
   static final ProductDS _dataSource = ProductDS._privateConstructor();
 
   FirebaseDatabase database = FirebaseDatabase.instance;
-  final StreamController<List<Object?>?> _dataController =
-      StreamController<List<Object?>?>();
-  Stream<List<Object?>?> get onData => _dataController.stream;
 
   factory ProductDS() {
     return _dataSource;

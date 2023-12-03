@@ -1,3 +1,6 @@
+import 'package:evira/controllers/auth-controller.dart';
+import 'package:evira/controllers/wishlist-controller.dart';
+import 'package:evira/data/data-sources/wishlist-ds.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,7 +8,9 @@ import '../../data/models/product.dart';
 
 class ProductView extends StatelessWidget {
   final Product product;
-  const ProductView({super.key, required this.product});
+  final bool isFavourite;
+  const ProductView(
+      {super.key, required this.product, required this.isFavourite});
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +36,25 @@ class ProductView extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  child: Icon(
-                    Icons.favorite_outline_rounded,
-                    size: 30,
-                  ),
                   top: 5,
                   left: 5,
+                  child: InkWell(
+                    onTap: () {
+                      if (isFavourite == true) {
+                        WishlistController.get
+                            .removeFromWishlist(product.id.toString());
+                        return;
+                      }
+                      WishlistController.get
+                          .addToWishlist(product.id.toString());
+                    },
+                    child: Icon(
+                      isFavourite == true
+                          ? Icons.favorite_rounded
+                          : Icons.favorite_outline_outlined,
+                      size: 30,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -47,7 +65,6 @@ class ProductView extends StatelessWidget {
               style: TextStyle(),
               textAlign: TextAlign.center,
             ),
-
             Text("${product.price} EGP"),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 15),

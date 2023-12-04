@@ -1,15 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evira/controllers/auth-controller.dart';
-import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:get/get.dart';
 
 class WishlistDS {
   final CollectionReference _wishlistCollection =
       FirebaseFirestore.instance.collection(Strings.wishlistCollectionName);
-
-  final User? userData = AuthController.get.userData;
-
   Future<QueryDocumentSnapshot<Object?>?> getUserWishlist(
     String userEmail,
   ) async {

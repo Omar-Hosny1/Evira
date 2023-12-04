@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
+import 'package:evira/data/data-sources/cart-ds.dart';
+import 'package:evira/data/repositories/cart-repo.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,31 +44,31 @@ class ProductView extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                    top: 5,
-                    left: 5,
-                    child: InkWell(
-                      onTap: () async {
-                        if (isFavourite.isTrue == true) {
-                          await WishlistController.get.removeFromWishlist(
-                              product.id.toString(), onDone: () {
-                            isFavourite.value = false;
-                          });
-                          return;
-                        }
-                        await WishlistController.get.addToWishlist(
-                            product.id.toString(),
-                            onDone: () => isFavourite.value = true);
-                      },
-                      child: Obx(
-                        () => Icon(
-                          isFavourite.isTrue == true
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_outline_outlined,
-                          size: 30,
-                        ),
+                  top: 5,
+                  left: 5,
+                  child: InkWell(
+                    onTap: () async {
+                      if (isFavourite.isTrue == true) {
+                        await WishlistController.get.removeFromWishlist(
+                            product.id.toString(), onDone: () {
+                          isFavourite.value = false;
+                        });
+                        return;
+                      }
+                      await WishlistController.get.addToWishlist(
+                          product.id.toString(),
+                          onDone: () => isFavourite.value = true);
+                    },
+                    child: Obx(
+                      () => Icon(
+                        isFavourite.isTrue == true
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_outline_outlined,
+                        size: 30,
                       ),
                     ),
                   ),
+                ),
               ],
             ),
             Text(
@@ -86,7 +88,12 @@ class ProductView extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.zero),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  await CartRepo(CartDS())
+                      .removeFromCartFromRepo(product.id.toString());
+                  // await CartRepo(CartDS())
+                      // .addToCartFromRepo(product.id.toString());
+                },
                 child: Text('Cart', style: TextStyle(color: Colors.white)),
               ),
             ),

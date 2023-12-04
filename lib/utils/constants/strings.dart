@@ -7,9 +7,12 @@ class Strings {
   static const String bucketFireStorageName = "usersPictures";
   static const String userCollectionName = "usersData";
   static const String wishlistCollectionName = "wishlistData";
+  static const String cartCollectionName = "cartData";
   static const String userDataKeySharedPrefrences = "userData";
   static const String userEmailKeyForWishlistDocument = "email";
   static const String productsMapKeyForWishlistDocument = "wishlist";
+  static const String userEmailKeyForCartDocument = "email";
+  static const String productsMapKeyForCartDocument = "cart";
 
 
 }

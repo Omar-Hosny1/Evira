@@ -73,7 +73,8 @@ class WishlistDS {
       print(currentWishlist);
       ;
       currentWishlist.remove(productId);
-      print('****************** currentWishlist AFTER DELETE ******************');
+      print(
+          '****************** currentWishlist AFTER DELETE ******************');
       print(currentWishlist);
       await _wishlistCollection.doc(userWishlist.id).update(
         {Strings.productsMapKeyForWishlistDocument: currentWishlist},

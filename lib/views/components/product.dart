@@ -1,16 +1,20 @@
-import 'package:evira/controllers/auth-controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
-import 'package:evira/data/data-sources/wishlist-ds.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../data/models/product.dart';
 
+// ignore: must_be_immutable
 class ProductView extends StatelessWidget {
   final Product product;
-  final bool isFavourite;
-  const ProductView(
-      {super.key, required this.product, required this.isFavourite});
+  Rx<bool?> isFavourite = Rx(null);
+
+  ProductView({
+    super.key,
+    required this.product,
+    required this.isFavourite,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,31 +35,38 @@ class ProductView extends StatelessWidget {
               children: [
                 AspectRatio(
                   aspectRatio: 4 / 5,
-                  child: Image.network(
-                    product.imageUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: product.imageUrl,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
                 Positioned(
-                  top: 5,
-                  left: 5,
-                  child: InkWell(
-                    onTap: () {
-                      if (isFavourite == true) {
-                        WishlistController.get
-                            .removeFromWishlist(product.id.toString());
-                        return;
-                      }
-                      WishlistController.get
-                          .addToWishlist(product.id.toString());
-                    },
-                    child: Icon(
-                      isFavourite == true
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_outline_outlined,
-                      size: 30,
+                    top: 5,
+                    left: 5,
+                    child: InkWell(
+                      onTap: () async {
+                        if (isFavourite.isTrue == true) {
+                          await WishlistController.get.removeFromWishlist(
+                              product.id.toString(), onDone: () {
+                            isFavourite.value = false;
+                          });
+                          return;
+                        }
+                        await WishlistController.get.addToWishlist(
+                            product.id.toString(),
+                            onDone: () => isFavourite.value = true);
+                      },
+                      child: Obx(
+                        () => Icon(
+                          isFavourite.isTrue == true
+                              ? Icons.favorite_rounded
+                              : Icons.favorite_outline_outlined,
+                          size: 30,
+                        ),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
             Text(

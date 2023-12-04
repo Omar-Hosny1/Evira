@@ -10,7 +10,8 @@ enum UserDataEnum {
   image,
   imagePath,
   token,
-  tokenExpiresIn
+  tokenExpiresIn,
+  gender
 }
 
 class User {
@@ -25,6 +26,7 @@ class User {
     String? imagePath,
     String? token,
     String? tokenExpiresIn,
+    String? gender,
   }) {
     _age = age;
     _height = height;
@@ -36,6 +38,7 @@ class User {
     _imagePath = imagePath;
     _token = token;
     _tokenExpiresIn = tokenExpiresIn;
+    _gender = gender;
   }
 
   String? _name;
@@ -48,6 +51,7 @@ class User {
   String? _imagePath;
   String? _token;
   String? _tokenExpiresIn;
+  String? _gender;
 
   Map<String, dynamic> toJson() => {
         'age': _age,
@@ -57,6 +61,9 @@ class User {
         'name': _name,
         'password': _password,
         'imagePath': _imagePath,
+        'token': _token,
+        'tokenExpiresIn': _tokenExpiresIn,
+        'gender': _gender,
       };
 
   Map<String, dynamic> toJsonToFireStore() => {
@@ -66,6 +73,7 @@ class User {
         'email': _email,
         'name': _name,
         'imagePath': _imagePath,
+        'gender': _gender,
       };
 
   factory User.fromJson(Map userData) => User(
@@ -79,6 +87,7 @@ class User {
         weight: userData['weight'],
         token: userData['token'],
         tokenExpiresIn: userData['tokenExpiresIn'],
+        gender: userData['gender'],
       );
 
   Map<UserDataEnum, dynamic> getUserData() {
@@ -93,6 +102,7 @@ class User {
       UserDataEnum.imagePath: _imagePath,
       UserDataEnum.token: _token,
       UserDataEnum.tokenExpiresIn: _tokenExpiresIn,
+      UserDataEnum.gender: _gender,
     };
   }
 
@@ -130,6 +140,10 @@ class User {
 
   set token(String token) {
     _token = token;
+  }
+
+  set gender(String gender) {
+    _gender = gender;
   }
 
   set tokenExpiresIn(String tokenExpiresIn) {
@@ -170,5 +184,9 @@ class User {
 
   String? get getTokenExpiresIn {
     return _tokenExpiresIn;
+  }
+  
+  String? get getGender {
+    return _gender;
   }
 }

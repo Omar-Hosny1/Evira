@@ -34,8 +34,8 @@ String? validateWeight(String? value) {
   // Weight should be a valid double
   try {
     double weight = double.parse(value);
-    if (weight <= 0 || weight > 120) {
-      return 'Weight should be a positive number and between 1..120';
+    if (weight <= 40 || weight > 140) {
+      return 'Weight should be a positive number and between 41..140';
     }
   } catch (e) {
     return 'Invalid weight format, must be only nums';

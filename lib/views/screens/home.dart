@@ -13,6 +13,14 @@ class Home extends StatelessWidget {
   const Home({super.key});
   static const routeName = '/home';
 
+  bool? isFavourite(String productId){
+    final wishlistController =  WishlistController.get.currentUserWishlist;
+    if(wishlistController == null) {
+      return null;
+    }
+    return wishlistController.wishlist[productId] == true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,10 +43,6 @@ class Home extends StatelessWidget {
               Toggle(),
               Expanded(
                 child: GetBuilder<ProductController>(
-                  initState: (_) async {
-                    await WishlistController.get.getUserWishlistFromRepo();
-                    print('SHOW NOW');
-                  },
                   id: Strings.productsGetBuilderId,
                   builder: (controller) => GridView.builder(
                     gridDelegate:
@@ -51,8 +55,7 @@ class Home extends StatelessWidget {
                     itemCount: controller.products.length,
                     itemBuilder: (context, index) => ProductView(
                       product: controller.products[index],
-                      isFavourite: WishlistController.get.currentUserWishlist!.wishlist[controller.products[index].id.toString()] == true,
-                      
+                      isFavourite: Rx(isFavourite(controller.products[index].id.toString())),
                     ),
                   ),
                 ),

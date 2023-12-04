@@ -1,8 +1,5 @@
 import 'package:evira/controllers/wishlist-controller.dart';
-import 'package:evira/data/data-sources/wishlist-ds.dart';
-import 'package:evira/data/repositories/wishlist-repo.dart';
 import 'package:evira/utils/constants/dimens.dart';
-import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,7 +42,7 @@ class Wishlist extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) => ProductView(
                           product: controller.wishlistProducts[index],
-                          isFavourite: true,
+                          isFavourite: Rx(null),
                         ),
                         itemCount: controller.wishlistProducts.length,
                       );

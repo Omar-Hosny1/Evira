@@ -21,6 +21,13 @@ class AuthController extends GetxController {
   //   super.onInit();
   //   // getInitialRoute();
   // }
+  @override
+  void onClose() {
+    // time to close some resources and to do other cleanings
+    userData = null;
+    _authTimer = null;
+    print('****************** CLOSED **************');
+  }
 
   AuthController() {
     _authRepository = AuthRepo(authDataSource: AuthDS());
@@ -69,6 +76,7 @@ class AuthController extends GetxController {
     if (gettedUserDataFromShared == null ||
         gettedUserDataFromShared.getTokenExpiresIn == null ||
         gettedUserDataFromShared.getToken == null) {
+      await _authRepository.cleanUserDataFromSharedPrefs();
       return SignUp.routeName;
     }
 
@@ -76,6 +84,7 @@ class AuthController extends GetxController {
         DateTime.parse(gettedUserDataFromShared.getTokenExpiresIn!);
 
     if (expiresIn.isBefore(DateTime.now())) {
+      await _authRepository.cleanUserDataFromSharedPrefs();
       return SignUp.routeName;
     }
     await _getUserDataFromPrefsAndSetCurrentUserData();
@@ -116,9 +125,10 @@ class AuthController extends GetxController {
   }
 
   Future<void> logOut() async {
-    userData = null;
-    update([Strings.userListTileGetBuilderId]);
     await _authRepository.logout();
     Get.offAllNamed(SignUp.routeName);
+    userData = null;
+    _authTimer = null;
+    update([Strings.userListTileGetBuilderId]);
   }
 }

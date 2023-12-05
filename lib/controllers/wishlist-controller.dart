@@ -32,6 +32,8 @@ class WishlistController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
+    _wishlistProducts = [];
+    _currentUserWishlist = null;
     print(
         '********************* WishlistController Closed *********************');
   }
@@ -46,7 +48,7 @@ class WishlistController extends GetxController {
     return _wishlistProducts;
   }
 
-  Future<void> getUserWishlistFromRepo() async {
+  Future<void> getUserWishlist() async {
     try {
       final userWishlist = await _wishlistRepo.getUserWishlistFromRepo();
       if (userWishlist == null) {
@@ -68,6 +70,7 @@ class WishlistController extends GetxController {
       {void Function()? onDone}) async {
     try {
       await _wishlistRepo.removeFromWishlist(productId);
+      await getUserWishlist();
       if (onDone != null) {
         onDone();
       }
@@ -80,7 +83,7 @@ class WishlistController extends GetxController {
       {void Function()? onDone}) async {
     try {
       await _wishlistRepo.addToWishlist(productId);
-
+      await getUserWishlist();
       if (onDone != null) {
         onDone();
       }

@@ -1,25 +1,47 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
-import 'package:evira/data/data-sources/cart-ds.dart';
-import 'package:evira/data/repositories/cart-repo.dart';
+import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../data/models/product.dart';
 
+
+ bool? isFavouriteHelper(String productId) {
+    final wishlistController = WishlistController.get.currentUserWishlist;
+    if (wishlistController == null) {
+      return null;
+    }
+    print('************* isFavouriteHelper RAN *****************');
+    return wishlistController.wishlist[productId] == true;
+  }
+
+  bool? isAddedToCartHelper(String productId) {
+    final currentUserCart = CartController.get.currentUserCart;
+    if (currentUserCart == null) {
+      print('************** currentUserCart is null ***************');
+      print(currentUserCart);
+      return null;
+    }
+    return currentUserCart.cart[productId] != null;
+  }
+
 // ignore: must_be_immutable
 class ProductView extends StatelessWidget {
   final Product product;
-  Rx<bool?> isFavourite = Rx(null);
 
   ProductView({
     super.key,
     required this.product,
-    required this.isFavourite,
+    // required this.isFavourite,
+    // required this.isAddedToCart,
   });
 
   @override
   Widget build(BuildContext context) {
+  final Rx<bool?> isFavourite = Rx(isFavouriteHelper(product.id.toString()));
+  final Rx<bool?> isAddedToCart = Rx(isAddedToCartHelper(product.id.toString()));
     return InkWell(
       onTap: () {
         Get.toNamed(ProductDetails.routeName, arguments: product.id);
@@ -82,19 +104,46 @@ class ProductView extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 15),
               width: double.infinity,
-              child: ElevatedButton(
-                style: TextButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.zero),
+              child: Obx(
+                () => BaseButton(
+                  buttonStyle: ElevatedButton.styleFrom(
+                    elevation: 0.0,
+                    shadowColor: Colors.transparent,
+                    padding: EdgeInsets.symmetric(vertical: 5),
+                    backgroundColor: isAddedToCart.isTrue == true
+                        ? Colors.transparent
+                        : Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                        side: BorderSide(
+                          color: Colors.black,
+                        )),
                   ),
+                  textStyle: TextStyle(
+                    color: isAddedToCart.isTrue == true
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                  text: isAddedToCart.isTrue == true
+                      ? 'Remove Cart'
+                      : 'Add To Cart',
+                  onPressed: () async {
+                    if (isAddedToCart.isTrue == true) {
+                      await CartController.get
+                          .removeFromCart(product.id.toString(), onDone: () {
+                        isAddedToCart.value = false;
+                      });
+                      return;
+                    }
+                    await CartController.get.addToCart(product.id.toString(),
+                        onDone: () {
+                      isAddedToCart.value = true;
+                    });
+                  },
+                  // child: Text(
+
+                  //     style: TextStyle(color: Colors.white)),
                 ),
-                onPressed: () async {
-                  await CartRepo(CartDS())
-                      .removeFromCartFromRepo(product.id.toString());
-                  // await CartRepo(CartDS())
-                      // .addToCartFromRepo(product.id.toString());
-                },
-                child: Text('Cart', style: TextStyle(color: Colors.white)),
               ),
             ),
           ],

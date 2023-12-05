@@ -1,12 +1,13 @@
-import 'package:evira/controllers/wishlist-controller.dart';
+import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
-import 'package:evira/views/components/product.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Wishlist extends StatelessWidget {
-  const Wishlist({super.key});
-  static const routeName = '/wishlist';
+class Cart extends StatelessWidget {
+  const Cart({super.key});
+
+  static const routeName = '/cart';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,32 +21,29 @@ class Wishlist extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: GetBuilder<WishlistController>(
+                child: GetBuilder<CartController>(
                   builder: (controller) => FutureBuilder(
-                    future: controller.getUserWishlist(),
+                    future: controller.getUserCart(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Text('Wait');
                       }
                       if (snapshot.hasError == true) {
                         print(
-                            '***************** Wishlist Data ERROR **********************');
+                            '***************** Cart Data ERROR **********************');
                         return Text(snapshot.error.toString());
                       }
-                      if (controller.wishlistProducts.isEmpty) {
-                        return Text('Start Add Products To Your Wishlist Now');
+                      if (controller.cartProducts.isEmpty == true) {
+                        return Text('Start Add Products To Your Cart Now');
                       }
                       print(
-                          '************** controller.wishlistProducts ****************');
-                      print(controller.wishlistProducts);
+                          '************** controller.currentUserCart ****************');
+                      print(controller.currentUserCart);
                       return ListView.builder(
                         shrinkWrap: true,
-                        itemBuilder: (context, index) => ProductView(
-                          // isAddedToCart: Rx(null),
-                          product: controller.wishlistProducts[index],
-                          // isFavourite: Rx(null),
-                        ),
-                        itemCount: controller.wishlistProducts.length,
+                        itemCount: controller.cartProducts.length,
+                        itemBuilder: (context, index) =>
+                            Text(controller.cartProducts[index].name),
                       );
                     },
                   ),

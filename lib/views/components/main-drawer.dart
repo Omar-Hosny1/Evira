@@ -1,5 +1,6 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/views/components/user-list-tile.dart';
+import 'package:evira/views/screens/cart.dart';
 import 'package:evira/views/screens/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,13 @@ class MainDrawer extends StatelessWidget {
               Get.toNamed(Wishlist.routeName);
             },
             title: const Text('Wishlist'),
+          ),
+          ListTile(
+            onTap: () {
+              Get.back(closeOverlays: true);
+              Get.toNamed(Cart.routeName);
+            },
+            title: const Text('Cart'),
           ),
         ],
       ),

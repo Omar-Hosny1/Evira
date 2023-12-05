@@ -1,5 +1,4 @@
 import 'package:evira/controllers/products-controller.dart';
-import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/logo.dart';
@@ -12,14 +11,6 @@ import 'package:get/get.dart';
 class Home extends StatelessWidget {
   const Home({super.key});
   static const routeName = '/home';
-
-  bool? isFavourite(String productId){
-    final wishlistController =  WishlistController.get.currentUserWishlist;
-    if(wishlistController == null) {
-      return null;
-    }
-    return wishlistController.wishlist[productId] == true;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +45,17 @@ class Home extends StatelessWidget {
                     ),
                     itemCount: controller.products.length,
                     itemBuilder: (context, index) => ProductView(
+                      // isAddedToCart: Rx(
+                      //   isAddedToCart(
+                      //     controller.products[index].id.toString(),
+                      //   ),
+                      // ),
                       product: controller.products[index],
-                      isFavourite: Rx(isFavourite(controller.products[index].id.toString())),
+                      // isFavourite: Rx(
+                      //   isFavourite(
+                      //     controller.products[index].id.toString(),
+                      //   ),
+                      // ),
                     ),
                   ),
                 ),

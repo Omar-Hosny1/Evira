@@ -1,4 +1,5 @@
 import 'package:evira/controllers/auth-controller.dart';
+import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/data/models/product.dart';
@@ -16,7 +17,8 @@ class ProductController extends GetxController {
     super.onInit();
     _productRepository = ProductRepository(ProductDS());
     print('*************** GETTING THE PRODUCTS ***************');
-    await WishlistController.get.getUserWishlistFromRepo();
+    await CartController.get.getUserCart();
+    await WishlistController.get.getUserWishlist();
     _listenAndGetProducts();
     // print('snackbar /////////////////////////');
     // Get.snackbar(fetchingState.name, fetchingState.name);
@@ -32,6 +34,7 @@ class ProductController extends GetxController {
   void onClose() {
     // time to close some resources and to do other cleanings
     print('****************** CLOSED **************');
+    _prods = [];
   }
 
   List<Product> get products {
@@ -51,6 +54,16 @@ class ProductController extends GetxController {
       }
     }
     return wishlistProducts;
+  }
+
+  List<Product> getCartProducts(Map<String, int> ids) {
+    final List<Product> cartProducts = [];
+    for (var i = 0; i < _prods.length; i++) {
+      if (ids[_prods[i].id.toString()] != null) {
+        cartProducts.add(_prods[i]);
+      }
+    }
+    return cartProducts;
   }
 
   void _listenAndGetProducts() {

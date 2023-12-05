@@ -1,5 +1,6 @@
 import 'package:evira/views/screens/auth/sign-in.dart';
 import 'package:evira/views/screens/auth/sign-up.dart';
+import 'package:evira/views/screens/cart.dart';
 import 'package:evira/views/screens/home.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:evira/views/screens/splash.dart';
@@ -32,6 +33,10 @@ class Routes {
     GetPage(
       name: Wishlist.routeName,
       page: () => Wishlist(),
+    ),
+    GetPage(
+      name: Cart.routeName,
+      page: () => Cart(),
     ),
   ];
 }

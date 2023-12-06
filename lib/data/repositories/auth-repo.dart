@@ -74,4 +74,10 @@ class AuthRepo {
       await authDataSource.signUp(user);
     });
   }
+
+  Future<void> resetPassword(String email) async {
+    await errorHandler(tryLogic: () async {
+      await authDataSource.resetPassword(email);
+    });
+  }
 }

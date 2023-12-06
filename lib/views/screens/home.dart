@@ -45,17 +45,7 @@ class Home extends StatelessWidget {
                     ),
                     itemCount: controller.products.length,
                     itemBuilder: (context, index) => ProductView(
-                      // isAddedToCart: Rx(
-                      //   isAddedToCart(
-                      //     controller.products[index].id.toString(),
-                      //   ),
-                      // ),
                       product: controller.products[index],
-                      // isFavourite: Rx(
-                      //   isFavourite(
-                      //     controller.products[index].id.toString(),
-                      //   ),
-                      // ),
                     ),
                   ),
                 ),

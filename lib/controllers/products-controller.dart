@@ -98,14 +98,34 @@ class ProductController extends GetxController {
     return false;
   }
 
-  _isProductForYou(Product product) {
+  bool _isProductGenderTheSameAsUserGender(
+    String productGender,
+    String userGender,
+  ) {
+    if (productGender == userGender) {
+      return true;
+    }
+    return false;
+  }
+
+  bool _isProductForYou(Product product) {
     try {
       final currentUserData = AuthController.get.userData!;
-      return _isUserWeightWithinTheProductWeightConstrains(
-            product.weight,
-            currentUserData.getWeight!,
-          ) ==
-          true;
+      final isUserWeightWithinTheProductWeightConstrains =
+          _isUserWeightWithinTheProductWeightConstrains(
+        product.weight,
+        currentUserData.getWeight!,
+      );
+      final isProductGenderTheSameAsUserGender =
+          _isProductGenderTheSameAsUserGender(
+        product.gender,
+        currentUserData.getGender!,
+      );
+      if (isUserWeightWithinTheProductWeightConstrains &&
+          isProductGenderTheSameAsUserGender) {
+        return true;
+      }
+      return false;
     } catch (e) {
       print('**************** _isProductForYou ERROR *******************');
       print(e);

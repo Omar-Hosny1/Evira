@@ -1,5 +1,6 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/strings.dart';
+import 'package:evira/views/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,7 +37,9 @@ class UserListTile extends StatelessWidget {
                     height: 50,
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(Profile.routeName);
+                },
                 subtitle: Text(controller.userData!.getEmail!,
                     style: const TextStyle(fontSize: 12)),
                 title: Text(controller.userData!.getName!,

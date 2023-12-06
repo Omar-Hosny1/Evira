@@ -3,6 +3,7 @@ import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/validations/common.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
+import 'package:evira/views/components/reset-password.dart';
 import 'package:evira/views/screens/auth/sign-up.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -103,27 +104,33 @@ class SignIn extends StatelessWidget {
                   height: 10,
                 ),
                 SizedBox(
-                    width: double.infinity,
-                    child: BaseButton(
-                      text: 'Sign Up',
-                      onPressed: () {
-                        Get.offNamed(SignUp.routeName);
-                      },
-                      textStyle: TextStyle(color: Colors.black),
-                      buttonStyle: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                            EdgeInsets.symmetric(vertical: 25)),
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            side: BorderSide(color: Colors.black),
-                          ),
+                  width: double.infinity,
+                  child: BaseButton(
+                    text: 'Sign Up',
+                    onPressed: () {
+                      Get.offNamed(SignUp.routeName);
+                    },
+                    textStyle: TextStyle(color: Colors.black),
+                    buttonStyle: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                          EdgeInsets.symmetric(vertical: 25)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                          side: BorderSide(color: Colors.black),
                         ),
                       ),
-                    ))
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.bottomSheet(ResetPassword());
+                  },
+                  child: Text('Forgot Your Password?'),
+                ),
               ],
             ),
           ),

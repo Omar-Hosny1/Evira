@@ -39,8 +39,8 @@ class AuthController extends GetxController {
       Get.offAllNamed(SignIn.routeName);
       showSnackbar(
         SnackbarState.success,
-        'Welcome To Evira..',
-        'Signed in Now',
+        'Verify Your Email To Signin',
+        'Check your email...',
       );
     } catch (e) {
       showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
@@ -91,20 +91,13 @@ class AuthController extends GetxController {
     return Home.routeName;
   }
 
-  // _authRepository.listenToUserStates((user) {
-  //   if (user == null) {
-  //     _authRepository.cleanUserDataFromSharedPrefs().then(
-  //           (_) => Get.offAllNamed(SignUp.routeName),
-  //         );
-
-  //     print('**************** LOGGED OUT ****************');
-  //     return;
-  //   }
-  //   _getUserDataFromPrefsAndSetCurrentUserData().then((_) {
-  //     print('**************** LOGGED IN ****************');
-  //     Get.offAllNamed(Home.routeName);
-  //   });
-  // });
+  Future<void> resetPassword(String email) async {
+    try {
+      await _authRepository.resetPassword(email);
+    } catch (e) {
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+    }
+  }
 
   void _autoLogOut(DateTime? expiryDate) {
     if (_authTimer != null) {

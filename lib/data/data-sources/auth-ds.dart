@@ -18,6 +18,14 @@ class AuthDS {
     return _currentUserData;
   }
 
+  resetPassword(String email) async {
+    try {
+      await _authInstance.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<UserCredential> _signUpWithEmailAndPassword(
     String email,
     String password,
@@ -27,6 +35,7 @@ class AuthDS {
         email: email,
         password: password,
       );
+      await credential.user?.sendEmailVerification();
       return credential;
     } catch (e) {
       rethrow;
@@ -82,6 +91,9 @@ class AuthDS {
         email: email,
         password: password,
       );
+      if (credentials.user?.emailVerified != true) {
+        throw Exception('Verify Your Email Please...');
+      }
       final userData = await getUserDatafromFireStore(email);
       final token = await credentials.user!.getIdToken();
       await saveInPrefs(userData as Map, token!);
@@ -106,10 +118,6 @@ class AuthDS {
   Future<void> signUp(U.User user) async {
     try {
       final userData = user.getUserData();
-      // final isUserAlreadyExist = await _isUserAlreadyExist(user.getEmail!);
-      // if (isUserAlreadyExist == true) {
-      //   throw FirebaseAuthException(code: 'email-already-exists');
-      // }
 
       await _signUpWithEmailAndPassword(
         userData[U.UserDataEnum.email],

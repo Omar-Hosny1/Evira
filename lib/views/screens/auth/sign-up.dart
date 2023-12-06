@@ -4,11 +4,13 @@ import 'dart:io';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
+import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/device/device_utils.dart';
 import 'package:evira/utils/validations/common.dart';
 import 'package:evira/utils/validations/sign-up.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
+import 'package:evira/views/components/base/drop-down.dart';
 import 'package:evira/views/screens/auth/sign-in.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,6 +42,9 @@ class SignUp extends StatelessWidget {
     if (_photo.value == null) {
       _photoErrMsg.value = 'Please Pick up an profile image';
       return;
+    }
+    if(_enteredUserData.getGender == null){
+      _enteredUserData.gender = Strings.gendersArray[0].toLowerCase();
     }
 
     _photoErrMsg.value = '';
@@ -126,6 +131,7 @@ class SignUp extends StatelessWidget {
                   ),
                   BaseInput(
                     label: 'Name',
+                    keyboardType: TextInputType.name, 
                     onSaved: (v) {
                       _enteredUserData.name = v!;
                     },
@@ -188,26 +194,36 @@ class SignUp extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
+                  DropDown(
+                      dropDownItems: Strings.gendersArray,
+                      onChange: (val) {
+                        _enteredUserData.gender = val.toLowerCase();
+                        print(val);
+                      }),
                   SizedBox(
-                      width: double.infinity,
-                      child: BaseButton(
-                        onPressed: _showPicker,
-                        text: 'Pick Up a Profile Image',
-                        textStyle: TextStyle(color: Colors.black),
-                        buttonStyle: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(vertical: 25)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              side: BorderSide(color: Colors.black),
-                            ),
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: BaseButton(
+                      onPressed: _showPicker,
+                      text: 'Pick Up a Profile Image',
+                      textStyle: TextStyle(color: Colors.black),
+                      buttonStyle: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 25)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            side: BorderSide(color: Colors.black),
                           ),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                   Obx(
                     () {
                       if (_photo.value == null) {
@@ -273,27 +289,28 @@ class SignUp extends StatelessWidget {
                     height: 10,
                   ),
                   SizedBox(
-                      width: double.infinity,
-                      child: BaseButton(
-                        text: 'Sign In',
-                        onPressed: () {
-                          Get.offNamed(SignIn.routeName);
-                        },
-                        textStyle: TextStyle(color: Colors.black),
-                        buttonStyle: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(vertical: 25)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              side: BorderSide(color: Colors.black),
-                            ),
+                    width: double.infinity,
+                    child: BaseButton(
+                      text: 'Sign In',
+                      onPressed: () {
+                        Get.offNamed(SignIn.routeName);
+                      },
+                      textStyle: TextStyle(color: Colors.black),
+                      buttonStyle: ButtonStyle(
+                        padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 25)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            side: BorderSide(color: Colors.black),
                           ),
                         ),
-                      ))
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

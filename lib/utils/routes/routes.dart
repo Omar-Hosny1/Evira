@@ -3,6 +3,7 @@ import 'package:evira/views/screens/auth/sign-up.dart';
 import 'package:evira/views/screens/cart.dart';
 import 'package:evira/views/screens/home.dart';
 import 'package:evira/views/screens/product-details.dart';
+import 'package:evira/views/screens/profile.dart';
 import 'package:evira/views/screens/splash.dart';
 import 'package:evira/views/screens/wishlist.dart';
 import 'package:get/get.dart';
@@ -37,6 +38,10 @@ class Routes {
     GetPage(
       name: Cart.routeName,
       page: () => Cart(),
+    ),
+    GetPage(
+      name: Profile.routeName,
+      page: () => Profile(),
     ),
   ];
 }

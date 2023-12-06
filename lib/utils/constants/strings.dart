@@ -13,6 +13,7 @@ class Strings {
   static const String productsMapKeyForWishlistDocument = "wishlist";
   static const String userEmailKeyForCartDocument = "email";
   static const String productsMapKeyForCartDocument = "cart";
+  static const List<String> gendersArray = ['Male', 'Female'];
 
 
 }

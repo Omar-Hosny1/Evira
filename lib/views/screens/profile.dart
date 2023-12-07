@@ -25,28 +25,38 @@ class Profile extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 50.0,
-                      backgroundImage: NetworkImage(
-                        currentUser.getImagePath!,
-                      ), // Replace with your image URL
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      currentUser.getName!,
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      currentUser.getEmail!,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.grey,
-                      ),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 50.0,
+                          backgroundImage: NetworkImage(
+                            currentUser.getImagePath!,
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentUser.getName!,
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              currentUser.getEmail!,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                     SizedBox(height: 16.0),
                     Card(
@@ -93,7 +103,8 @@ class Profile extends StatelessWidget {
                     ),
                     Card(
                       child: ListTile(
-                        trailing: Icon(Icons.arrow_forward,
+                        trailing: Icon(
+                          Icons.arrow_forward,
                           color: Colors.red,
                         ),
                         leading: Icon(

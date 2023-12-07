@@ -71,6 +71,9 @@ class AuthDS {
             isEqualTo: email,
           )
           .get();
+      if (userDataSnapShot.docs.isEmpty == true) {
+        throw FirebaseException(plugin: 'Can\'t find The User Data');
+      }
       final userData = userDataSnapShot.docs[0].data();
       if (userData == null) {
         throw FirebaseException(plugin: 'Can\'t find The User Data');

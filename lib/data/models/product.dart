@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:evira/controllers/cart-controller.dart';
+
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
 String productToJson(Product data) => json.encode(data.toJson());
@@ -38,4 +40,12 @@ class Product {
         "price": price,
         "weight": weight,
     };
+
+    increaseCartProductQuantity() async {
+      await CartController.get.addToCart(id.toString());
+    }
+
+    decreaseCartProductQuantity() async {
+      await CartController.get.removeFromCart(id.toString());
+    }
 }

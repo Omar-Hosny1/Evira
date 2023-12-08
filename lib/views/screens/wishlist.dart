@@ -1,6 +1,9 @@
 import 'package:evira/controllers/wishlist-controller.dart';
+import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/constants/dimens.dart';
+import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/product.dart';
+import 'package:evira/views/components/wishlist-item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +14,10 @@ class Wishlist extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          leading: BackArrow(),
+          title: Text('Wishlist Products'),
+        ),
         body: Padding(
           padding: const EdgeInsets.only(
             left: Dimens.horizontal_padding,
@@ -25,7 +32,7 @@ class Wishlist extends StatelessWidget {
                     future: controller.getUserWishlist(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Text('Wait');
+                        return Center(child: CircularProgressIndicator());
                       }
                       if (snapshot.hasError == true) {
                         print(
@@ -38,14 +45,15 @@ class Wishlist extends StatelessWidget {
                       print(
                           '************** controller.wishlistProducts ****************');
                       print(controller.wishlistProducts);
+                      print(controller.wishlistProducts[0].data());
                       return ListView.builder(
                         shrinkWrap: true,
-                        itemBuilder: (context, index) => ProductView(
-                          // isAddedToCart: Rx(null),
-                          product: controller.wishlistProducts[index],
-                          // isFavourite: Rx(null),
-                        ),
                         itemCount: controller.wishlistProducts.length,
+                        itemBuilder: (context, index) => WishlistItem(
+                          Product.fromJson(
+                            controller.wishlistProducts[index].data() as Map,
+                          ),
+                        ),
                       );
                     },
                   ),

@@ -1,21 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/data/data-sources/wishlist-ds.dart';
 import 'package:evira/data/models/firebase-models/user-wishlist.dart';
-import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/wishlist-repo.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
 
 class WishlistController extends GetxController {
   late final WishlistRepo _wishlistRepo;
-  List<Product> _wishlistProducts = [];
   UserWishlist? _currentUserWishlist;
+  List<QueryDocumentSnapshot<Object?>> _wishlistProducts = [];
+
+  List<QueryDocumentSnapshot<Object?>> get wishlistProducts {
+    return [..._wishlistProducts];
+  }
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     _wishlistRepo = WishlistRepo(wishlistDS: WishlistDS());
+    // getUserWishlist();
     print(
         '********************* WishlistController Created *********************');
   }
@@ -32,7 +38,6 @@ class WishlistController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    _wishlistProducts = [];
     _currentUserWishlist = null;
     print(
         '********************* WishlistController Closed *********************');
@@ -44,25 +49,26 @@ class WishlistController extends GetxController {
 
   static WishlistController get get => Get.find();
 
-  List<Product> get wishlistProducts {
-    return _wishlistProducts;
-  }
-
   Future<void> getUserWishlist() async {
     try {
       final userWishlist = await _wishlistRepo.getUserWishlistFromRepo();
-      if (userWishlist == null) {
+      if (userWishlist == null || userWishlist.wishlist.isEmpty) {
         print('******************** userWishlist is Null ********************');
         return;
       }
       _currentUserWishlist = userWishlist;
-      _wishlistProducts = ProductController.get.getWishlistProducts(
+      final data = await ProductController.get.getWishlistProducts(
         userWishlist.wishlist,
       );
+      _wishlistProducts = data.docs;
       print('*************** previewed _wishlistProducts ***********');
       print(_wishlistProducts);
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+      showSnackbar(
+        SnackbarState.danger,
+        'Something Went Wrong',
+        formatErrorMessage(e.toString()),
+      );
     }
   }
 
@@ -75,7 +81,8 @@ class WishlistController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong',
+          formatErrorMessage(e.toString()));
     }
   }
 
@@ -88,7 +95,8 @@ class WishlistController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong',
+          formatErrorMessage(e.toString()));
     }
   }
 }

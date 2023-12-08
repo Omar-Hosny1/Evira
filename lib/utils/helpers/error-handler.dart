@@ -1,5 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+String formatErrorMessage(String errMsg) {
+  if (errMsg.startsWith('Exception: ')) {
+    return errMsg.substring(11);
+  }
+  return errMsg;
+}
+
 Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
   try {
     return await tryLogic();
@@ -19,7 +26,7 @@ Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
         errMsg = 'The password provided is too weak...';
         break;
       case 'invalid-credential':
-        errMsg = 'Invalid password try Again...';
+        errMsg = 'Invalid Email or Password try Again Later...';
         break;
       case 'too-many-requests':
         errMsg = 'Too many requests try Again Later...';

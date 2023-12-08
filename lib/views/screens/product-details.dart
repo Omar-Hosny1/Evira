@@ -19,18 +19,18 @@ class ProductDetails extends StatelessWidget {
         ),
         child: Column(
           children: [
-            GetBuilder<ProductController>(
-              builder: (controller) => FutureBuilder(
-                future: controller.getProduct(id),
-                builder: (context, snapshot) {
-                  if(snapshot.hasError){
-                    return Text(snapshot.error.toString());
-                  }
-                  return Text(snapshot.data?.gender ?? 'N/A');
-                },
-              ),
+            FutureBuilder(
+              future: ProductController.get.getProduct(id),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text('LOADING');
+                }
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
+                return Text(snapshot.data?.gender ?? 'N/A');
+              },
             ),
-            Text(id.toString())
           ],
         ),
       ),

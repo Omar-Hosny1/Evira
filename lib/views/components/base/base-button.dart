@@ -14,7 +14,7 @@ class BaseButton extends StatelessWidget {
     return ElevatedButton(
       style: buttonStyle ??
           ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 17),
+            padding: EdgeInsets.symmetric(vertical: 17,horizontal: 15),
             backgroundColor: Colors.black,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0),
@@ -23,7 +23,7 @@ class BaseButton extends StatelessWidget {
       onPressed: onPressed,
       child: Text(
         text,
-        style: textStyle,
+        style: textStyle ?? TextStyle(color: Colors.white),
         textAlign: TextAlign.center,
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
+import 'package:evira/views/components/back-arrow.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatelessWidget {
@@ -12,6 +13,10 @@ class Profile extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+         appBar: AppBar(
+          leading: BackArrow(),
+          title: Text('Your Profile'),
+        ),
         body: Padding(
           padding: const EdgeInsets.only(
             left: Dimens.horizontal_padding,

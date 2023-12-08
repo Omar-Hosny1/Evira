@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/products-controller.dart';
+import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/logo.dart';
@@ -35,21 +37,57 @@ class Home extends StatelessWidget {
               Expanded(
                 child: GetBuilder<ProductController>(
                   id: Strings.productsGetBuilderId,
-                  builder: (controller) => GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 10,
-                      childAspectRatio: 4 / 7,
-                    ),
-                    itemCount: controller.products.length,
-                    itemBuilder: (context, index) => ProductView(
-                      product: controller.products[index],
-                    ),
+                  builder: (controller) => StreamBuilder<QuerySnapshot>(
+                    stream: ProductController.get.getCurrentProducts(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator(),);
+                      }
+                      print("*************** products data *********");
+                      print(snapshot.data!.docs[0].data());
+                      return GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 4 / 7,
+                        ),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) => ProductView(
+                          product: Product.fromJson(
+                              snapshot.data!.docs[index].data() as Map),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              ),
+              )
+              // Expanded(
+              //   child: GetBuilder<ProductController>(
+              //     id: Strings.productsGetBuilderId,
+              //     builder: (controller) =>
+
+              //     GridView.builder(
+              //       gridDelegate:
+              //           const SliverGridDelegateWithFixedCrossAxisCount(
+              //         crossAxisCount: 2,
+              //         mainAxisSpacing: 16,
+              //         crossAxisSpacing: 10,
+              //         childAspectRatio: 4 / 7,
+              //       ),
+              //       itemCount: controller.products.length,
+              //       itemBuilder: (context, index) => ProductView(
+              //         product: controller.products[index],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

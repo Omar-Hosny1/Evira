@@ -3,6 +3,7 @@ import 'package:evira/data/data-sources/cart-ds.dart';
 import 'package:evira/data/models/firebase-models/user-cart.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/cart-repo.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
 
@@ -43,7 +44,7 @@ class CartController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', formatErrorMessage(e.toString()));
     }
   }
 
@@ -56,7 +57,7 @@ class CartController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', formatErrorMessage(e.toString()));
     }
   }
 
@@ -77,7 +78,7 @@ class CartController extends GetxController {
       );
       // update();
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', e.toString());
+      showSnackbar(SnackbarState.danger, 'Something Went Wrong', formatErrorMessage(e.toString()));
     }
   }
 }

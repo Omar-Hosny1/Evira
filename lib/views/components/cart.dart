@@ -10,16 +10,6 @@ class CartContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Your Cart',
-              style: TextStyle(fontSize: 25),
-            ),
-            Text("${products.length} Product")
-          ],
-        ),
         if (products.isEmpty)
           Center(
             child: Text('Your Cart is Empty'),

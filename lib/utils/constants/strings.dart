@@ -8,6 +8,7 @@ class Strings {
   static const String userCollectionName = "users_data";
   static const String wishlistCollectionName = "wishlist_data";
   static const String cartCollectionName = "cart_data";
+  static const String productsCollectionName = "products_data";
   static const String userDataKeySharedPrefrences = "userData";
   static const String userEmailKeyForWishlistDocument = "email";
   static const String productsMapKeyForWishlistDocument = "wishlist";

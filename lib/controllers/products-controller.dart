@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
@@ -11,6 +12,7 @@ class ProductController extends GetxController {
   late final ProductRepository _productRepository;
   List<Product> _prods = [];
   static ProductController get get => Get.find();
+  bool _isDiscoverProductsSelected = true;
 
   @override
   void onInit() async {
@@ -19,7 +21,6 @@ class ProductController extends GetxController {
     print('*************** GETTING THE PRODUCTS ***************');
     await CartController.get.getUserCart();
     await WishlistController.get.getUserWishlist();
-    _listenAndGetProducts();
     // print('snackbar /////////////////////////');
     // Get.snackbar(fetchingState.name, fetchingState.name);
   }
@@ -46,14 +47,15 @@ class ProductController extends GetxController {
     return product;
   }
 
-  List<Product> getWishlistProducts(Map<String, bool> ids) {
-    final List<Product> wishlistProducts = [];
-    for (var i = 0; i < _prods.length; i++) {
-      if (ids[_prods[i].id.toString()] == true) {
-        wishlistProducts.add(_prods[i]);
-      }
-    }
-    return wishlistProducts;
+  Future<QuerySnapshot<Object?>> getWishlistProducts(Map<String, bool> ids) async {
+    return await _productRepository.getWishlistProducts(ids.keys.toList());
+    // final List<Product> wishlistProducts = [];
+    // for (var i = 0; i < _prods.length; i++) {
+    //   if (ids[_prods[i].id.toString()] == true) {
+    //     wishlistProducts.add(_prods[i]);
+    //   }
+    // }
+    // return wishlistProducts;
   }
 
   List<Product> getCartProducts(Map<String, int> ids) {
@@ -66,11 +68,21 @@ class ProductController extends GetxController {
     return cartProducts;
   }
 
-  void _listenAndGetProducts() {
-    _productRepository.listenToProducts((data, fetchingState) {
-      _prods = data ?? _prods;
-      update([Strings.productsGetBuilderId]);
-    });
+  Stream<QuerySnapshot<Object?>> getCurrentProducts() {
+    print('************** _isDiscoverProductsSelected ******************');
+    print(_isDiscoverProductsSelected);
+    if (_isDiscoverProductsSelected == true) {
+      return _listenAndGetAllProducts();
+    }
+    return _listenAndGetForYouProducts();
+  }
+
+  Stream<QuerySnapshot<Object?>> _listenAndGetAllProducts() {
+    return _productRepository.listenToProducts();
+  }
+
+  Stream<QuerySnapshot<Object?>> _listenAndGetForYouProducts() {
+    return _productRepository.getForYouProducts();
   }
 
   bool _isUserWeightWithinTheProductWeightConstrains(
@@ -134,13 +146,15 @@ class ProductController extends GetxController {
   }
 
   void showForYouProducts() {
-    _prods.removeWhere((element) => _isProductForYou(element) == false);
-    print('******************* _prods.length *******************');
-    print(_prods.length);
+    _isDiscoverProductsSelected = false;
     update([Strings.productsGetBuilderId]);
+    // _prods.removeWhere((element) => _isProductForYou(element) == false);
+    // print('******************* _prods.length *******************');
+    // print(_prods.length);
   }
 
   void showAll() {
-    _listenAndGetProducts();
+    _isDiscoverProductsSelected = true;
+    update([Strings.productsGetBuilderId]);
   }
 }

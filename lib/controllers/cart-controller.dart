@@ -49,6 +49,9 @@ class CartController extends GetxController {
       if (_currentUserCart!.cart[productId] == null) {
         _currentUserCart!.cart[productId] = 1;
         update([Strings.cartGetBuilderId]);
+        if (onDone != null) {
+          onDone();
+        }
         return;
       }
       _currentUserCart!.cart[productId] =
@@ -78,27 +81,33 @@ class CartController extends GetxController {
   }) async {
     try {
       await _cartRepo.removeFromCartFromRepo(productId);
-      if (_currentUserCart == null) {
-        await getUserCart();
-      }
       if (_currentUserCart!.cart[productId] == 1) {
         _cartProducts.removeWhere(
           (element) =>
               Product.fromJson(element.data() as Map).id ==
               int.parse(productId),
         );
+        _currentUserCart?.cart.remove(productId);
+        if (onDone != null) {
+          onDone();
+        }
         update([Strings.cartGetBuilderId]);
         return;
       }
       _currentUserCart!.cart[productId] =
           _currentUserCart!.cart[productId]! - 1;
-      update([Strings.cartGetBuilderId]);
       if (onDone != null) {
         onDone();
       }
+      update([Strings.cartGetBuilderId]);
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong',
-          formatErrorMessage(e.toString()));
+      showSnackbar(
+        SnackbarState.danger,
+        'Something Went Wrong',
+        formatErrorMessage(
+          e.toString(),
+        ),
+      );
     }
   }
 

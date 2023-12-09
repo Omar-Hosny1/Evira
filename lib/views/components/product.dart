@@ -8,16 +8,18 @@ import 'package:get/get.dart';
 import '../../data/models/product.dart';
 
 bool? isFavouriteHelper(String productId) {
-  final wishlistController = WishlistController.get.currentUserWishlist;
-  if (wishlistController == null) {
+  final currentUserWishlist = WishlistController.get.currentUserWishlist;
+  if (currentUserWishlist == null) {
     return null;
   }
   print('************* isFavouriteHelper RAN *****************');
-  return wishlistController.wishlist[productId] == true;
+  return currentUserWishlist.wishlist[productId] == true;
 }
 
 bool? isAddedToCartHelper(String productId) {
   final currentUserCart = CartController.get.currentUserCart;
+  print('***************** currentUserCart?.cart **************');
+  print(currentUserCart?.cart);
   if (currentUserCart == null) {
     print('************** currentUserCart is null ***************');
     print(currentUserCart);

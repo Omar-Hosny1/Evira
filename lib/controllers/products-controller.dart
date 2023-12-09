@@ -13,6 +13,7 @@ class ProductController extends GetxController {
   List<Product> _prods = [];
   static ProductController get get => Get.find();
   bool _isDiscoverProductsSelected = true;
+  bool isCartAndWishlistDataFetchedSuccessfuly = false;
 
   @override
   void onInit() async {
@@ -21,7 +22,9 @@ class ProductController extends GetxController {
     print('*************** GETTING THE PRODUCTS ***************');
     await CartController.get.getUserCart();
     await WishlistController.get.getUserWishlist();
-    // print('snackbar /////////////////////////');
+    isCartAndWishlistDataFetchedSuccessfuly = true;
+    print('.................. FINISHED ..................');
+    getCurrentProducts();
     // Get.snackbar(fetchingState.name, fetchingState.name);
   }
 
@@ -67,6 +70,11 @@ class ProductController extends GetxController {
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {
     print('************** _isDiscoverProductsSelected ******************');
     print(_isDiscoverProductsSelected);
+    if (isCartAndWishlistDataFetchedSuccessfuly == false) {
+      return Stream.empty();
+    }
+    print('.................. GOT THE PRODUCTS ..................');
+
     if (_isDiscoverProductsSelected == true) {
       return _listenAndGetAllProducts();
     }

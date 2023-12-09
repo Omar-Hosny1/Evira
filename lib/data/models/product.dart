@@ -56,6 +56,13 @@ class Product {
     );
   }
 
+  removeFromCartPermanently({void Function()? onDone}) async {
+    await CartController.get.removeFromCartPermanently(
+      id.toString(),
+      onDone: onDone,
+    );
+  }
+
   int getProductQuantity() {
     return CartController.get.getProductQuantity(id.toString());
   }

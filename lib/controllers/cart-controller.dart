@@ -72,7 +72,38 @@ class CartController extends GetxController {
   }
 
   int getProductQuantity(String id) {
-    return currentUserCart!.cart[id]!;
+    return currentUserCart?.cart[id] ?? 0;
+  }
+
+  Future<void> removeFromCartPermanently(
+    String productId, {
+    void Function()? onDone,
+  }) async {
+    try {
+      await _cartRepo.removeFromCartPermanently(productId);
+      _currentUserCart?.cart.remove(productId);
+      _cartProducts.removeWhere(
+        (element) =>
+            Product.fromJson(element.data() as Map).id ==
+            int.parse(
+              productId,
+            ),
+      );
+
+      if (onDone != null) {
+        onDone();
+      }
+
+      update([Strings.cartGetBuilderId]);
+    } catch (e) {
+      showSnackbar(
+        SnackbarState.danger,
+        'Something Went Wrong',
+        formatErrorMessage(
+          e.toString(),
+        ),
+      );
+    }
   }
 
   Future<void> removeFromCart(
@@ -81,24 +112,24 @@ class CartController extends GetxController {
   }) async {
     try {
       await _cartRepo.removeFromCartFromRepo(productId);
-      if (_currentUserCart!.cart[productId] == 1) {
+      if (_currentUserCart?.cart[productId] == 1) {
+        _currentUserCart?.cart.remove(productId);
         _cartProducts.removeWhere(
           (element) =>
               Product.fromJson(element.data() as Map).id ==
               int.parse(productId),
         );
-        _currentUserCart?.cart.remove(productId);
-        if (onDone != null) {
-          onDone();
-        }
-        update([Strings.cartGetBuilderId]);
-        return;
+      } else {
+        print(_currentUserCart?.cart[productId]);
+        _currentUserCart?.cart[productId] =
+            _currentUserCart!.cart[productId]! - 1;
+        print(_currentUserCart?.cart[productId]);
       }
-      _currentUserCart!.cart[productId] =
-          _currentUserCart!.cart[productId]! - 1;
+
       if (onDone != null) {
         onDone();
       }
+      ProductController.get.updateTheUI();
       update([Strings.cartGetBuilderId]);
     } catch (e) {
       showSnackbar(

@@ -4,6 +4,7 @@ import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/cart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
@@ -19,18 +20,21 @@ class Cart extends StatelessWidget {
           leading: BackArrow(),
         ),
         bottomNavigationBar: Container(
-          color: Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
           width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text('0 Products'),
-              BaseButton(
-                onPressed: () {},
-                text: ('Checkout Now!'),
-              )
-            ],
+          child: BaseButton(
+            onPressed: () {
+              Get.defaultDialog(
+                  middleText: 'Your Order Has Been Saved Successfuly...',
+                  radius: 10,
+                  titlePadding: EdgeInsets.only(top: 20),
+                  title: 'Thanks For Dealing With Evira',
+                  custom: Icon(
+                    Icons.done_all,
+                    color: Colors.green,
+                  ));
+            },
+            text: ('Checkout Now!'),
           ),
         ),
         body: Padding(

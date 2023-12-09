@@ -45,6 +45,30 @@ class CartDS {
     }
   }
 
+  Future<void> removeFromCartPermanently(
+    String userEmail,
+    String productId,
+  ) async {
+    try {
+      final userCart = await getUserCart(userEmail);
+      if (userCart == null) {
+        return;
+      }
+      final currentCart = (userCart.data()
+          as Map)[Strings.productsMapKeyForCartDocument] as Map;
+
+      if (currentCart[productId] == null) {
+        return;
+      }
+      currentCart.remove(productId);
+      await _cartCollection.doc(userCart.id).update(
+        {Strings.productsMapKeyForCartDocument: currentCart},
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> removeFromCart(String userEmail, String productId) async {
     try {
       final userCart = await getUserCart(userEmail);

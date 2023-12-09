@@ -125,7 +125,7 @@ class ProductView extends StatelessWidget {
                       : 'Add To Cart',
                   onPressed: () async {
                     if (isAddedToCart.isTrue == true) {
-                      await product.removeFromCart(onDone: () {
+                      await product.removeFromCartPermanently(onDone: () {
                         isAddedToCart.value = false;
                       });
                       return;

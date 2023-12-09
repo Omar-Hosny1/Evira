@@ -21,6 +21,13 @@ class CartRepo {
     });
   }
 
+  Future<void> removeFromCartPermanently(String productId) async {
+    await errorHandler(tryLogic: () async {
+      final userEmail = AuthController.get.userData!.getEmail!;
+      await cartDs.removeFromCartPermanently(userEmail, productId);
+    });
+  }
+
   Future<UserCart?> getUserCartFromRepo() async {
     return await errorHandler<UserCart?>(tryLogic: () async {
       final userEmail = AuthController.get.userData!.getEmail!;

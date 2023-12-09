@@ -13,7 +13,6 @@ class ProductController extends GetxController {
   List<Product> _prods = [];
   static ProductController get get => Get.find();
   bool _isDiscoverProductsSelected = true;
-  bool isCartAndWishlistDataFetchedSuccessfuly = false;
 
   @override
   void onInit() async {
@@ -22,7 +21,6 @@ class ProductController extends GetxController {
     print('*************** GETTING THE PRODUCTS ***************');
     await CartController.get.getUserCart();
     await WishlistController.get.getUserWishlist();
-    isCartAndWishlistDataFetchedSuccessfuly = true;
     print('.................. FINISHED ..................');
     getCurrentProducts();
     // Get.snackbar(fetchingState.name, fetchingState.name);
@@ -54,13 +52,6 @@ class ProductController extends GetxController {
     List<int> ids,
   ) async {
     return await _productRepository.getWishlistProducts(ids);
-    // final List<Product> wishlistProducts = [];
-    // for (var i = 0; i < _prods.length; i++) {
-    //   if (ids[_prods[i].id.toString()] == true) {
-    //     wishlistProducts.add(_prods[i]);
-    //   }
-    // }
-    // return wishlistProducts;
   }
 
   Future<QuerySnapshot<Object?>> getCartProducts(List<int> ids) async {
@@ -70,9 +61,6 @@ class ProductController extends GetxController {
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {
     print('************** _isDiscoverProductsSelected ******************');
     print(_isDiscoverProductsSelected);
-    if (isCartAndWishlistDataFetchedSuccessfuly == false) {
-      return Stream.empty();
-    }
     print('.................. GOT THE PRODUCTS ..................');
 
     if (_isDiscoverProductsSelected == true) {
@@ -152,9 +140,10 @@ class ProductController extends GetxController {
   void showForYouProducts() {
     _isDiscoverProductsSelected = false;
     update([Strings.productsGetBuilderId]);
-    // _prods.removeWhere((element) => _isProductForYou(element) == false);
-    // print('******************* _prods.length *******************');
-    // print(_prods.length);
+  }
+
+  void updateTheUI() {
+    update([Strings.productsGetBuilderId]);
   }
 
   void showAll() {

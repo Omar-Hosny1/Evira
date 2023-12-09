@@ -19,9 +19,14 @@ class WishlistItem extends StatelessWidget {
         title: Text(product.name),
         subtitle: Text(product.gender),
         leading: Image.network(product.imageUrl),
-        trailing: Icon(
-          Icons.remove,
-          color: Colors.red,
+        trailing: InkWell(
+          onTap: () async {
+            await product.removeFromWishlist();
+          },
+          child: Icon(
+            Icons.remove,
+            color: Colors.red,
+          ),
         ),
       ),
     );

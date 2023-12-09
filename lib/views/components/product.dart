@@ -7,41 +7,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../data/models/product.dart';
 
-
- bool? isFavouriteHelper(String productId) {
-    final wishlistController = WishlistController.get.currentUserWishlist;
-    if (wishlistController == null) {
-      return null;
-    }
-    print('************* isFavouriteHelper RAN *****************');
-    return wishlistController.wishlist[productId] == true;
+bool? isFavouriteHelper(String productId) {
+  final wishlistController = WishlistController.get.currentUserWishlist;
+  if (wishlistController == null) {
+    return null;
   }
+  print('************* isFavouriteHelper RAN *****************');
+  return wishlistController.wishlist[productId] == true;
+}
 
-  bool? isAddedToCartHelper(String productId) {
-    final currentUserCart = CartController.get.currentUserCart;
-    if (currentUserCart == null) {
-      print('************** currentUserCart is null ***************');
-      print(currentUserCart);
-      return null;
-    }
-    return currentUserCart.cart[productId] != null;
+bool? isAddedToCartHelper(String productId) {
+  final currentUserCart = CartController.get.currentUserCart;
+  if (currentUserCart == null) {
+    print('************** currentUserCart is null ***************');
+    print(currentUserCart);
+    return null;
   }
+  return currentUserCart.cart[productId] != null;
+}
 
-// ignore: must_be_immutable
 class ProductView extends StatelessWidget {
   final Product product;
 
-  ProductView({
-    super.key,
-    required this.product,
-    // required this.isFavourite,
-    // required this.isAddedToCart,
-  });
+  const ProductView({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-  final Rx<bool?> isFavourite = Rx(isFavouriteHelper(product.id.toString()));
-  final Rx<bool?> isAddedToCart = Rx(isAddedToCartHelper(product.id.toString()));
+    final Rx<bool?> isFavourite = Rx(isFavouriteHelper(product.id.toString()));
+    final Rx<bool?> isAddedToCart =
+        Rx(isAddedToCartHelper(product.id.toString()));
     return InkWell(
       onTap: () {
         Get.toNamed(ProductDetails.routeName, arguments: product.id);
@@ -71,15 +65,14 @@ class ProductView extends StatelessWidget {
                   child: InkWell(
                     onTap: () async {
                       if (isFavourite.isTrue == true) {
-                        await WishlistController.get.removeFromWishlist(
-                            product.id.toString(), onDone: () {
+                        await product.removeFromWishlist(onDone: () {
                           isFavourite.value = false;
                         });
                         return;
                       }
-                      await WishlistController.get.addToWishlist(
-                          product.id.toString(),
-                          onDone: () => isFavourite.value = true);
+                      await product.addToWishlist(
+                        onDone: () => isFavourite.value = true,
+                      );
                     },
                     child: Obx(
                       () => Icon(
@@ -114,10 +107,11 @@ class ProductView extends StatelessWidget {
                         ? Colors.transparent
                         : Colors.black,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
-                        side: BorderSide(
-                          color: Colors.black,
-                        )),
+                      borderRadius: BorderRadius.circular(0),
+                      side: BorderSide(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                   textStyle: TextStyle(
                     color: isAddedToCart.isTrue == true
@@ -129,20 +123,15 @@ class ProductView extends StatelessWidget {
                       : 'Add To Cart',
                   onPressed: () async {
                     if (isAddedToCart.isTrue == true) {
-                      await CartController.get
-                          .removeFromCart(product.id.toString(), onDone: () {
+                      await product.removeFromCart(onDone: () {
                         isAddedToCart.value = false;
                       });
                       return;
                     }
-                    await CartController.get.addToCart(product.id.toString(),
-                        onDone: () {
+                    await product.addToCart(onDone: () {
                       isAddedToCart.value = true;
                     });
                   },
-                  // child: Text(
-
-                  //     style: TextStyle(color: Colors.white)),
                 ),
               ),
             ),

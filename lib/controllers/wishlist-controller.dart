@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/data/data-sources/wishlist-ds.dart';
 import 'package:evira/data/models/firebase-models/user-wishlist.dart';
+import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/wishlist-repo.dart';
+import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
@@ -39,6 +41,7 @@ class WishlistController extends GetxController {
     // TODO: implement onClose
     super.onClose();
     _currentUserWishlist = null;
+    _wishlistProducts = [];
     print(
         '********************* WishlistController Closed *********************');
   }
@@ -58,7 +61,7 @@ class WishlistController extends GetxController {
       }
       _currentUserWishlist = userWishlist;
       final data = await ProductController.get.getWishlistProducts(
-        userWishlist.wishlist,
+        userWishlist.wishlist.keys.map((e) => int.parse(e)).toList(),
       );
       _wishlistProducts = data.docs;
       print('*************** previewed _wishlistProducts ***********');
@@ -76,18 +79,30 @@ class WishlistController extends GetxController {
       {void Function()? onDone}) async {
     try {
       await _wishlistRepo.removeFromWishlist(productId);
-      await getUserWishlist();
+      _wishlistProducts.removeWhere((element) {
+        return Product.fromJson(element.data() as Map).id ==
+            int.parse(productId);
+      });
+      _currentUserWishlist!.wishlist.remove(productId);
+      update([Strings.wishlistGetBuilderId]);
       if (onDone != null) {
         onDone();
       }
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong',
-          formatErrorMessage(e.toString()));
+      showSnackbar(
+        SnackbarState.danger,
+        'Something Went Wrong',
+        formatErrorMessage(
+          e.toString(),
+        ),
+      );
     }
   }
 
-  Future<void> addToWishlist(String productId,
-      {void Function()? onDone}) async {
+  Future<void> addToWishlist(
+    String productId, {
+    void Function()? onDone,
+  }) async {
     try {
       await _wishlistRepo.addToWishlist(productId);
       await getUserWishlist();
@@ -95,8 +110,13 @@ class WishlistController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong',
-          formatErrorMessage(e.toString()));
+      showSnackbar(
+        SnackbarState.danger,
+        'Something Went Wrong',
+        formatErrorMessage(
+          e.toString(),
+        ),
+      );
     }
   }
 }

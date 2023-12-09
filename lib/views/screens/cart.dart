@@ -4,7 +4,6 @@ import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/cart.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
@@ -39,27 +38,23 @@ class Cart extends StatelessWidget {
             horizontal: Dimens.horizontal_padding,
             vertical: Dimens.vertical_padding,
           ),
-          child: GetBuilder<CartController>(
-            builder: (controller) => FutureBuilder(
-              future: controller.getUserCart(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError == true) {
-                  print(
-                      '***************** Cart Data ERROR **********************');
-                  return Center(child: Text(snapshot.error.toString()));
-                }
-                print(
-                    '************** controller.currentUserCart ****************');
-                print(controller.currentUserCart);
-                return CartContainer(
-                  products: controller.cartProducts,
+          child: FutureBuilder(
+            future: CartController.get.getUserCart(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
-              },
-            ),
+              } else if (snapshot.hasError == true) {
+                print(
+                    '***************** Cart Data ERROR **********************');
+                return Center(child: Text(snapshot.error.toString()));
+              }
+              print(
+                  '************** controller.currentUserCart ****************');
+              print(CartController.get.currentUserCart);
+              return CartContainer();
+            },
           ),
         ),
       ),

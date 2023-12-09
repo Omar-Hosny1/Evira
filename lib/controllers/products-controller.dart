@@ -47,8 +47,10 @@ class ProductController extends GetxController {
     return product;
   }
 
-  Future<QuerySnapshot<Object?>> getWishlistProducts(Map<String, bool> ids) async {
-    return await _productRepository.getWishlistProducts(ids.keys.toList());
+  Future<QuerySnapshot<Object?>> getWishlistProducts(
+    List<int> ids,
+  ) async {
+    return await _productRepository.getWishlistProducts(ids);
     // final List<Product> wishlistProducts = [];
     // for (var i = 0; i < _prods.length; i++) {
     //   if (ids[_prods[i].id.toString()] == true) {
@@ -58,14 +60,8 @@ class ProductController extends GetxController {
     // return wishlistProducts;
   }
 
-  List<Product> getCartProducts(Map<String, int> ids) {
-    final List<Product> cartProducts = [];
-    for (var i = 0; i < _prods.length; i++) {
-      if (ids[_prods[i].id.toString()] != null) {
-        cartProducts.add(_prods[i]);
-      }
-    }
-    return cartProducts;
+  Future<QuerySnapshot<Object?>> getCartProducts(List<int> ids) async {
+    return await _productRepository.getCartProducts(ids);
   }
 
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {

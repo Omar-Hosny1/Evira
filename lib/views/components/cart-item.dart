@@ -27,18 +27,16 @@ class CartItem extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.remove),
               onPressed: () async {
-                await product.decreaseCartProductQuantity();
-                productQuantity.value = CartController
-                    .get.currentUserCart!.cart[product.id.toString()]!;
+                await product.removeFromCart();
+                productQuantity.value = product.getProductQuantity();
               },
             ),
             Obx(() => Text(productQuantity.value.toString())),
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () async {
-                await product.increaseCartProductQuantity();
-                productQuantity.value = CartController
-                    .get.currentUserCart!.cart[product.id.toString()]!;
+                await product.addToCart();
+                productQuantity.value = product.getProductQuantity();
               },
             ),
           ],

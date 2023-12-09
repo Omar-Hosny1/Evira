@@ -31,7 +31,11 @@ class ProductRepository {
   }
 
 
-  Future<QuerySnapshot<Object?>> getWishlistProducts(List ids) async {
+  Future<QuerySnapshot<Object?>> getWishlistProducts(List<int> ids) async {
    return await _productsDataSource.getWishlistProducts(ids); 
+  }
+
+  Future<QuerySnapshot<Object?>> getCartProducts(List<int> ids) async {
+   return await _productsDataSource.getCartProducts(ids); 
   }
 }

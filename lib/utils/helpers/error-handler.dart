@@ -43,6 +43,8 @@ Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
     print(e.message);
     throw Exception(e.message);
   } catch (e) {
-    throw Exception(e.toString());
+    print(e.runtimeType);
+    print('...................... e.runtimeType');
+    rethrow;
   }
 }

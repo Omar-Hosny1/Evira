@@ -6,6 +6,8 @@ import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/product-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
+import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
@@ -13,16 +15,17 @@ class ProductController extends GetxController {
   List<Product> _prods = [];
   static ProductController get get => Get.find();
   bool _isDiscoverProductsSelected = true;
+  bool _isCartAndWishlistDataFetched = false;
+
+  bool get isCartAndWishlistDataFetched => _isCartAndWishlistDataFetched;
 
   @override
   void onInit() async {
     super.onInit();
     _productRepository = ProductRepository(ProductDS());
     print('*************** GETTING THE PRODUCTS ***************');
-    await CartController.get.getUserCart();
-    await WishlistController.get.getUserWishlist();
+
     print('.................. FINISHED ..................');
-    getCurrentProducts();
     // Get.snackbar(fetchingState.name, fetchingState.name);
   }
 
@@ -59,10 +62,6 @@ class ProductController extends GetxController {
   }
 
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {
-    print('************** _isDiscoverProductsSelected ******************');
-    print(_isDiscoverProductsSelected);
-    print('.................. GOT THE PRODUCTS ..................');
-
     if (_isDiscoverProductsSelected == true) {
       return _listenAndGetAllProducts();
     }
@@ -143,11 +142,31 @@ class ProductController extends GetxController {
   }
 
   void updateTheUI() {
+    print('***************** updateTheUI RAN ********************');
     update([Strings.productsGetBuilderId]);
   }
 
   void showAll() {
     _isDiscoverProductsSelected = true;
     update([Strings.productsGetBuilderId]);
+  }
+
+  Future<void> fetchCartAndWishlistData() async {
+    try {
+      await errorHandler(tryLogic: () async {
+        await CartController.get.getUserCart();
+        await WishlistController.get.getUserWishlist();
+        _isCartAndWishlistDataFetched = true;
+        updateTheUI();
+      });
+    } catch (e) {
+      showSnackbar(
+        SnackbarState.danger,
+        'Something Went Wrong',
+        formatErrorMessage(
+          e.toString() + 'AAAAAAAAAAAAAAAAAA',
+        ),
+      );
+    }
   }
 }

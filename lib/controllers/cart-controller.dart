@@ -5,8 +5,6 @@ import 'package:evira/data/models/firebase-models/user-cart.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/cart-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
@@ -14,6 +12,9 @@ class CartController extends GetxController {
   late final CartRepo _cartRepo;
   UserCart? _currentUserCart;
   List<QueryDocumentSnapshot<Object?>> _cartProducts = [];
+  double _cartAmount = 0;
+
+  double get cartAmount => _cartAmount;
 
   List<QueryDocumentSnapshot<Object?>> get cartProducts {
     return _cartProducts;
@@ -56,18 +57,13 @@ class CartController extends GetxController {
       }
       _currentUserCart!.cart[productId] =
           _currentUserCart!.cart[productId]! + 1;
-      update([Strings.cartGetBuilderId]);
       if (onDone != null) {
         onDone();
       }
+      updateCartAmount();
+      update([Strings.cartGetBuilderId]);
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString(),
-        ),
-      );
+      rethrow;
     }
   }
 
@@ -93,16 +89,10 @@ class CartController extends GetxController {
       if (onDone != null) {
         onDone();
       }
-
+      updateCartAmount();
       update([Strings.cartGetBuilderId]);
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString(),
-        ),
-      );
+      rethrow;
     }
   }
 
@@ -129,16 +119,10 @@ class CartController extends GetxController {
       if (onDone != null) {
         onDone();
       }
-      ProductController.get.updateTheUI();
+      updateCartAmount();
       update([Strings.cartGetBuilderId]);
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString(),
-        ),
-      );
+      rethrow;
     }
   }
 
@@ -159,15 +143,24 @@ class CartController extends GetxController {
         gettedUserCart.cart.keys.map((e) => int.parse(e)).toList(),
       );
       _cartProducts = data.docs;
+      updateCartAmount();
       update([Strings.cartGetBuilderId]);
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString(),
-        ),
-      );
+      rethrow;
     }
+  }
+
+  void updateCartAmount() {
+    if (_cartProducts.length == 0 || _currentUserCart == null) {
+      _cartAmount = 0;
+    }
+    double amount = 0;
+    for (var i = 0; i < _cartProducts.length; i++) {
+      final currentProduct = Product.fromJson(_cartProducts[i].data() as Map);
+      final currentProductAmount =
+          _currentUserCart!.cart[currentProduct.id.toString()] ?? 0;
+      amount += currentProduct.price * currentProductAmount;
+    }
+    _cartAmount = amount;
   }
 }

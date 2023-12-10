@@ -5,8 +5,6 @@ import 'package:evira/data/models/firebase-models/user-wishlist.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/wishlist-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
 
 class WishlistController extends GetxController {
@@ -67,11 +65,7 @@ class WishlistController extends GetxController {
       print('*************** previewed _wishlistProducts ***********');
       print(_wishlistProducts);
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(e.toString()),
-      );
+      rethrow;
     }
   }
 
@@ -89,13 +83,7 @@ class WishlistController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString(),
-        ),
-      );
+      rethrow;
     }
   }
 
@@ -110,13 +98,7 @@ class WishlistController extends GetxController {
         onDone();
       }
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString(),
-        ),
-      );
+      rethrow;
     }
   }
 }

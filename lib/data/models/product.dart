@@ -80,4 +80,17 @@ class Product {
       onDone: onDone,
     );
   }
+
+  String formatProductName() {
+    if (name.length > 14) {
+      return '${name.substring(0, 14)}...';
+    }
+    return name;
+  }
+
+  String formatProductPrice() {
+    return ' EGP $price';
+  }
+
+
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/screens/profile.dart';
@@ -28,22 +29,33 @@ class UserListTile extends StatelessWidget {
                 ),
               ),
               child: ListTile(
-                trailing: ClipRRect(
-                  borderRadius: BorderRadius.circular(25),
-                  child: Image.network(
-                    controller.userData!.getImagePath!,
-                    fit: BoxFit.contain,
-                    width: 50,
-                    height: 50,
+                trailing: CircleAvatar(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: CachedNetworkImage(
+                      imageUrl: controller.userData!.getImagePath!,
+                      fit: BoxFit.cover,
+                      width: 50,
+                      height: 50,
+                    ),
                   ),
                 ),
                 onTap: () {
+                  Get.back(closeOverlays: true);
                   Get.toNamed(Profile.routeName);
                 },
-                subtitle: Text(controller.userData!.getEmail!,
-                    style: const TextStyle(fontSize: 12)),
-                title: Text(controller.userData!.getName!,
-                    style: const TextStyle(fontSize: 18)),
+                subtitle: Text(
+                  controller.userData!.getEmail!,
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+                title: Text(
+                  controller.userData!.getName!,
+                  style: const TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
               ),
             ),
     );

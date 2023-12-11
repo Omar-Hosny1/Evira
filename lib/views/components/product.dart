@@ -71,7 +71,7 @@ class ProductView extends StatelessWidget {
                   top: 0,
                   left: 0,
                   child: ProductWishlistButton(
-                    isLoadingStateForFavourite: _isLoadingStateForFavourite,
+                    isLoading: _isLoadingStateForFavourite,
                     isFavourite: isFavourite,
                     product: product,
                   ),
@@ -89,7 +89,7 @@ class ProductView extends StatelessWidget {
               width: double.infinity,
               child: ProductCartButton(
                 isAddedToCart: isAddedToCart,
-                isLoadingStateForCart: _isLoadingStateForCart,
+                isLoading: _isLoadingStateForCart,
                 product: product,
               ),
             ),

@@ -53,7 +53,13 @@ class Home extends StatelessWidget {
                         );
                       }
                       if (controller.isCartAndWishlistDataFetched == false) {
-                        controller.fetchCartAndWishlistData();
+                        try {
+                          controller.fetchCartAndWishlistData();
+                        } catch (e) {
+                          return Text(
+                            e.toString(),
+                          );
+                        }
                         return Center(
                           child: CircularProgressIndicator(),
                         );
@@ -71,11 +77,17 @@ class Home extends StatelessWidget {
                             childAspectRatio: 4 / 7,
                           ),
                           itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) => ProductView(
-                            product: Product.fromJson(
+                          itemBuilder: (context, index) {
+                            final product = Product.fromJson(
                               snapshot.data!.docs[index].data() as Map,
-                            ),
-                          ),
+                            );
+                            return ProductView(
+                              key: Key(
+                                product.id.toString(),
+                              ),
+                              product: product,
+                            );
+                          },
                         ),
                       );
                     },

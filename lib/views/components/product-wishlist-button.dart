@@ -6,39 +6,39 @@ import 'package:get/get.dart';
 class ProductWishlistButton extends StatelessWidget {
   const ProductWishlistButton({
     super.key,
-    required this.isLoadingStateForFavourite,
+    required this.isLoading,
     required this.isFavourite,
     required this.product,
   });
 
-  final RxBool isLoadingStateForFavourite;
+  final RxBool isLoading;
   final Rx<bool?> isFavourite;
   final Product product;
 
 void wishlistIconHandler(Rx<bool?> isFavourite) async {
     if (isFavourite.isTrue == true) {
       await errorHandlerInView(tryLogic: () async {
-        isLoadingStateForFavourite.value = true;
+        isLoading.value = true;
         await product.removeFromWishlist();
         isFavourite.value = false;
       }, finallyLogic: () {
-        isLoadingStateForFavourite.value = false;
+        isLoading.value = false;
       });
       return;
     }
     await errorHandlerInView(tryLogic: () async {
-      isLoadingStateForFavourite.value = true;
+      isLoading.value = true;
       await product.addToWishlist();
       isFavourite.value = true;
     }, finallyLogic: () {
-      isLoadingStateForFavourite.value = false;
+      isLoading.value = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     Widget buildIcon() {
-      if (isLoadingStateForFavourite.isTrue == true) {
+      if (isLoading.isTrue == true) {
         return CircularProgressIndicator();
       }
 
@@ -52,7 +52,7 @@ void wishlistIconHandler(Rx<bool?> isFavourite) async {
 
     return Obx(
       () => IconButton(
-        onPressed: () => wishlistIconHandler(isFavourite),
+        onPressed: isLoading.isTrue ? null : () => wishlistIconHandler(isFavourite),
         icon: buildIcon(),
       ),
     );

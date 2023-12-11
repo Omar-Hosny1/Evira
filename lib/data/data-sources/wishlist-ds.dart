@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class WishlistDS {
   final CollectionReference _wishlistCollection =
       FirebaseFirestore.instance.collection(Strings.wishlistCollectionName);
+      
   Future<QueryDocumentSnapshot<Object?>?> getUserWishlist(
     String userEmail,
   ) async {
@@ -26,26 +27,18 @@ class WishlistDS {
   Future<void> addToWishlist(String userEmail, String productId) async {
     try {
       final userWishlist = await getUserWishlist(userEmail);
-      print('******************* addToWishlist CALLED ********************');
-      // Has Wishlist
       if (userWishlist != null) {
-        print('****************** HAS Wishlist ******************');
         final currentWishlist = (userWishlist.data()
             as Map)[Strings.productsMapKeyForWishlistDocument] as Map;
-        print('****************** currentWishlist ******************');
-        print(currentWishlist);
         if (currentWishlist[productId] == true) {
           return;
         }
         final updatedWishList = {...currentWishlist, productId: true};
-        print('****************** updatedWishList ******************');
-        print(updatedWishList);
         await _wishlistCollection.doc(userWishlist.id).update(
           {Strings.productsMapKeyForWishlistDocument: updatedWishList},
         );
         return;
       }
-      print('*************** ADDING ***************');
       await _wishlistCollection.add({
         Strings.userEmailKeyForWishlistDocument: userEmail,
         Strings.productsMapKeyForWishlistDocument: {productId: true},
@@ -61,20 +54,14 @@ class WishlistDS {
       if (userWishlist == null) {
         return;
       }
-      print('****************** HAS Wishlist ******************');
       final currentWishlist = (userWishlist.data()
           as Map)[Strings.productsMapKeyForWishlistDocument] as Map;
-      print('****************** currentWishlist ******************');
-      print(currentWishlist);
-      ;
       currentWishlist.remove(productId);
-      print(
-          '****************** currentWishlist AFTER DELETE ******************');
-      print(currentWishlist);
       await _wishlistCollection.doc(userWishlist.id).update(
         {Strings.productsMapKeyForWishlistDocument: currentWishlist},
       );
     } catch (e) {
+      print('ERROR ${e.toString()}');
       rethrow;
     }
   }

@@ -110,10 +110,8 @@ class CartController extends GetxController {
               int.parse(productId),
         );
       } else {
-        print(_currentUserCart?.cart[productId]);
         _currentUserCart?.cart[productId] =
             _currentUserCart!.cart[productId]! - 1;
-        print(_currentUserCart?.cart[productId]);
       }
 
       if (onDone != null) {
@@ -151,7 +149,7 @@ class CartController extends GetxController {
   }
 
   void updateCartAmount() {
-    if (_cartProducts.length == 0 || _currentUserCart == null) {
+    if (_cartProducts.isEmpty || _currentUserCart == null) {
       _cartAmount = 0;
     }
     double amount = 0;

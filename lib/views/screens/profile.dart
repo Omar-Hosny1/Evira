@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
@@ -13,7 +14,7 @@ class Profile extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-         appBar: AppBar(
+        appBar: AppBar(
           leading: BackArrow(),
           title: Text('Your Profile'),
         ),
@@ -36,7 +37,7 @@ class Profile extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 50.0,
-                          backgroundImage: NetworkImage(
+                          backgroundImage: CachedNetworkImageProvider(
                             currentUser.getImagePath!,
                           ),
                         ),
@@ -108,6 +109,9 @@ class Profile extends StatelessWidget {
                     ),
                     Card(
                       child: ListTile(
+                        onTap: () async {
+                          await AuthController.get.logOut();
+                        },
                         trailing: Icon(
                           Icons.arrow_forward,
                           color: Colors.red,

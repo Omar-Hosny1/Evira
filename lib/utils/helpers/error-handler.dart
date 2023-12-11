@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 String formatErrorMessage(String errMsg) {
@@ -9,7 +11,12 @@ String formatErrorMessage(String errMsg) {
 
 Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
   try {
-    return await tryLogic();
+    return await tryLogic().timeout(const Duration(seconds: 4), onTimeout: () {
+      throw FirebaseException(
+        plugin: 'network-request-failed',
+        message: 'network-request-failed',
+      );
+    });
   } on FirebaseAuthException catch (e) {
     print('******************** Firebase Error Message ********************');
     print(e.code);
@@ -41,7 +48,12 @@ Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
   } on FirebaseException catch (e) {
     print('******************** Firebase Error Message ********************');
     print(e.message);
+    if (e.message == 'network-request-failed') {
+      throw Exception('Check Yout Network And Try Aganin Later...');
+    }
     throw Exception(e.message);
+  } on SocketException {
+    throw Exception('No Internet Connection');
   } catch (e) {
     print(e.runtimeType);
     print('...................... e.runtimeType');

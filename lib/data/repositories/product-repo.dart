@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/data/models/product.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
 
 class ProductRepository {
   final ProductDS _productsDataSource;
@@ -26,16 +27,21 @@ class ProductRepository {
     final currentUser = AuthController.get.userData!;
 
     final dataStream = _productsDataSource.getForYouProducts(
-        currentUser.getGender!, currentUser.getWeight!);
+      currentUser.getGender!,
+      currentUser.getWeight!,
+    );
     return dataStream;
   }
 
-
   Future<QuerySnapshot<Object?>> getWishlistProducts(List<int> ids) async {
-   return await _productsDataSource.getWishlistProducts(ids); 
+    return errorHandler(tryLogic: () async {
+      return await _productsDataSource.getWishlistProducts(ids);
+    });
   }
 
   Future<QuerySnapshot<Object?>> getCartProducts(List<int> ids) async {
-   return await _productsDataSource.getCartProducts(ids); 
+    return errorHandler(tryLogic: () async {
+      return await _productsDataSource.getCartProducts(ids);
+    });
   }
 }

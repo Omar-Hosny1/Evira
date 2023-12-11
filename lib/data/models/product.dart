@@ -89,8 +89,10 @@ class Product {
   }
 
   String formatProductPrice() {
-    return ' EGP $price';
+    return 'EGP $price';
   }
 
-
+  String formatProductWeight() {
+    return '$weight KG' ;
+  }
 }

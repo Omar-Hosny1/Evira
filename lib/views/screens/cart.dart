@@ -3,7 +3,7 @@ import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
-import 'package:evira/views/components/cart.dart';
+import 'package:evira/views/components/cart-container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,18 +72,13 @@ class Cart extends StatelessWidget {
             future: CartController.get.getUserCart(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError == true) {
-                print(
-                    '***************** Cart Data ERROR **********************');
                 return Center(child: Text(snapshot.error.toString()));
               }
-              print(
-                  '************** controller.currentUserCart ****************');
-              print(CartController.get.currentUserCart);
-              return CartContainer();
+              return const CartContainer();
             },
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,20 @@ class WishlistItem extends StatelessWidget {
       child: ListTile(
         title: Text(product.name),
         subtitle: Text(product.gender),
-        leading: Image.network(product.imageUrl),
+        leading: CachedNetworkImage(
+          imageUrl: product.imageUrl,
+          placeholder: (context, url) => Center(
+            child: SizedBox(
+              width: 70,
+              height: 70,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        ),
         trailing: Obx(
           () => InkWell(
-            onTap: removeFromWishlistHandler,
+            onTap: _isLoading.isTrue ? null : removeFromWishlistHandler,
             child: _isLoading.isTrue
                 ? CircularProgressIndicator()
                 : Icon(

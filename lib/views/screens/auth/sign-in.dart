@@ -1,5 +1,6 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
+import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/validations/common.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
@@ -25,9 +26,12 @@ class SignIn extends StatelessWidget {
     }
 
     _formKey.currentState?.save();
-    _isLoading.value = true;
-    await AuthController.get.signIn(_enteredEmail, _enteredPassword);
-    _isLoading.value = false;
+    await errorHandlerInView(tryLogic: () async {
+      _isLoading.value = true;
+      await AuthController.get.signIn(_enteredEmail, _enteredPassword);
+    }, finallyLogic: () {
+      _isLoading.value = false;
+    });
   }
 
   @override
@@ -91,8 +95,8 @@ class SignIn extends StatelessWidget {
                                 EdgeInsets.symmetric(vertical: 25)),
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.black),
-                            shape:
-                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(50),
                                 side: BorderSide(color: Colors.black),
@@ -117,7 +121,8 @@ class SignIn extends StatelessWidget {
                             EdgeInsets.symmetric(vertical: 25)),
                         backgroundColor:
                             MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                             side: BorderSide(color: Colors.black),

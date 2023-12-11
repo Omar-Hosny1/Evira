@@ -6,8 +6,6 @@ import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/product-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
@@ -54,11 +52,19 @@ class ProductController extends GetxController {
   Future<QuerySnapshot<Object?>> getWishlistProducts(
     List<int> ids,
   ) async {
-    return await _productRepository.getWishlistProducts(ids);
+    try {
+      return await _productRepository.getWishlistProducts(ids);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<QuerySnapshot<Object?>> getCartProducts(List<int> ids) async {
-    return await _productRepository.getCartProducts(ids);
+    try {
+      return await _productRepository.getCartProducts(ids);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {
@@ -153,20 +159,13 @@ class ProductController extends GetxController {
 
   Future<void> fetchCartAndWishlistData() async {
     try {
-      await errorHandler(tryLogic: () async {
-        await CartController.get.getUserCart();
-        await WishlistController.get.getUserWishlist();
-        _isCartAndWishlistDataFetched = true;
-        updateTheUI();
-      });
+      await CartController.get.getUserCart();
+      await WishlistController.get.getUserWishlist();
+      _isCartAndWishlistDataFetched = true;
+      updateTheUI();
     } catch (e) {
-      showSnackbar(
-        SnackbarState.danger,
-        'Something Went Wrong',
-        formatErrorMessage(
-          e.toString() + 'AAAAAAAAAAAAAAAAAA',
-        ),
-      );
+      updateTheUI();
+      rethrow;
     }
   }
 }

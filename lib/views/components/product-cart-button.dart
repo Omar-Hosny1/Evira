@@ -9,31 +9,31 @@ class ProductCartButton extends StatelessWidget {
   const ProductCartButton({
     super.key,
     required this.isAddedToCart,
-    required this.isLoadingStateForCart,
+    required this.isLoading,
     required this.product,
   });
 
   final Rx<bool?> isAddedToCart;
-  final RxBool isLoadingStateForCart;
+  final RxBool isLoading;
   final Product product;
 
   void cartButtonHandler(Rx<bool?> isAddedToCart) async {
     if (isAddedToCart.isTrue == true) {
       await errorHandlerInView(tryLogic: () async {
-        isLoadingStateForCart.value = true;
+        isLoading.value = true;
         await product.removeFromCartPermanently();
         isAddedToCart.value = false;
       }, finallyLogic: () {
-        isLoadingStateForCart.value = false;
+        isLoading.value = false;
       });
       return;
     }
     await errorHandlerInView(tryLogic: () async {
-      isLoadingStateForCart.value = true;
+      isLoading.value = true;
       await product.addToCart();
       isAddedToCart.value = true;
     }, finallyLogic: () {
-      isLoadingStateForCart.value = false;
+      isLoading.value = false;
     });
   }
 
@@ -57,12 +57,12 @@ class ProductCartButton extends StatelessWidget {
         textStyle: TextStyle(
           color: isAddedToCart.isTrue == true ? Colors.black : Colors.white,
         ),
-        text: isLoadingStateForCart.isTrue == true
+        text: isLoading.isTrue == true
             ? 'Loading...'
             : isAddedToCart.isTrue == true
                 ? 'Remove Cart'
                 : 'Add To Cart',
-        onPressed: isLoadingStateForCart.isTrue
+        onPressed: isLoading.isTrue
             ? null
             : () => cartButtonHandler(isAddedToCart),
       ),

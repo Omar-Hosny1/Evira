@@ -1,4 +1,3 @@
-import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/views/components/user-list-tile.dart';
 import 'package:evira/views/screens/cart.dart';
 import 'package:evira/views/screens/wishlist.dart';
@@ -20,12 +19,6 @@ class MainDrawer extends StatelessWidget {
           //   },
           //   title: const Text('Raise Data'),
           // ),
-          ListTile(
-            onTap: () {
-              AuthController.get.logOut();
-            },
-            title: const Text('Logout'),
-          ),
           ListTile(
             onTap: () {
               Get.back(closeOverlays: true);

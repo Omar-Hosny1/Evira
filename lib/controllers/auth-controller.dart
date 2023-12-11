@@ -4,7 +4,6 @@ import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/data/repositories/auth-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/views/screens/auth/sign-in.dart';
 import 'package:evira/views/screens/auth/sign-up.dart';
@@ -44,7 +43,7 @@ class AuthController extends GetxController {
         'Check your email...',
       );
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', formatErrorMessage(e.toString()));
+      rethrow;
     }
   }
 
@@ -55,7 +54,7 @@ class AuthController extends GetxController {
       await _getUserDataFromPrefsAndSetCurrentUserData();
       showSnackbar(SnackbarState.success, 'Success', 'Logged in Successfully');
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', formatErrorMessage(e.toString()));
+      rethrow;
     }
   }
 
@@ -96,7 +95,7 @@ class AuthController extends GetxController {
     try {
       await _authRepository.resetPassword(email);
     } catch (e) {
-      showSnackbar(SnackbarState.danger, 'Something Went Wrong', formatErrorMessage(e.toString()));
+      rethrow;
     }
   }
 
@@ -112,8 +111,11 @@ class AuthController extends GetxController {
       Duration(seconds: timeToExpiry),
       () {
         logOut();
-        showSnackbar(SnackbarState.success, 'Sign in Again Now',
-            'Your Token Had Expired');
+        showSnackbar(
+          SnackbarState.success,
+          'Sign in Again Now',
+          'Your Token Had Expired',
+        );
       },
     );
   }

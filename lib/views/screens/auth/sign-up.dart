@@ -6,6 +6,7 @@ import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/device/device_utils.dart';
+import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/validations/common.dart';
 import 'package:evira/utils/validations/sign-up.dart';
 import 'package:evira/views/components/base/base-button.dart';
@@ -43,7 +44,7 @@ class SignUp extends StatelessWidget {
       _photoErrMsg.value = 'Please Pick up an profile image';
       return;
     }
-    if(_enteredUserData.getGender == null){
+    if (_enteredUserData.getGender == null) {
       _enteredUserData.gender = Strings.gendersArray[0].toLowerCase();
     }
 
@@ -52,9 +53,13 @@ class SignUp extends StatelessWidget {
 
     _formKey.currentState?.save();
     final authController = Get.find<AuthController>();
-    _isLoading.value = true;
-    await authController.signUp(_enteredUserData);
-    _isLoading.value = false;
+
+    await errorHandlerInView(tryLogic: () async {
+      _isLoading.value = true;
+      await authController.signUp(_enteredUserData);
+    }, finallyLogic: () {
+      _isLoading.value = false;
+    });
   }
 
   Future imgFromGallery() async {
@@ -131,7 +136,7 @@ class SignUp extends StatelessWidget {
                   ),
                   BaseInput(
                     label: 'Name',
-                    keyboardType: TextInputType.name, 
+                    keyboardType: TextInputType.name,
                     onSaved: (v) {
                       _enteredUserData.name = v!;
                     },

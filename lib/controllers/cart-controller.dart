@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evira/controllers/order-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/data/data-sources/cart-ds.dart';
 import 'package:evira/data/models/firebase-models/user-cart.dart';
+import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/cart-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
@@ -160,5 +162,44 @@ class CartController extends GetxController {
       amount += currentProduct.price * currentProductAmount;
     }
     _cartAmount = amount;
+  }
+
+  List<OrderedProduct> _prepareOrderProducts() {
+    final List<OrderedProduct> result = [];
+    try {
+      for (var i = 0; i < _cartProducts.length; i++) {
+        final currentProduct = _cartProducts[i].data() as Map<String, dynamic>;
+        final currentProductQuantity =
+            _currentUserCart?.cart[currentProduct['id'].toString()];
+        print(_currentUserCart?.cart);
+        print(' ................. currentProductQuantity ....................');
+        print(currentProductQuantity);
+        final orderedProduct = OrderedProduct.fromJson(
+          currentProduct,
+          quantity: currentProductQuantity,
+        );
+        print(orderedProduct);
+        result.add(orderedProduct);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+    return result;
+  }
+
+  Future<void> makeOrder() async {
+    try {
+      final orderdProducts = _prepareOrderProducts();
+      print('GOT HERE');
+      await OrderController.get.addOrder(orderdProducts, _cartAmount);
+      print('GOT HERE');
+      await _cartRepo.cleanUpUserCart();
+      _currentUserCart?.cart = {};
+      _cartProducts = [];
+      _cartAmount = 0;
+      update([Strings.cartGetBuilderId]);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

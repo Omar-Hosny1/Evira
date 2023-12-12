@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/data/repositories/auth-repo.dart';
@@ -50,8 +51,9 @@ class AuthController extends GetxController {
   Future<void> signIn(String email, String password) async {
     try {
       await _authRepository.signIn(email, password);
-      Get.offAllNamed(Home.routeName);
       await _getUserDataFromPrefsAndSetCurrentUserData();
+      await ProductController.get.fetchCartAndWishlistData();
+      Get.offAllNamed(Home.routeName);
       showSnackbar(SnackbarState.success, 'Success', 'Logged in Successfully');
     } catch (e) {
       rethrow;
@@ -88,6 +90,7 @@ class AuthController extends GetxController {
       return SignUp.routeName;
     }
     await _getUserDataFromPrefsAndSetCurrentUserData();
+    await ProductController.get.fetchCartAndWishlistData();
     return Home.routeName;
   }
 

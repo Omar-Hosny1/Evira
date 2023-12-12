@@ -1,9 +1,9 @@
-import 'package:evira/data/models/product.dart';
+import 'package:evira/data/models/orderd-product.dart';
 
 class Order {
-  List<Product> products;
+  List<OrderedProduct> products;
   String date;
-  int totalPrice;
+  double totalPrice;
 
   Order({
     required this.products,
@@ -12,8 +12,8 @@ class Order {
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-        products: List<Product>.from(
-            json["products"].map((x) => Product.fromJson(x))),
+        products: List<OrderedProduct>.from(
+            json["products"].map((x) => OrderedProduct.fromJson(x))),
         date: json["date"],
         totalPrice: json["total_price"],
       );

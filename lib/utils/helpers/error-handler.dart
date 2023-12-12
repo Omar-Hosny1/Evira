@@ -11,7 +11,7 @@ String formatErrorMessage(String errMsg) {
 
 Future<T> errorHandler<T>({required Future<T> Function() tryLogic}) async {
   try {
-    return await tryLogic().timeout(const Duration(seconds: 4), onTimeout: () {
+    return await tryLogic().timeout(const Duration(seconds: 6), onTimeout: () {
       throw FirebaseException(
         plugin: 'network-request-failed',
         message: 'network-request-failed',

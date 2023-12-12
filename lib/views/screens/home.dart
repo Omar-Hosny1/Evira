@@ -52,18 +52,7 @@ class Home extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      if (controller.isCartAndWishlistDataFetched == false) {
-                        try {
-                          controller.fetchCartAndWishlistData();
-                        } catch (e) {
-                          return Text(
-                            e.toString(),
-                          );
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
+
                       return RefreshIndicator(
                         onRefresh: () async {
                           controller.updateTheUI();

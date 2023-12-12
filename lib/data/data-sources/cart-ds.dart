@@ -116,4 +116,21 @@ class CartDS {
       rethrow;
     }
   }
+
+  Future<void> cleanUpUserCart(String userEmail) async {
+    try {
+      final userCart = await getUserCart(userEmail);
+      if (userCart == null) {
+        return;
+      }
+
+      await _cartCollection.doc(userCart.id).update(
+        {
+          Strings.productsMapKeyForCartDocument: {},
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

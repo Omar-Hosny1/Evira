@@ -41,4 +41,11 @@ class CartRepo {
       return UserCart.fromJson(userCartData);
     });
   }
+
+  Future<void> cleanUpUserCart() async {
+    await errorHandler(tryLogic: () async {
+      final userEmail = AuthController.get.userData!.getEmail!;
+      await cartDs.cleanUpUserCart(userEmail);
+    });
+  }
 }

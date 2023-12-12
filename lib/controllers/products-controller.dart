@@ -13,9 +13,6 @@ class ProductController extends GetxController {
   List<Product> _prods = [];
   static ProductController get get => Get.find();
   bool _isDiscoverProductsSelected = true;
-  bool _isCartAndWishlistDataFetched = false;
-
-  bool get isCartAndWishlistDataFetched => _isCartAndWishlistDataFetched;
 
   @override
   void onInit() async {
@@ -161,10 +158,7 @@ class ProductController extends GetxController {
     try {
       await CartController.get.getUserCart();
       await WishlistController.get.getUserWishlist();
-      _isCartAndWishlistDataFetched = true;
-      updateTheUI();
     } catch (e) {
-      updateTheUI();
       rethrow;
     }
   }

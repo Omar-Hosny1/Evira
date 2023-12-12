@@ -15,6 +15,8 @@ class Strings {
   static const String userDataKeySharedPrefrences = "userData";
   static const String userEmailKeyForWishlistDocument = "email";
   static const String userEmailKeyForOrderDocument = "email";
+  static const String dateKeyForOrderDocument = "date";
+  static const String ordersKeyForOrderDocument = "orders";
   static const String productsMapKeyForWishlistDocument = "wishlist";
   static const String userEmailKeyForCartDocument = "email";
   static const String productsMapKeyForCartDocument = "cart";

@@ -41,8 +41,9 @@ class CartController extends GetxController {
     _cartProducts = [];
   }
 
-  Future<void> addToCart(String productId, {void Function()? onDone}) async {
+  Future<void> addToCart(String productId) async {
     try {
+      print('addToCart CALLED');
       await _cartRepo.addToCartFromRepo(productId);
       print('************* _currentUserCart ****************');
       print(_currentUserCart);
@@ -52,16 +53,11 @@ class CartController extends GetxController {
       if (_currentUserCart!.cart[productId] == null) {
         _currentUserCart!.cart[productId] = 1;
         update([Strings.cartGetBuilderId]);
-        if (onDone != null) {
-          onDone();
-        }
         return;
       }
       _currentUserCart!.cart[productId] =
           _currentUserCart!.cart[productId]! + 1;
-      if (onDone != null) {
-        onDone();
-      }
+
       updateCartAmount();
       update([Strings.cartGetBuilderId]);
     } catch (e) {
@@ -126,8 +122,15 @@ class CartController extends GetxController {
     }
   }
 
+  void resetDefaults() {
+    _cartAmount = 0;
+    _cartProducts = [];
+    update([Strings.cartGetBuilderId]);
+  }
+
   Future<void> getUserCart() async {
     try {
+      resetDefaults();
       final gettedUserCart = await _cartRepo.getUserCartFromRepo();
       if (gettedUserCart == null || gettedUserCart.cart.isEmpty) {
         print(

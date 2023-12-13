@@ -73,25 +73,29 @@ class AuthController extends GetxController {
   }
 
   Future<String> getInitialRoute() async {
-    final gettedUserDataFromShared =
-        await _authRepository.getUserDataFromSharedPrefs();
-    if (gettedUserDataFromShared == null ||
-        gettedUserDataFromShared.getTokenExpiresIn == null ||
-        gettedUserDataFromShared.getToken == null) {
-      await _authRepository.cleanUserDataFromSharedPrefs();
+    try {
+      final gettedUserDataFromShared =
+          await _authRepository.getUserDataFromSharedPrefs();
+      if (gettedUserDataFromShared == null ||
+          gettedUserDataFromShared.getTokenExpiresIn == null ||
+          gettedUserDataFromShared.getToken == null) {
+        await _authRepository.cleanUserDataFromSharedPrefs();
+        return SignUp.routeName;
+      }
+
+      final expiresIn =
+          DateTime.parse(gettedUserDataFromShared.getTokenExpiresIn!);
+
+      if (expiresIn.isBefore(DateTime.now())) {
+        await _authRepository.cleanUserDataFromSharedPrefs();
+        return SignUp.routeName;
+      }
+      await _getUserDataFromPrefsAndSetCurrentUserData();
+      await ProductController.get.fetchCartAndWishlistData();
+      return Home.routeName;
+    } catch (e) {
       return SignUp.routeName;
     }
-
-    final expiresIn =
-        DateTime.parse(gettedUserDataFromShared.getTokenExpiresIn!);
-
-    if (expiresIn.isBefore(DateTime.now())) {
-      await _authRepository.cleanUserDataFromSharedPrefs();
-      return SignUp.routeName;
-    }
-    await _getUserDataFromPrefsAndSetCurrentUserData();
-    await ProductController.get.fetchCartAndWishlistData();
-    return Home.routeName;
   }
 
   Future<void> resetPassword(String email) async {

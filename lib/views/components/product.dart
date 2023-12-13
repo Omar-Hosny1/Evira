@@ -1,6 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evira/controllers/cart-controller.dart';
-import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/views/components/product-cart-button.dart';
 import 'package:evira/views/components/product-wishlist-button.dart';
 import 'package:evira/views/screens/product-details.dart';
@@ -8,36 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../data/models/product.dart';
 
-bool? _isFavouriteHelper(String productId) {
-  final currentUserWishlist = WishlistController.get.currentUserWishlist;
-  if (currentUserWishlist == null) {
-    return null;
-  }
-  return currentUserWishlist.wishlist[productId] == true;
-}
-
-bool? isAddedToCartHelper(String productId) {
-  final currentUserCart = CartController.get.currentUserCart;
-  if (currentUserCart == null) {
-    return null;
-  }
-  return currentUserCart.cart[productId] != null;
-}
-
 class ProductView extends StatelessWidget {
   final Product product;
-  final RxBool _isLoadingStateForFavourite = false.obs;
-  final RxBool _isLoadingStateForCart = false.obs;
 
-  ProductView({super.key, required this.product});
+  const ProductView({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
-    final Rx<bool?> isFavourite = Rx(_isFavouriteHelper(product.id.toString()));
-    final Rx<bool?> isAddedToCart = Rx(
-      isAddedToCartHelper(product.id.toString()),
-    );
-
     return InkWell(
       onTap: () {
         Get.toNamed(ProductDetails.routeName, arguments: product.id);
@@ -71,8 +46,6 @@ class ProductView extends StatelessWidget {
                   top: 0,
                   left: 0,
                   child: ProductWishlistButton(
-                    isLoading: _isLoadingStateForFavourite,
-                    isFavourite: isFavourite,
                     product: product,
                   ),
                 )
@@ -88,8 +61,6 @@ class ProductView extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 15),
               width: double.infinity,
               child: ProductCartButton(
-                isAddedToCart: isAddedToCart,
-                isLoading: _isLoadingStateForCart,
                 product: product,
               ),
             ),

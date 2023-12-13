@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
+import 'package:evira/utils/helpers/handle-loading-state.dart';
+import 'package:get/get.dart';
 
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
@@ -14,6 +16,29 @@ class Product {
   String name;
   int price;
   String weight;
+  final Rx<bool> _isLoadingStateForCart = false.obs;
+  final Rx<bool?> _isAddedToCart = Rx(null);
+
+  final Rx<bool> _isLoadingStateForWishlist = false.obs;
+  final Rx<bool?> _isAddedToWishlist = Rx(null);
+
+  Rx<bool> get isLoadingStateForCart {
+    return Rx(_isLoadingStateForCart.value);
+  }
+
+  Rx<bool> get isLoadingStateForWishlist {
+    return Rx(_isLoadingStateForWishlist.value);
+  }
+
+  Rx<bool?> get isAddedToCart {
+    _isAddedToCart.value = _isAddedToCartHelper();
+    return Rx(_isAddedToCart.value);
+  }
+
+  Rx<bool?> get isAddedToWishlist {
+    _isAddedToWishlist.value = _isAddedToTheWishlistHelper();
+    return Rx(_isAddedToWishlist.value);
+  }
 
   Product({
     required this.gender,
@@ -42,24 +67,36 @@ class Product {
         "weight": weight,
       };
 
-  addToCart({void Function()? onDone}) async {
-    await CartController.get.addToCart(
-      id.toString(),
-      onDone: onDone,
+  Future<void> addToCart() async {
+    await handleLoaddingState(
+      tryLogic: () async {
+        await CartController.get.addToCart(
+          id.toString(),
+        );
+      },
+      isLoading: _isLoadingStateForCart,
     );
   }
 
-  removeFromCart({void Function()? onDone}) async {
-    await CartController.get.removeFromCart(
-      id.toString(),
-      onDone: onDone,
+  Future<void> removeFromCart() async {
+    await handleLoaddingState(
+      tryLogic: () async {
+        await CartController.get.removeFromCart(
+          id.toString(),
+        );
+      },
+      isLoading: _isLoadingStateForCart,
     );
   }
 
-  removeFromCartPermanently({void Function()? onDone}) async {
-    await CartController.get.removeFromCartPermanently(
-      id.toString(),
-      onDone: onDone,
+  Future<void> removeFromCartPermanently() async {
+    await handleLoaddingState(
+      tryLogic: () async {
+        await CartController.get.removeFromCartPermanently(
+          id.toString(),
+        );
+      },
+      isLoading: _isLoadingStateForCart,
     );
   }
 
@@ -67,17 +104,25 @@ class Product {
     return CartController.get.getProductQuantity(id.toString());
   }
 
-  removeFromWishlist({void Function()? onDone}) async {
-    await WishlistController.get.removeFromWishlist(
-      id.toString(),
-      onDone: onDone,
+  Future<void> removeFromWishlist() async {
+    await handleLoaddingState(
+      tryLogic: () async {
+        await WishlistController.get.removeFromWishlist(
+          id.toString(),
+        );
+      },
+      isLoading: _isLoadingStateForWishlist,
     );
   }
 
-  addToWishlist({void Function()? onDone}) async {
-    await WishlistController.get.addToWishlist(
-      id.toString(),
-      onDone: onDone,
+  Future<void> addToWishlist() async {
+    await handleLoaddingState(
+      tryLogic: () async {
+        await WishlistController.get.addToWishlist(
+          id.toString(),
+        );
+      },
+      isLoading: _isLoadingStateForWishlist,
     );
   }
 
@@ -93,6 +138,22 @@ class Product {
   }
 
   String formatProductWeight() {
-    return '$weight KG' ;
+    return '$weight KG';
+  }
+
+  bool? _isAddedToTheWishlistHelper() {
+    final currentUserWishlist = WishlistController.get.currentUserWishlist;
+    if (currentUserWishlist == null) {
+      return null;
+    }
+    return currentUserWishlist.wishlist[id.toString()] == true;
+  }
+
+  bool? _isAddedToCartHelper() {
+    final currentUserCart = CartController.get.currentUserCart;
+    if (currentUserCart == null) {
+      return null;
+    }
+    return currentUserCart.cart[id.toString()] != null;
   }
 }

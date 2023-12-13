@@ -2,6 +2,7 @@ import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
@@ -51,29 +52,33 @@ class Cart extends StatelessWidget {
               ),
               Obx(
                 () => BaseButton(
-                  onPressed: _isLoading.isTrue ? null : () async {
-
-                    errorHandlerInView(tryLogic: () async {
-                      if(CartController.get.cartProducts.length == 0){
-                        showSnackbar(SnackbarState.danger, 'Try Add Some Product To Yout Cart!', 'Your Cart is Empty!');
-                        return;
-                      }
-                      _isLoading.value = true;
-                      await CartController.get.makeOrder();
-                      Get.defaultDialog(
-                          middleText:
-                              'Your Order Has Been Saved Successfuly...',
-                          radius: 10,
-                          titlePadding: EdgeInsets.only(top: 20),
-                          title: 'Thanks For Dealing With Evira',
-                          custom: const Icon(
-                            Icons.done_all,
-                            color: Colors.green,
-                          ));
-                    }, finallyLogic: () {
-                      _isLoading.value = false;
-                    });
-                  },
+                  onPressed: _isLoading.isTrue
+                      ? null
+                      : () async {
+                          errorHandlerInView(tryLogic: () async {
+                            if (CartController.get.cartProducts.length == 0) {
+                              showSnackbar(
+                                  SnackbarState.danger,
+                                  'Try Add Some Product To Your Cart!',
+                                  'Your Cart is Empty!');
+                              return;
+                            }
+                            _isLoading.value = true;
+                            await CartController.get.makeOrder();
+                            Get.defaultDialog(
+                                middleText:
+                                    'Your Order Has Been Saved Successfuly...',
+                                radius: 10,
+                                titlePadding: EdgeInsets.only(top: 20),
+                                title: 'Thanks For Dealing With Evira',
+                                custom: const Icon(
+                                  Icons.done_all,
+                                  color: Colors.green,
+                                ));
+                          }, finallyLogic: () {
+                            _isLoading.value = false;
+                          });
+                        },
                   text: _isLoading.isTrue ? 'Loading...' : 'Checkout Now!',
                 ),
               ),
@@ -93,7 +98,12 @@ class Cart extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError == true) {
-                return Center(child: Text(snapshot.error.toString()));
+                return Center(
+                    child: Text(
+                  formatErrorMessage(
+                    snapshot.error.toString(),
+                  ),
+                ));
               }
               return const CartContainer();
             },

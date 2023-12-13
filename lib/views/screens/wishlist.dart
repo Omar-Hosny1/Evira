@@ -1,6 +1,7 @@
 import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/wishlist-container.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,12 @@ class Wishlist extends StatelessWidget {
                     return Center(child: CircularProgressIndicator());
                   }
                   if (snapshot.hasError == true) {
-                    return Text(snapshot.error.toString());
+                    return Center(
+                        child: Text(
+                      formatErrorMessage(
+                        snapshot.error.toString(),
+                      ),
+                    ));
                   }
                   return GetBuilder<WishlistController>(
                     id: Strings.wishlistGetBuilderId,

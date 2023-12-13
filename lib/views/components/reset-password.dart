@@ -1,4 +1,5 @@
 import 'package:evira/controllers/auth-controller.dart';
+import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/utils/validations/common.dart';
 import 'package:evira/views/components/base/base-button.dart';
@@ -23,15 +24,18 @@ class ResetPassword extends StatelessWidget {
       );
       return;
     }
-    _isLoading.value = true;
-    await AuthController.get.resetPassword(enteredText);
-    _isLoading.value = false;
-    Get.back(closeOverlays: true);
-    showSnackbar(
-      SnackbarState.success,
-      'Check Your Email...',
-      'Email Sent Successfuly',
-    );
+    await errorHandlerInView(tryLogic: () async {
+      _isLoading.value = true;
+      await AuthController.get.resetPassword(enteredText);
+      showSnackbar(
+        SnackbarState.success,
+        'Check Your Email...',
+        'Email Sent Successfuly',
+      );
+    }, finallyLogic: () {
+      _isLoading.value = false;
+      Get.back(closeOverlays: true);
+    });
   }
 
   @override

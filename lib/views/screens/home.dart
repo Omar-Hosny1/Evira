@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/constants/dimens.dart';
@@ -7,6 +9,7 @@ import 'package:evira/views/components/logo.dart';
 import 'package:evira/views/components/main-drawer.dart';
 import 'package:evira/views/components/product.dart';
 import 'package:evira/views/components/toggle.dart';
+import 'package:evira/views/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,6 +27,23 @@ class Home extends StatelessWidget {
           titleTextStyle:
               const TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
           title: const Logo(),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(
+                right: Dimens.horizontal_padding,
+              ),
+              child: InkWell(
+                onTap: () {
+                  Get.toNamed(Profile.routeName);
+                },
+                child: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(
+                    AuthController.get.userData!.getImagePath!,
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.only(

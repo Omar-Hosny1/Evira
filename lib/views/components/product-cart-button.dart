@@ -8,32 +8,20 @@ import 'package:get/get.dart';
 class ProductCartButton extends StatelessWidget {
   const ProductCartButton({
     super.key,
-    required this.isAddedToCart,
-    required this.isLoading,
     required this.product,
   });
 
-  final Rx<bool?> isAddedToCart;
-  final RxBool isLoading;
   final Product product;
 
-  void cartButtonHandler(Rx<bool?> isAddedToCart) async {
-    if (isAddedToCart.isTrue == true) {
+  void cartButtonHandler() async {
+    if (product.isAddedToCart.isTrue == true) {
       await errorHandlerInView(tryLogic: () async {
-        isLoading.value = true;
         await product.removeFromCartPermanently();
-        isAddedToCart.value = false;
-      }, finallyLogic: () {
-        isLoading.value = false;
       });
       return;
     }
     await errorHandlerInView(tryLogic: () async {
-      isLoading.value = true;
       await product.addToCart();
-      isAddedToCart.value = true;
-    }, finallyLogic: () {
-      isLoading.value = false;
     });
   }
 
@@ -45,8 +33,9 @@ class ProductCartButton extends StatelessWidget {
           elevation: 0.0,
           shadowColor: Colors.transparent,
           padding: EdgeInsets.symmetric(vertical: 5),
-          backgroundColor:
-              isAddedToCart.isTrue == true ? Colors.transparent : Colors.black,
+          backgroundColor: product.isAddedToCart.isTrue == true
+              ? Colors.transparent
+              : Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(0),
             side: BorderSide(
@@ -55,16 +44,18 @@ class ProductCartButton extends StatelessWidget {
           ),
         ),
         textStyle: TextStyle(
-          color: isAddedToCart.isTrue == true ? Colors.black : Colors.white,
+          color: product.isAddedToCart.isTrue == true
+              ? Colors.black
+              : Colors.white,
         ),
-        text: isLoading.isTrue == true
+        text: product.isLoadingStateForCart.isTrue == true
             ? 'Loading...'
-            : isAddedToCart.isTrue == true
+            : product.isAddedToCart.isTrue == true
                 ? 'Remove Cart'
                 : 'Add To Cart',
-        onPressed: isLoading.isTrue
+        onPressed: product.isLoadingStateForCart.isTrue
             ? null
-            : () => cartButtonHandler(isAddedToCart),
+            : () => cartButtonHandler(),
       ),
     );
   }

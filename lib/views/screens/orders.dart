@@ -1,6 +1,6 @@
 import 'package:evira/controllers/order-controller.dart';
-import 'package:evira/data/models/firebase-models/order.dart';
 import 'package:evira/utils/constants/dimens.dart';
+import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/order-item.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,13 @@ class Orders extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasError == true) {
-                return Center(child: Text(snapshot.error.toString()));
+                return Center(
+                  child: Text(
+                    formatErrorMessage(
+                      snapshot.error.toString(),
+                    ),
+                  ),
+                );
               }
               final userOrders = snapshot.data;
               if (userOrders == null) {
@@ -42,6 +48,7 @@ class Orders extends StatelessWidget {
               }
               final orders = userOrders.orders.values.toList();
               return ListView.builder(
+                shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return OrderItem(
                     order: orders[index],

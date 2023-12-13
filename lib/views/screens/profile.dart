@@ -3,7 +3,11 @@ import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/views/components/back-arrow.dart';
+import 'package:evira/views/screens/cart.dart';
+import 'package:evira/views/screens/orders.dart';
+import 'package:evira/views/screens/wishlist.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -69,48 +73,80 @@ class Profile extends StatelessWidget {
                       child: ListTile(
                         trailing: Text(currentUser.getAge!.toString()),
                         leading: Icon(Icons.person),
-                        title: Text('Yout Age'),
+                        title: Text('Your Age'),
                       ),
                     ),
                     Card(
                       child: ListTile(
                         trailing: Text(currentUser.getHeight!.toString()),
                         leading: Icon(Icons.height),
-                        title: Text('Yout Height'),
+                        title: Text('Your Height'),
                       ),
                     ),
                     Card(
                       child: ListTile(
                         trailing: Text(currentUser.getWeight!.toString()),
                         leading: Icon(Icons.monitor_weight),
-                        title: Text('Yout Weight'),
+                        title: Text('Your Weight'),
                       ),
                     ),
                     Card(
                       child: ListTile(
+                        onTap: () {
+                          Get.toNamed(Wishlist.routeName);
+                        },
                         trailing: Icon(Icons.arrow_forward),
                         leading: Icon(Icons.favorite),
-                        title: Text('Yout Wishlist'),
+                        title: Text('Your Wishlist'),
                       ),
                     ),
                     Card(
                       child: ListTile(
+                        onTap: () {
+                          Get.toNamed(Cart.routeName);
+                        },
                         trailing: Icon(Icons.arrow_forward),
                         leading: Icon(Icons.shopping_bag),
-                        title: Text('Yout Cart'),
+                        title: Text('Your Cart'),
                       ),
                     ),
                     Card(
                       child: ListTile(
+                        onTap: () {
+                          Get.toNamed(Orders.routeName);
+                        },
                         trailing: Icon(Icons.arrow_forward),
                         leading: Icon(Icons.payments),
-                        title: Text('Yout Orders'),
+                        title: Text('Your Orders'),
                       ),
                     ),
                     Card(
                       child: ListTile(
                         onTap: () async {
-                          await AuthController.get.logOut();
+                          Get.defaultDialog(
+                            titlePadding: EdgeInsets.only(top: 20),
+                            title: 'Logout Confirmation',
+                            middleText: 'Are You Sure That You Want To Logout?',
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await AuthController.get.logOut();
+                                },
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
                         },
                         trailing: Icon(
                           Icons.arrow_forward,

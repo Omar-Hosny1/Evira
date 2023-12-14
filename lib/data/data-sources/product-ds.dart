@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/utils/constants/strings.dart';
+import './data.dart';
 
 class ProductDS {
   ProductDS._privateConstructor();
@@ -35,17 +36,16 @@ class ProductDS {
         .asStream();
   }
 
-  // raiseProduct() async {
-  //   print(da[6.toString()]);
-  //   da.forEach((key, value) async {
-  //     await _productsCollection.add(value);
-  //   });
-  //   // ignore: unused_local_variable
-  //   // for (var i = 1; i < 104; i++) {
-  //   //   print(i);
-  //   //   print(da[i.toString()]);
-  //   // }
-  // }
+  raiseProduct() async {
+    da.forEach((key, value) async {
+      await _productsCollection.add(value);
+    });
+    // ignore: unused_local_variable
+    // for (var i = 1; i < 104; i++) {
+    //   print(i);
+    //   print(da[i.toString()]);
+    // }
+  }
 
   Future<QuerySnapshot<Object?>> getWishlistProducts(List<int> ids) async {
     print('************* ids ***************');

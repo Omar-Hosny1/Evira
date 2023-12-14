@@ -11,9 +11,10 @@ class OrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     DateTime dateTime = DateTime.parse(order.date);
-         String formattedDate = DateFormat.yMMMMd().add_jms().format(dateTime);
-  final sectionTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
+    DateTime dateTime = DateTime.parse(order.date);
+    String formattedDate = DateFormat.yMMMMd().add_jms().format(dateTime);
+    final sectionTextStyle =
+        TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
     return Card(
       margin: EdgeInsets.all(8.0),
       child: Padding(
@@ -21,24 +22,33 @@ class OrderItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Order Date:', style: sectionTextStyle,),
+            Text(
+              'Order Date:',
+              style: sectionTextStyle,
+            ),
             SizedBox(height: 4.0),
             Text(formattedDate),
             SizedBox(height: 8.0),
-            Text('Total Price:', style: sectionTextStyle,),
+            Text(
+              'Total Price:',
+              style: sectionTextStyle,
+            ),
             SizedBox(height: 4.0),
-            
             Text('${order.totalPrice.toStringAsFixed(2)} EGP'),
             SizedBox(height: 8.0),
-            Text('Ordered Products:', style: sectionTextStyle,),
+            Text(
+              'Ordered Products:',
+              style: sectionTextStyle,
+            ),
             SizedBox(height: 4.0),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: order.products.length,
-              itemBuilder: (context, index) {
-                return OrderedProductItem(product: order.products[index]);
-              },
+            SizedBox(
+              height: order.products.length == 1 ? 70 : 110,
+              child: ListView.builder(
+                itemCount: order.products.length,
+                itemBuilder: (context, index) {
+                  return OrderedProductItem(product: order.products[index]);
+                },
+              ),
             ),
           ],
         ),

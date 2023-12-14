@@ -48,7 +48,6 @@ class Orders extends StatelessWidget {
               }
               final orders = userOrders.orders.values.toList();
               return ListView.builder(
-                shrinkWrap: true,
                 itemBuilder: (context, index) {
                   return OrderItem(
                     order: orders[index],

@@ -1,3 +1,4 @@
+import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/views/components/user-list-tile.dart';
 import 'package:evira/views/screens/cart.dart';
 import 'package:evira/views/screens/orders.dart';
@@ -14,6 +15,12 @@ class MainDrawer extends StatelessWidget {
       child: ListView(
         children: [
           UserListTile(),
+          // ListTile(
+          //   onTap: () async {
+          //     await ProductDS().raiseProduct();
+          //   },
+          //   title: const Text('UIIIII'),
+          // ),
           ListTile(
             onTap: () {
               Get.back(closeOverlays: true);

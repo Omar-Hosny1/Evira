@@ -119,7 +119,7 @@ class ProductController extends GetxController {
       final currentUserData = AuthController.get.userData!;
       final isUserWeightWithinTheProductWeightConstrains =
           _isUserWeightWithinTheProductWeightConstrains(
-        product.weight,
+        product.name, // aaaaaaaaa
         currentUserData.getWeight!,
       );
       final isProductGenderTheSameAsUserGender =

@@ -1,20 +1,22 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/data/models/firebase-models/order.dart';
-import 'package:evira/data/models/orderd-product.dart';
+import 'package:evira/views/screens/orders/ordered-products.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class OrderItem extends StatelessWidget {
   final Order order;
 
-  OrderItem({required this.order});
+  const OrderItem({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(order.date);
     String formattedDate = DateFormat.yMMMMd().add_jms().format(dateTime);
-    final sectionTextStyle =
-        TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
+    const sectionTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 18,
+    );
     return Card(
       margin: EdgeInsets.all(8.0),
       child: Padding(
@@ -36,46 +38,21 @@ class OrderItem extends StatelessWidget {
             SizedBox(height: 4.0),
             Text('${order.totalPrice.toStringAsFixed(2)} EGP'),
             SizedBox(height: 8.0),
-            Text(
-              'Ordered Products:',
-              style: sectionTextStyle,
-            ),
-            SizedBox(height: 4.0),
-            SizedBox(
-              height: order.products.length == 1 ? 70 : 110,
-              child: ListView.builder(
-                itemCount: order.products.length,
-                itemBuilder: (context, index) {
-                  return OrderedProductItem(product: order.products[index]);
+            Container(
+              color: Theme.of(context).colorScheme.background,
+              child: ListTile(
+                onTap: (){
+                  Get.toNamed(OrderedProducts.routeName, arguments: order.products);
                 },
+                title: Text('Show Ordered Products'),
+                trailing: Icon(
+                  Icons.arrow_forward,
+                ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class OrderedProductItem extends StatelessWidget {
-  final OrderedProduct product;
-
-  OrderedProductItem({required this.product});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.all(2),
-      title: Text(product.name),
-      leading: CachedNetworkImage(
-        imageUrl: product.imageUrl,
-        placeholder: (context, url) => const Center(
-          child: CircularProgressIndicator(),
-        ),
-        errorWidget: (context, url, error) => Icon(Icons.error),
-      ),
-      subtitle: Text('Quantity: ${product.quantity}'),
-      trailing: Text('${product.price.toStringAsFixed(2)} EGP'),
     );
   }
 }

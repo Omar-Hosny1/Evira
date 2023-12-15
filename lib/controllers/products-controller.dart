@@ -14,20 +14,14 @@ class ProductController extends GetxController {
   static ProductController get get => Get.find();
   bool _isDiscoverProductsSelected = true;
 
+  get isDiscoverProductsSelected {
+    return _isDiscoverProductsSelected;
+  }
+
   @override
   void onInit() async {
     super.onInit();
     _productRepository = ProductRepository(ProductDS());
-    print('*************** GETTING THE PRODUCTS ***************');
-
-    print('.................. FINISHED ..................');
-    // Get.snackbar(fetchingState.name, fetchingState.name);
-  }
-
-  @override
-  Future onReady() async {
-    // time to open some resources
-    print('****************** READY **************');
   }
 
   @override
@@ -65,6 +59,7 @@ class ProductController extends GetxController {
   }
 
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {
+    print('Stream<QuerySnapshot<Object?>> getCurrentProducts Called');
     if (_isDiscoverProductsSelected == true) {
       return _listenAndGetAllProducts();
     }
@@ -79,10 +74,10 @@ class ProductController extends GetxController {
     return _productRepository.getForYouProducts();
   }
 
-  bool _isUserWeightWithinTheProductWeightConstrains(
+  bool isUserWeightWithinTheProductWeightConstrains(
     String productPreferedWeight,
-    int userWeight,
   ) {
+    int userWeight = AuthController.get.userData!.getWeight!;
     final weightConstrains = productPreferedWeight.split('-');
     if (weightConstrains[0] == 'over 90') {
       if (userWeight > 90) {
@@ -117,17 +112,16 @@ class ProductController extends GetxController {
   bool _isProductForYou(Product product) {
     try {
       final currentUserData = AuthController.get.userData!;
-      final isUserWeightWithinTheProductWeightConstrains =
-          _isUserWeightWithinTheProductWeightConstrains(
+      final aisUserWeightWithinTheProductWeightConstrains =
+          isUserWeightWithinTheProductWeightConstrains(
         product.name, // aaaaaaaaa
-        currentUserData.getWeight!,
       );
       final isProductGenderTheSameAsUserGender =
           _isProductGenderTheSameAsUserGender(
         product.gender,
         currentUserData.getGender!,
       );
-      if (isUserWeightWithinTheProductWeightConstrains &&
+      if (aisUserWeightWithinTheProductWeightConstrains &&
           isProductGenderTheSameAsUserGender) {
         return true;
       }
@@ -140,6 +134,7 @@ class ProductController extends GetxController {
   }
 
   void showForYouProducts() {
+    print('showForYouProducts CALLED');
     _isDiscoverProductsSelected = false;
     update([Strings.productsGetBuilderId]);
   }

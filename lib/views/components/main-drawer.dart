@@ -1,7 +1,6 @@
-import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/views/components/user-list-tile.dart';
 import 'package:evira/views/screens/cart.dart';
-import 'package:evira/views/screens/orders.dart';
+import 'package:evira/views/screens/orders/orders.dart';
 import 'package:evira/views/screens/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

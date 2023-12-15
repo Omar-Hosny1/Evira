@@ -18,30 +18,8 @@ class WishlistController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     _wishlistRepo = WishlistRepo(wishlistDS: WishlistDS());
-    // getUserWishlist();
-    print(
-        '********************* WishlistController Created *********************');
-  }
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-    print(
-        '********************* WishlistController Ready *********************');
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-    _currentUserWishlist = null;
-    _wishlistProducts = [];
-    print(
-        '********************* WishlistController Closed *********************');
   }
 
   UserWishlist? get currentUserWishlist {
@@ -51,54 +29,33 @@ class WishlistController extends GetxController {
   static WishlistController get get => Get.find();
 
   Future<void> getUserWishlist() async {
-    try {
-      final userWishlist = await _wishlistRepo.getUserWishlistFromRepo();
-      if (userWishlist == null || userWishlist.wishlist.isEmpty) {
-        print('******************** userWishlist is Null ********************');
-        return;
-      }
-      _currentUserWishlist = userWishlist;
-      final data = await ProductController.get.getWishlistProducts(
-        userWishlist.wishlist.keys.map((e) => int.parse(e)).toList(),
-      );
-      _wishlistProducts = data.docs;
-      print('*************** previewed _wishlistProducts ***********');
-      print(_wishlistProducts);
-    } catch (e) {
-      rethrow;
+    final userWishlist = await _wishlistRepo.getUserWishlistFromRepo();
+    if (userWishlist == null || userWishlist.wishlist.isEmpty) {
+      print('******************** userWishlist is Null ********************');
+      return;
     }
+    _currentUserWishlist = userWishlist;
+    final data = await ProductController.get.getWishlistProducts(
+      userWishlist.wishlist.keys.map((e) => int.parse(e)).toList(),
+    );
+    _wishlistProducts = data.docs;
+    print('*************** previewed _wishlistProducts ***********');
+    print(_wishlistProducts);
   }
 
-  Future<void> removeFromWishlist(String productId,
-      {void Function()? onDone}) async {
-    try {
-      await _wishlistRepo.removeFromWishlist(productId);
-      _wishlistProducts.removeWhere((element) {
-        return Product.fromJson(element.data() as Map).id ==
-            int.parse(productId);
-      });
-      _currentUserWishlist!.wishlist.remove(productId);
-      update([Strings.wishlistGetBuilderId]);
-      if (onDone != null) {
-        onDone();
-      }
-    } catch (e) {
-      rethrow;
-    }
+  Future<void> removeFromWishlist(
+    String productId,
+  ) async {
+    await _wishlistRepo.removeFromWishlist(productId);
+    _wishlistProducts.removeWhere((element) {
+      return Product.fromJson(element.data() as Map).id == int.parse(productId);
+    });
+    _currentUserWishlist!.wishlist.remove(productId);
+    update([Strings.wishlistGetBuilderId]);
   }
 
-  Future<void> addToWishlist(
-    String productId, {
-    void Function()? onDone,
-  }) async {
-    try {
-      await _wishlistRepo.addToWishlist(productId);
-      await getUserWishlist();
-      if (onDone != null) {
-        onDone();
-      }
-    } catch (e) {
-      rethrow;
-    }
+  Future<void> addToWishlist(String productId) async {
+    await _wishlistRepo.addToWishlist(productId);
+    await getUserWishlist();
   }
 }

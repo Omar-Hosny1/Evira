@@ -17,11 +17,15 @@ class CartContainer extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: controller.cartProducts.length,
-      itemBuilder: (context, index) => CartItem(
-        product: Product.fromJson(
+      itemBuilder: (context, index) {
+        final Product product = Product.fromJson(
           controller.cartProducts[index].data() as Map,
-        ),
-      ),
+        );
+        return CartItem(
+          key: ValueKey(product.id),
+          product: product,
+        );
+      },
     );
   }
 

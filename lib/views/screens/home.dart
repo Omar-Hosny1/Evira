@@ -98,9 +98,7 @@ class Home extends StatelessWidget {
                               data[index].data() as Map,
                             );
                             return ProductView(
-                              key: Key(
-                                product.id.toString(),
-                              ),
+                              key: ValueKey(product.id),
                               product: product,
                             );
                           },

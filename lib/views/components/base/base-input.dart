@@ -10,10 +10,12 @@ class BaseInput extends StatelessWidget {
     this.onSaved,
     this.keyboardType,
     this.controller,
+    this.initialValue,
   });
 
   final String? Function(String?)? validator;
   final String? label;
+  final String? initialValue;
   final bool? isPassword;
   final void Function(String?)? onSaved;
   final TextInputType? keyboardType;
@@ -28,9 +30,10 @@ class BaseInput extends StatelessWidget {
         () => TextFormField(
           controller: controller,
           onSaved: onSaved,
+          cursorColor: Colors.black,
           validator: validator,
-          cursorColor: Colors.white,
           keyboardType: keyboardType,
+          initialValue: initialValue,
           obscureText: isPassword == true ? showPassword.value : false,
           decoration: InputDecoration(
             suffixIcon: isPassword == true
@@ -80,8 +83,9 @@ class BaseInput extends StatelessWidget {
     return TextFormField(
       controller: controller,
       onSaved: onSaved,
+      initialValue: initialValue,
       validator: validator,
-      cursorColor: Colors.white,
+      cursorColor: Colors.black,
       keyboardType: keyboardType,
       obscureText: isPassword == true ? showPassword.value : false,
       decoration: InputDecoration(

@@ -4,7 +4,8 @@ import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/screens/cart.dart';
-import 'package:evira/views/screens/orders.dart';
+import 'package:evira/views/screens/orders/orders.dart';
+import 'package:evira/views/screens/update-user.dart';
 import 'package:evira/views/screens/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -118,6 +119,16 @@ class Profile extends StatelessWidget {
                         trailing: Icon(Icons.arrow_forward),
                         leading: Icon(Icons.payments),
                         title: Text('Your Orders'),
+                      ),
+                    ),
+                    Card(
+                      child: ListTile(
+                        onTap: () {
+                          Get.toNamed(UpdateUser.routeName);
+                        },
+                        trailing: Icon(Icons.arrow_forward),
+                        leading: Icon(Icons.person),
+                        title: Text('Update Your Data'),
                       ),
                     ),
                     Card(

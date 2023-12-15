@@ -94,6 +94,7 @@ class AuthController extends GetxController {
       await ProductController.get.fetchCartAndWishlistData();
       return Home.routeName;
     } catch (e) {
+      await _authRepository.cleanUserDataFromSharedPrefs();
       return SignUp.routeName;
     }
   }

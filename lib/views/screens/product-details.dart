@@ -1,27 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
-import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-bool? _isFavouriteHelper(String productId) {
-  final currentUserWishlist = WishlistController.get.currentUserWishlist;
-  if (currentUserWishlist == null) {
-    return null;
-  }
-  return currentUserWishlist.wishlist[productId] == true;
-}
-
-bool? isAddedToCartHelper(String productId) {
-  final currentUserCart = CartController.get.currentUserCart;
-  if (currentUserCart == null) {
-    return null;
-  }
-  return currentUserCart.cart[productId] != null;
-}
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({super.key});

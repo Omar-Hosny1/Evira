@@ -15,13 +15,16 @@ class WishlistContainer extends StatelessWidget {
       );
     }
     return ListView.builder(
-      shrinkWrap: true,
-      itemCount: wishlistProducts.length,
-      itemBuilder: (context, index) => WishlistItem(
-        Product.fromJson(
-          wishlistProducts[index].data() as Map,
-        ),
-      ),
-    );
+        shrinkWrap: true,
+        itemCount: wishlistProducts.length,
+        itemBuilder: (context, index) {
+          final Product product = Product.fromJson(
+            wishlistProducts[index].data() as Map,
+          );
+          return WishlistItem(
+            product,
+            key: ValueKey(product.id),
+          );
+        });
   }
 }

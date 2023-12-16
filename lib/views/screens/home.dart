@@ -2,13 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
-import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/views/components/logo.dart';
 import 'package:evira/views/components/main-drawer.dart';
-import 'package:evira/views/components/product.dart';
+import 'package:evira/views/components/products-grid.dart';
 import 'package:evira/views/components/toggle.dart';
 import 'package:evira/views/screens/profile.dart';
 import 'package:flutter/material.dart';
@@ -74,8 +73,12 @@ class Home extends StatelessWidget {
                       }
                       if (snapshot.hasError) {
                         return Center(
-                            child: Text(
-                                formatErrorMessage(snapshot.error.toString())));
+                          child: Text(
+                            formatErrorMessage(
+                              snapshot.error.toString(),
+                            ),
+                          ),
+                        );
                       }
                       final data = snapshot.data?.docs;
 
@@ -83,29 +86,9 @@ class Home extends StatelessWidget {
                         return Center(child: Text('No Products Found'));
                       }
 
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          controller.updateTheUI();
-                        },
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 16,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 4 / 7,
-                          ),
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            final product = Product.fromJson(
-                              data[index].data() as Map,
-                            );
-                            return ProductView(
-                              key: ValueKey(product.id),
-                              product: product,
-                            );
-                          },
-                        ),
+                      return ProductsGrid(
+                        products: data,
+                        controller: controller,
                       );
                     },
                   ),

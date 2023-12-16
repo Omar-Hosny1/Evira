@@ -75,62 +75,29 @@ class ProductController extends GetxController {
   }
 
   bool isUserWeightWithinTheProductWeightConstrains(
-    String productPreferedWeight,
+    int minWeight,
+    int maxWeight,
   ) {
     int userWeight = AuthController.get.userData!.getWeight!;
-    final weightConstrains = productPreferedWeight.split('-');
-    if (weightConstrains[0] == 'over 90') {
-      if (userWeight > 90) {
-        return true;
-      }
-      return false;
-    }
-    print('**************** weightConstrains *****************');
-    print(weightConstrains);
-    final low = double.parse(weightConstrains[0]);
-    final high = double.parse(weightConstrains[1]);
-    print('*************** low *************');
-    print(low);
-    print('*************** high *************');
-    print(high);
-    if (userWeight >= low && userWeight <= high) {
+    if (userWeight >= minWeight && userWeight <= maxWeight) {
       return true;
     }
     return false;
   }
 
-  bool _isProductGenderTheSameAsUserGender(
-    String productGender,
-    String userGender,
+  List<Product> filterForYouProducts(
+    List<QueryDocumentSnapshot<Object?>> products,
   ) {
-    if (productGender == userGender) {
-      return true;
-    }
-    return false;
-  }
-
-  bool _isProductForYou(Product product) {
-    try {
-      final currentUserData = AuthController.get.userData!;
-      final aisUserWeightWithinTheProductWeightConstrains =
-          isUserWeightWithinTheProductWeightConstrains(
-        product.name, // aaaaaaaaa
-      );
-      final isProductGenderTheSameAsUserGender =
-          _isProductGenderTheSameAsUserGender(
-        product.gender,
-        currentUserData.getGender!,
-      );
-      if (aisUserWeightWithinTheProductWeightConstrains &&
-          isProductGenderTheSameAsUserGender) {
-        return true;
+    final List<Product> filteredProducts = [];
+    for (var i = 0; i < products.length; i++) {
+      final product = Product.fromJson(products[i].data() as Map);
+      if (isUserWeightWithinTheProductWeightConstrains(
+              product.minWeight, product.maxWeight) ==
+          true) {
+        filteredProducts.add(product);
       }
-      return false;
-    } catch (e) {
-      print('**************** _isProductForYou ERROR *******************');
-      print(e);
-      return false;
     }
+    return filteredProducts;
   }
 
   void showForYouProducts() {
@@ -150,11 +117,7 @@ class ProductController extends GetxController {
   }
 
   Future<void> fetchCartAndWishlistData() async {
-    try {
-      await CartController.get.getUserCart();
-      await WishlistController.get.getUserWishlist();
-    } catch (e) {
-      rethrow;
-    }
+    await CartController.get.getUserCart();
+    await WishlistController.get.getUserWishlist();
   }
 }

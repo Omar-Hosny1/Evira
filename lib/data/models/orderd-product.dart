@@ -11,7 +11,8 @@ class OrderedProduct extends Product {
     required super.imageUrl,
     required super.name,
     required super.price,
-    required super.weight,
+    required super.maxWeight,
+    required super.minWeight,
     required this.quantity,
   });
 
@@ -23,7 +24,8 @@ class OrderedProduct extends Product {
         imageUrl: json["image_url"],
         name: json["name"],
         price: json["price"],
-        weight: json["weight"],
+        maxWeight: json["max_weight"],
+        minWeight: json["min_weight"],
         quantity: quantity ?? json["quantity"],
       );
 

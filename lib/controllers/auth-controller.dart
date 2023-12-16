@@ -53,8 +53,7 @@ class AuthController extends GetxController {
       await _authRepository.signIn(email, password);
       await _getUserDataFromPrefsAndSetCurrentUserData();
       await ProductController.get.fetchCartAndWishlistData();
-      update([Strings.userListenersGetBuilderId]);
-
+      
       Get.offAllNamed(Home.routeName);
       showSnackbar(SnackbarState.success, 'Success', 'Logged in Successfully');
     } catch (e) {

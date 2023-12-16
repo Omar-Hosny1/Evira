@@ -15,7 +15,9 @@ class Product {
   String imageUrl;
   String name;
   int price;
-  String weight;
+  int maxWeight;
+  int minWeight;
+
   final Rx<bool> _isLoadingStateForCart = false.obs;
   final Rx<bool?> _isAddedToCart = Rx(null);
 
@@ -46,7 +48,8 @@ class Product {
     required this.imageUrl,
     required this.name,
     required this.price,
-    required this.weight,
+    required this.maxWeight,
+    required this.minWeight,
   });
 
   factory Product.fromJson(Map<dynamic, dynamic> json) => Product(
@@ -55,7 +58,8 @@ class Product {
         imageUrl: json["image_url"],
         name: json["name"],
         price: json["price"],
-        weight: json["weight"],
+        maxWeight: json["max_weight"],
+        minWeight: json["min_weight"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,7 +68,8 @@ class Product {
         "image_url": imageUrl,
         "name": name,
         "price": price,
-        "weight": weight,
+        "max_weight": maxWeight,
+        "min_weight": minWeight,
       };
 
   Future<void> addToCart() async {
@@ -134,7 +139,7 @@ class Product {
   }
 
   String formatProductWeight() {
-    return '$weight KG';
+    return '$minWeight-$maxWeight  KG';
   }
 
   bool? _isAddedToTheWishlistHelper() {

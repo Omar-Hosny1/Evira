@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evira/controllers/products-controller.dart';
+import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +7,11 @@ import 'package:get/get.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({super.key});
-  static final routeName = '/product-details';
+  static const routeName = '/product-details';
 
   @override
   Widget build(BuildContext context) {
-    final id = Get.arguments as int;
+    final product = Get.arguments as Product;
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -24,21 +24,6 @@ class ProductDetails extends StatelessWidget {
             horizontal: Dimens.horizontal_padding,
           ),
           child: Column(
-            children: [
-              FutureBuilder(
-                future: ProductController.get.getProduct(id),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
-                  final product = snapshot.data;
-                  if (product == null) {
-                    return Center(child: const Text('No Product Found'));
-                  }
-                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
@@ -205,13 +190,10 @@ class ProductDetails extends StatelessWidget {
                         }),
                       )
                     ],
-                  );
-                },
-              ),
-            ],
+                  )
           ),
         ),
       ),
-    ));
+    );
   }
 }

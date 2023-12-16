@@ -56,7 +56,10 @@ class CartItem extends StatelessWidget {
               CachedNetworkImage(
                 imageUrl: product.imageUrl,
                 height: 60,
-                width: 60,  
+                width: 60,
+              ),
+              SizedBox(
+                width: 15,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

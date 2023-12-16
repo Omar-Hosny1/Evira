@@ -63,7 +63,31 @@ class AuthDS {
     }
   }
 
-  Future<Object> getUserDatafromFireStore(String email) async {
+  Future<void> _deleteCurrenctUserImage(String imgUrl) async {
+    final httpsReference = _firebaseStorage.refFromURL(imgUrl);
+    await httpsReference.delete();
+  }
+
+  Future<void> updateUserData(U.User user) async {
+    final userData = user.getUserData();
+    if (userData[U.UserDataEnum.image] != null) {
+      // Image Operation
+      await _deleteCurrenctUserImage(user.getImagePath!);
+      final fileUrl = await _uploadFile(userData[U.UserDataEnum.image]);
+      user.imagePath = fileUrl;
+    }
+
+    // User Doc Operation
+    final currentUserDocDatAndId =
+        await getUserDatafromFireStore(user.getEmail!);
+    print('................... currentUserDoc');
+    print(currentUserDocDatAndId);
+    final userDocId = currentUserDocDatAndId[1] as String;
+
+    await _usersCollection.doc(userDocId).set(user.toJsonToFireStore());
+  }
+
+  Future<List<Object>> getUserDatafromFireStore(String email) async {
     try {
       final userDataSnapShot = await _usersCollection
           .where(
@@ -78,7 +102,7 @@ class AuthDS {
       if (userData == null) {
         throw FirebaseException(plugin: 'Can\'t find The User Data');
       }
-      return userData;
+      return [userDataSnapShot.docs[0].data()!, userDataSnapShot.docs[0].id];
     } catch (e) {
       rethrow;
     }
@@ -87,7 +111,11 @@ class AuthDS {
   Future<void> signIn(
     String email,
     String password,
-    Future<void> Function(Object userData, String token) saveInPrefs,
+    Future<void> Function(
+      Object userData,
+      String token, {
+      bool? isSignIn,
+    }) saveInPrefs,
   ) async {
     try {
       final credentials = await _authInstance.signInWithEmailAndPassword(
@@ -97,9 +125,10 @@ class AuthDS {
       if (credentials.user?.emailVerified != true) {
         throw Exception('Verify Your Email Please...');
       }
-      final userData = await getUserDatafromFireStore(email);
+      final userDataAndId = await getUserDatafromFireStore(email);
+      final userData = userDataAndId[0];
       final token = await credentials.user!.getIdToken();
-      await saveInPrefs(userData as Map, token!);
+      await saveInPrefs(userData as Map, token!, isSignIn: true);
     } catch (e) {
       rethrow;
     }

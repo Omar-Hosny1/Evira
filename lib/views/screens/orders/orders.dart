@@ -1,7 +1,7 @@
 import 'package:evira/controllers/order-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/views/components/back-arrow.dart';
+import 'package:evira/views/components/main-drawer.dart';
 import 'package:evira/views/components/order-item.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +13,8 @@ class Orders extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: MainDrawer(),
         appBar: AppBar(
-          leading: BackArrow(),
           title: Text('Your Orders'),
         ),
         body: Padding(

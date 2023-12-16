@@ -53,8 +53,22 @@ class AuthController extends GetxController {
       await _authRepository.signIn(email, password);
       await _getUserDataFromPrefsAndSetCurrentUserData();
       await ProductController.get.fetchCartAndWishlistData();
+      update([Strings.userListenersGetBuilderId]);
+
       Get.offAllNamed(Home.routeName);
       showSnackbar(SnackbarState.success, 'Success', 'Logged in Successfully');
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserData(User user) async {
+    try {
+      await _authRepository.updateUserData(user);
+      await _getUserDataFromPrefsAndSetCurrentUserData();
+      update([Strings.userListenersGetBuilderId]);
+      print('................. user.toJson() ................');
+      print(user.toJson());
     } catch (e) {
       rethrow;
     }
@@ -67,7 +81,7 @@ class AuthController extends GetxController {
     userData = getedUserData;
     _autoLogOut(DateTime.parse(getedUserData!.getTokenExpiresIn!));
 
-    update([Strings.userListTileGetBuilderId]);
+    update([Strings.userListenersGetBuilderId]);
     print('****************** userData ******************');
     print(userData!.getUserData());
   }
@@ -133,6 +147,5 @@ class AuthController extends GetxController {
     Get.offAllNamed(SignUp.routeName);
     userData = null;
     _authTimer = null;
-    update([Strings.userListTileGetBuilderId]);
   }
 }

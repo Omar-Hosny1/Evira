@@ -1,3 +1,5 @@
+import 'package:evira/controllers/cart-controller.dart';
+
 import './product.dart';
 
 class OrderedProduct extends Product {
@@ -13,7 +15,9 @@ class OrderedProduct extends Product {
     required this.quantity,
   });
 
-  factory OrderedProduct.fromJson(Map<dynamic, dynamic> json, {int? quantity}) => OrderedProduct(
+  factory OrderedProduct.fromJson(Map<dynamic, dynamic> json,
+          {int? quantity}) =>
+      OrderedProduct(
         gender: json["gender"],
         id: json["id"],
         imageUrl: json["image_url"],
@@ -28,5 +32,10 @@ class OrderedProduct extends Product {
     Map<String, dynamic> superJson = super.toJson();
     superJson['quantity'] = quantity;
     return superJson;
+  }
+
+  int getProductQuantity() {
+    quantity = CartController.get.getProductQuantity(id.toString());
+    return quantity;
   }
 }

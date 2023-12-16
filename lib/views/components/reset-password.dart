@@ -1,7 +1,7 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
-import 'package:evira/utils/validations/common.dart';
+import 'package:evira/utils/validations/common-validations.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
 import 'package:flutter/material.dart';

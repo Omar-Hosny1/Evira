@@ -141,9 +141,10 @@ class ProductDetails extends StatelessWidget {
                                       ? 'Remove From Cart'
                                       : 'Add To Cart',
                               style: TextStyle(
-                                  color: product.isAddedToCart.isTrue == true
-                                      ? Colors.black
-                                      : Colors.white),
+                                color: product.isAddedToCart.isTrue == true
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
                             ),
                           ),
                         ),

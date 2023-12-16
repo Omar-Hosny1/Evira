@@ -4,9 +4,9 @@ import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
-import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/cart-container.dart';
+import 'package:evira/views/components/main-drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,9 +20,9 @@ class Cart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: MainDrawer(),
         appBar: AppBar(
           title: Text('Your Cart'),
-          leading: BackArrow(),
         ),
         bottomNavigationBar: Container(
           height: 120,

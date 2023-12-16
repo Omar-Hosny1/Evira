@@ -1,5 +1,5 @@
 import 'package:evira/controllers/cart-controller.dart';
-import 'package:evira/data/models/product.dart';
+import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/cart-item.dart';
 import 'package:flutter/widgets.dart';
@@ -18,8 +18,12 @@ class CartContainer extends StatelessWidget {
       shrinkWrap: true,
       itemCount: controller.cartProducts.length,
       itemBuilder: (context, index) {
-        final Product product = Product.fromJson(
-          controller.cartProducts[index].data() as Map,
+        final currentProductData = controller.cartProducts[index].data();
+        final OrderedProduct product = OrderedProduct.fromJson(
+          currentProductData as Map,
+          quantity: CartController.get.getProductQuantity(
+            currentProductData['id'].toString(),
+          ),
         );
         return CartItem(
           key: ValueKey(product.id),

@@ -14,7 +14,7 @@ class UserListTile extends StatelessWidget {
     // Short-circuiting is a useful feature as it can optimize code execution by avoiding unnecessary evaluations when the outcome is already determined based on the first operand.
 
     return GetBuilder<AuthController>(
-      id: Strings.userListTileGetBuilderId,
+      id: Strings.userListenersGetBuilderId,
       builder: (controller) => controller.userData == null
           ? const ListTile(
               title: Text('N/A', style: TextStyle(fontSize: 18)),

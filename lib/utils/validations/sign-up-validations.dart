@@ -6,8 +6,8 @@ String? validateAge(String? value) {
   // Age should be a valid integer
   try {
     int age = int.parse(value);
-    if (age <= 0 || age >= 100) {
-      return 'Age should be valid and must be a positive number';
+    if (age <= 15 || age >= 100) {
+      return 'Age should be in between 15 .. 100 Year';
     }
   } catch (e) {
     return 'Invalid age format, must be only nums';

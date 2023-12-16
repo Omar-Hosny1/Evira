@@ -1,83 +1,142 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evira/controllers/cart-controller.dart';
-import 'package:evira/data/models/product.dart';
+import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CartItem extends StatelessWidget {
-  final Product product;
-  final _isLoading = false.obs;
+  final OrderedProduct product;
 
-  CartItem({
+  const CartItem({
     super.key,
     required this.product,
   });
 
   void handleAddToCart(RxInt productQuantity) async {
     await errorHandlerInView(tryLogic: () async {
-      _isLoading.value = true;
       await product.addToCart();
       productQuantity.value = product.getProductQuantity();
-    }, finallyLogic: () {
-      _isLoading.value = false;
     });
   }
 
   void handleRemoveFromCart(RxInt productQuantity) async {
     await errorHandlerInView(tryLogic: () async {
-      _isLoading.value = true;
       await product.removeFromCart();
       productQuantity.value = product.getProductQuantity();
-    }, finallyLogic: () {
-      _isLoading.value = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final productQuantity =
-        CartController.get.currentUserCart!.cart[product.id.toString()]!.obs;
-
     Widget buildProductQuantity() {
-      if (_isLoading.isTrue) {
-        return FittedBox(child: CircularProgressIndicator());
+      if (product.isLoadingStateForCart.isTrue) {
+        return const FittedBox(child: CircularProgressIndicator());
       }
       return Text(
-        productQuantity.value.toString(),
+        product.quantity.toString(),
         textAlign: TextAlign.center,
       );
     }
 
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      child: ListTile(
-        title: Text(product.name),
-        subtitle: Text(product.formatProductPrice()),
-        leading: CachedNetworkImage(imageUrl: product.imageUrl),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Obx(
-              () => IconButton(
-                icon: Icon(Icons.remove),
-                onPressed: _isLoading.isTrue
-                    ? null
-                    : () => handleRemoveFromCart(productQuantity),
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      width: double.infinity,
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CachedNetworkImage(
+                imageUrl: product.imageUrl,
+                height: 60,
+                width: 60,  
               ),
-            ),
-            SizedBox(width: 20, child: Obx(() => buildProductQuantity())),
-            Obx(
-              () => IconButton(
-                icon: Icon(Icons.add),
-                onPressed: _isLoading.isTrue
-                    ? null
-                    : () => handleAddToCart(productQuantity),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    product.name,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(product.formatProductPrice()),
+                ],
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Obx(
+                () => IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: product.isLoadingStateForCart.isTrue
+                      ? null
+                      : () => handleRemoveFromCart(product.quantity.obs),
+                ),
+              ),
+              SizedBox(width: 20, child: Obx(() => buildProductQuantity())),
+              Obx(
+                () => IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: product.isLoadingStateForCart.isTrue
+                      ? null
+                      : () => handleAddToCart(product.quantity.obs),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
+
+    // Container(
+    //   height: 80,
+    //   margin: const EdgeInsets.symmetric(vertical: 6),
+    //   child: Center(
+    //     child: Card(
+    //       child: ListTile(
+    //         title: Text(product.name),
+    //         subtitle: Text(product.formatProductPrice()),
+    //         leading: CachedNetworkImage(imageUrl: product.imageUrl),
+    //         trailing: Row(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             Obx(
+    //               () => IconButton(
+    //                 icon: Icon(Icons.remove),
+    //                 onPressed: product.isLoadingStateForCart.isTrue
+    //                     ? null
+    //                     : () => handleRemoveFromCart(product.quantity.obs),
+    //               ),
+    //             ),
+    //             SizedBox(width: 20, child: Obx(() => buildProductQuantity())),
+    //             Obx(
+    //               () => IconButton(
+    //                 icon: Icon(Icons.add),
+    //                 onPressed: product.isLoadingStateForCart.isTrue
+    //                     ? null
+    //                     : () => handleAddToCart(product.quantity.obs),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

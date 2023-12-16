@@ -11,6 +11,7 @@ class BaseInput extends StatelessWidget {
     this.keyboardType,
     this.controller,
     this.initialValue,
+    this.onChanged,
   });
 
   final String? Function(String?)? validator;
@@ -18,6 +19,7 @@ class BaseInput extends StatelessWidget {
   final String? initialValue;
   final bool? isPassword;
   final void Function(String?)? onSaved;
+  final void Function(String)? onChanged;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
 
@@ -31,6 +33,7 @@ class BaseInput extends StatelessWidget {
           controller: controller,
           onSaved: onSaved,
           cursorColor: Colors.black,
+          onChanged: onChanged,
           validator: validator,
           keyboardType: keyboardType,
           initialValue: initialValue,
@@ -84,6 +87,7 @@ class BaseInput extends StatelessWidget {
       controller: controller,
       onSaved: onSaved,
       initialValue: initialValue,
+      onChanged: onChanged,
       validator: validator,
       cursorColor: Colors.black,
       keyboardType: keyboardType,

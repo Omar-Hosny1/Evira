@@ -1,22 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/auth-controller.dart';
-import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/dimens.dart';
+import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/back-arrow.dart';
-import 'package:evira/views/screens/cart.dart';
-import 'package:evira/views/screens/orders/orders.dart';
 import 'package:evira/views/screens/update-user.dart';
-import 'package:evira/views/screens/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
   static const routeName = '/profile';
+  
   @override
   Widget build(BuildContext context) {
-    final User currentUser = AuthController.get.userData!;
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -40,85 +36,84 @@ class Profile extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 50.0,
-                          backgroundImage: CachedNetworkImageProvider(
-                            currentUser.getImagePath!,
+                        GetBuilder<AuthController>(
+                          id: Strings.userListenersGetBuilderId,
+                          builder: (controller) => InkWell(
+                            onTap: () {
+                              Get.bottomSheet(Container(
+                                margin: EdgeInsets.all(20),
+                                child: CachedNetworkImage(
+                                  imageUrl: controller.userData!.getImagePath!,
+                                ),
+                              ));
+                            },
+                            child: CircleAvatar(
+                              radius: 50.0,
+                              backgroundImage: CachedNetworkImageProvider(
+                                controller.userData!.getImagePath!,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(width: 16.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              currentUser.getName!,
-                              style: TextStyle(
-                                fontSize: 24.0,
-                                fontWeight: FontWeight.bold,
+                        GetBuilder<AuthController>(
+                          id: Strings.userListenersGetBuilderId,
+                          builder: (controller) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.userData!.getName!,
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 8.0),
-                            Text(
-                              currentUser.getEmail!,
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.grey,
+                              SizedBox(height: 8.0),
+                              Text(
+                                controller.userData!.getEmail!,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                     SizedBox(height: 16.0),
-                    Card(
-                      child: ListTile(
-                        trailing: Text(currentUser.getAge!.toString()),
-                        leading: Icon(Icons.person),
-                        title: Text('Your Age'),
+                    GetBuilder<AuthController>(
+                      id: Strings.userListenersGetBuilderId,
+                      builder: (controller) => Card(
+                        child: ListTile(
+                          trailing:
+                              Text(controller.userData!.getAge!.toString()),
+                          leading: Icon(Icons.person),
+                          title: Text('Your Age'),
+                        ),
                       ),
                     ),
-                    Card(
-                      child: ListTile(
-                        trailing: Text(currentUser.getHeight!.toString()),
-                        leading: Icon(Icons.height),
-                        title: Text('Your Height'),
+                    GetBuilder<AuthController>(
+                      id: Strings.userListenersGetBuilderId,
+                      builder: (controller) => Card(
+                        child: ListTile(
+                          trailing:
+                              Text(controller.userData!.getHeight!.toString()),
+                          leading: Icon(Icons.height),
+                          title: Text('Your Height'),
+                        ),
                       ),
                     ),
-                    Card(
-                      child: ListTile(
-                        trailing: Text(currentUser.getWeight!.toString()),
-                        leading: Icon(Icons.monitor_weight),
-                        title: Text('Your Weight'),
-                      ),
-                    ),
-                    Card(
-                      child: ListTile(
-                        onTap: () {
-                          Get.toNamed(Wishlist.routeName);
-                        },
-                        trailing: Icon(Icons.arrow_forward),
-                        leading: Icon(Icons.favorite),
-                        title: Text('Your Wishlist'),
-                      ),
-                    ),
-                    Card(
-                      child: ListTile(
-                        onTap: () {
-                          Get.toNamed(Cart.routeName);
-                        },
-                        trailing: Icon(Icons.arrow_forward),
-                        leading: Icon(Icons.shopping_bag),
-                        title: Text('Your Cart'),
-                      ),
-                    ),
-                    Card(
-                      child: ListTile(
-                        onTap: () {
-                          Get.toNamed(Orders.routeName);
-                        },
-                        trailing: Icon(Icons.arrow_forward),
-                        leading: Icon(Icons.payments),
-                        title: Text('Your Orders'),
+                    GetBuilder<AuthController>(
+                      id: Strings.userListenersGetBuilderId,
+                      builder: (controller) => Card(
+                        child: ListTile(
+                          trailing: Text(
+                            controller.userData!.getWeight!.toString(),
+                          ),
+                          leading: Icon(Icons.monitor_weight),
+                          title: Text('Your Weight'),
+                        ),
                       ),
                     ),
                     Card(

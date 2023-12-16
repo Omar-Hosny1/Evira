@@ -37,9 +37,12 @@ class Home extends StatelessWidget {
                 onTap: () {
                   Get.toNamed(Profile.routeName);
                 },
-                child: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                    AuthController.get.userData!.getImagePath!,
+                child: GetBuilder<AuthController>(
+                  id: Strings.userListenersGetBuilderId,
+                  builder: (controller) => CircleAvatar(
+                    backgroundImage: CachedNetworkImageProvider(
+                      controller.userData!.getImagePath!,
+                    ),
                   ),
                 ),
               ),

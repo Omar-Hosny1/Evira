@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/device/device_utils.dart';
-import 'package:evira/utils/validations/sign-up.dart';
+import 'package:evira/utils/helpers/error-handler-view.dart';
+import 'package:evira/utils/helpers/snack-bar.dart';
+import 'package:evira/utils/validations/sign-up-validations.dart';
 import 'package:evira/views/components/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
@@ -18,24 +22,51 @@ class UpdateUser extends StatelessWidget {
   final Rx<XFile?> _photo = Rx(null);
   final ImagePicker _picker = ImagePicker();
   final _isLoading = false.obs;
-  final Rx<String> _photoErrMsg = ''.obs;
+  final Rx<bool> _isFromDirty = false.obs;
+  final authController = AuthController.get;
+  final userData = AuthController.get.userData!;
 
-  Future<void> _submit() async {}
-
-  Future imgFromGallery() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    _photo.value = pickedFile;
-    if (pickedFile != null) {
-      _photoErrMsg.value = '';
+  Future<void> _submit() async {
+    final isValid = _formKey.currentState?.validate();
+    if (isValid != true) {
+      return;
     }
+    if (_isFromDirty.isFalse && _photo.value == null) {
+      showSnackbar(
+        SnackbarState.danger,
+        'No Data Changed Yet',
+        'Try To Edit what you want',
+      );
+      return;
+    }
+
+    if (_photo.value != null) {
+      userData.image = File(_photo.value!.path);
+    }
+    _formKey.currentState?.save();
+
+    await errorHandlerInView(tryLogic: () async {
+      _isLoading.value = true;
+      await authController.updateUserData(userData);
+      Get.back();
+      showSnackbar(
+        SnackbarState.success,
+        'Updated Successfluy',
+        'Your Data Updated Successfuly',
+      );
+    }, finallyLogic: () {
+      _isLoading.value = false;
+    });
   }
 
-  Future imgFromCamera() async {
+  Future<void> imgFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    _photo.value = pickedFile;
+  }
+
+  Future<void> imgFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     _photo.value = pickedFile;
-    if (pickedFile != null) {
-      _photoErrMsg.value = '';
-    }
   }
 
   void _showPicker() {
@@ -49,14 +80,14 @@ class UpdateUser extends StatelessWidget {
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Gallery'),
                 onTap: () {
-                  Get.back(closeOverlays: true);
+                  Get.back();
                   imgFromGallery();
                 }),
             ListTile(
                 leading: const Icon(Icons.camera),
                 title: const Text('Camera'),
                 onTap: () {
-                  Get.back(closeOverlays: true);
+                  Get.back();
                   imgFromCamera();
                 }),
           ],
@@ -68,10 +99,6 @@ class UpdateUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userData = AuthController.get.userData!;
-    print('........................................');
-    print(userData.getUserData());
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -93,10 +120,19 @@ class UpdateUser extends StatelessWidget {
                     height: 200,
                     child: InkWell(
                       onTap: _showPicker,
-                      child: CircleAvatar(
-                        backgroundImage: CachedNetworkImageProvider(
-                            userData.getImagePath!,
-                            scale: 150),
+                      child: Obx(
+                        () => CircleAvatar(
+                          backgroundImage: _photo.value == null
+                              ? CachedNetworkImageProvider(
+                                  userData.getImagePath!,
+                                  scale: 150,
+                                )
+                              : FileImage(
+                                  File(
+                                    _photo.value!.path,
+                                  ),
+                                ) as ImageProvider,
+                        ),
                       ),
                     ),
                   ),
@@ -110,6 +146,9 @@ class UpdateUser extends StatelessWidget {
                     onSaved: (v) {
                       userData.name = v!;
                     },
+                    onChanged: (_) {
+                      _isFromDirty.value = true;
+                    },
                     validator: validateName,
                   ),
                   SizedBox(
@@ -119,6 +158,9 @@ class UpdateUser extends StatelessWidget {
                     initialValue: userData.getAge.toString(),
                     onSaved: (v) {
                       userData.age = int.parse(v!);
+                    },
+                    onChanged: (_) {
+                      _isFromDirty.value = true;
                     },
                     label: 'Age',
                     keyboardType: TextInputType.number,
@@ -133,6 +175,9 @@ class UpdateUser extends StatelessWidget {
                     onSaved: (v) {
                       userData.weight = int.parse(v!);
                     },
+                    onChanged: (_) {
+                      _isFromDirty.value = true;
+                    },
                     label: 'Weight (KG)',
                     validator: validateWeight,
                   ),
@@ -143,6 +188,9 @@ class UpdateUser extends StatelessWidget {
                     initialValue: userData.getHeight.toString(),
                     onSaved: (v) {
                       userData.height = int.parse(v!);
+                    },
+                    onChanged: (_) {
+                      _isFromDirty.value = true;
                     },
                     keyboardType: TextInputType.number,
                     label: 'Height (CM)',
@@ -155,7 +203,11 @@ class UpdateUser extends StatelessWidget {
                     () => SizedBox(
                       width: double.infinity,
                       child: BaseButton(
-                        onPressed: _isLoading.isTrue ? null : _submit,
+                        onPressed: _isLoading.isTrue ||
+                                (_isFromDirty.value == false &&
+                                    _photo.value == null)
+                            ? null
+                            : _submit,
                         text: _isLoading.isTrue ? 'Loading...' : 'Update',
                         textStyle: TextStyle(color: Colors.white),
                         buttonStyle: ButtonStyle(

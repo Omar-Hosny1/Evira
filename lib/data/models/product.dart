@@ -100,10 +100,6 @@ class Product {
     );
   }
 
-  int getProductQuantity() {
-    return CartController.get.getProductQuantity(id.toString());
-  }
-
   Future<void> removeFromWishlist() async {
     await handleLoaddingState(
       tryLogic: () async {

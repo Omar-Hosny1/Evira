@@ -33,7 +33,6 @@ class CartController extends GetxController {
   }
 
   @override
-  @override
   void onClose() {
     // time to close some resources and to do other cleanings
     print('****************** CLOSED **************');

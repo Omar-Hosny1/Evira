@@ -13,7 +13,8 @@ class AuthRepo {
   Future<void> cleanUserDataFromSharedPrefs() async {
     await errorHandler(tryLogic: () async {
       final sharedPreferences = await SharedPreferences.getInstance();
-      final isRemoved = await sharedPreferences.remove(Strings.userDataKeySharedPrefrences);
+      final isRemoved =
+          await sharedPreferences.remove(Strings.userDataKeySharedPrefrences);
       print('************* sharedPreferences.remove isRemoved *************');
       print(isRemoved);
     });
@@ -33,26 +34,32 @@ class AuthRepo {
     return User.fromJson(json.decode(getedUserData));
   }
 
-  Future<void> _saveUserDataInPrefs(Object userData, String token) async {
+  Future<void> _saveUserDataInPrefs(
+    Object userData,
+    String token, {
+    bool? isSignIn,
+  }) async {
     await errorHandler(tryLogic: () async {
       print('************_saveUserDataInPrefs Called ************');
       final sharedPreferences = await SharedPreferences.getInstance();
-      final userDataAsMap = (userData as Map);
-      userDataAsMap['token'] = token;
-      userDataAsMap['tokenExpiresIn'] =
-          DateTime.now().add(Duration(hours: 1)).toIso8601String();
-      final encodedData = json.encode(userDataAsMap);
-      print('******************** encodedData ********************');
-      print(encodedData);
-      final isSavedSuccessfully = await sharedPreferences.setString(
+
+      if (isSignIn == true) {
+        final userDataAsMap = (userData as Map);
+        userDataAsMap['token'] = token;
+        userDataAsMap['tokenExpiresIn'] =
+            DateTime.now().add(Duration(hours: 1)).toIso8601String();
+        final encodedData = json.encode(userDataAsMap);
+        await sharedPreferences.setString(
+          Strings.userDataKeySharedPrefrences,
+          encodedData,
+        );
+        return;
+      }
+      final encodedData = json.encode(userData);
+      await sharedPreferences.setString(
         Strings.userDataKeySharedPrefrences,
         encodedData,
       );
-      if (isSavedSuccessfully == false) {
-        print('***************** isSavedSuccessfully *****************');
-        throw Exception('Data Can\'t Saved Locally in this Device');
-      }
-        print('***************** isSavedSuccessfully = TRUE *****************');
     });
   }
 
@@ -78,6 +85,13 @@ class AuthRepo {
   Future<void> resetPassword(String email) async {
     await errorHandler(tryLogic: () async {
       await authDataSource.resetPassword(email);
+    });
+  }
+
+  Future<void> updateUserData(User user) async {
+    await errorHandler(tryLogic: () async {
+      await authDataSource.updateUserData(user);
+      await _saveUserDataInPrefs(user, user.getToken!);
     });
   }
 }

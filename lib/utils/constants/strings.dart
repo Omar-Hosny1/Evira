@@ -5,7 +5,7 @@ class Strings {
   static const String productsGetBuilderId = "products-builder";
   static const String wishlistGetBuilderId = "wishlist-builder";
   static const String cartGetBuilderId = "cart-builder";
-  static const String userListTileGetBuilderId = "user-list-tile-builder";
+  static const String userListenersGetBuilderId = "user-listeners-builder";
   static const String bucketFireStorageName = "users_pictures";
   static const String userCollectionName = "users_data";
   static const String wishlistCollectionName = "wishlist_data";

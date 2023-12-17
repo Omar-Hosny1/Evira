@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
+import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/data/repositories/auth-repo.dart';
@@ -53,7 +55,7 @@ class AuthController extends GetxController {
       await _authRepository.signIn(email, password);
       await _getUserDataFromPrefsAndSetCurrentUserData();
       await ProductController.get.fetchCartAndWishlistData();
-      
+
       Get.offAllNamed(Home.routeName);
       showSnackbar(SnackbarState.success, 'Success', 'Logged in Successfully');
     } catch (e) {
@@ -101,6 +103,7 @@ class AuthController extends GetxController {
 
       if (expiresIn.isBefore(DateTime.now())) {
         await _authRepository.cleanUserDataFromSharedPrefs();
+        resetAllPermenanrControllers();
         return SignUp.routeName;
       }
       await _getUserDataFromPrefsAndSetCurrentUserData();
@@ -108,6 +111,7 @@ class AuthController extends GetxController {
       return Home.routeName;
     } catch (e) {
       await _authRepository.cleanUserDataFromSharedPrefs();
+      resetAllPermenanrControllers();
       return SignUp.routeName;
     }
   }
@@ -141,8 +145,15 @@ class AuthController extends GetxController {
     );
   }
 
+  void resetAllPermenanrControllers() {
+    ProductController.get.resetProductsController();
+    CartController.get.resetCartController();
+    WishlistController.get.resetWishlistController();
+  }
+
   Future<void> logOut() async {
     await _authRepository.logout();
+    resetAllPermenanrControllers();
     Get.offAllNamed(SignUp.routeName);
     userData = null;
     _authTimer = null;

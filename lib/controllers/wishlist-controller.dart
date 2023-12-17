@@ -50,11 +50,15 @@ class WishlistController extends GetxController {
       return Product.fromJson(element.data() as Map).id == int.parse(productId);
     });
     _currentUserWishlist!.wishlist.remove(productId);
-    // update([Strings.wishlistGetBuilderId]);
   }
 
   Future<void> addToWishlist(String productId) async {
     await _wishlistRepo.addToWishlist(productId);
     await getUserWishlist();
+  }
+
+  resetWishlistController() {
+    _currentUserWishlist = null;
+    _wishlistProducts = [];
   }
 }

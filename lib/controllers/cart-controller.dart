@@ -42,14 +42,6 @@ class CartController extends GetxController {
     _cartRepo = CartRepo(CartDS());
   }
 
-  @override
-  void onClose() {
-    // time to close some resources and to do other cleanings
-    print('****************** CLOSED **************');
-    _currentUserCart = null;
-    _cartProducts = [];
-  }
-
   Future<void> addToCart(String productId) async {
     try {
       _isAbleToAddOrRemove.value = false;
@@ -103,7 +95,6 @@ class CartController extends GetxController {
       _isAbleToAddOrRemove.value = true;
     } catch (e) {
       _isAbleToAddOrRemove.value = true;
-
       rethrow;
     }
   }
@@ -151,26 +142,18 @@ class CartController extends GetxController {
       resetDefaults();
       final gettedUserCart = await _cartRepo.getUserCartFromRepo();
       if (gettedUserCart == null || gettedUserCart.cart.isEmpty) {
-        print(
-          '******************** gettedUserCart is Null ********************',
-        );
         return;
       }
-      print('************ gettedUserCart *************');
-      print(gettedUserCart.toJson());
       _currentUserCart = gettedUserCart;
 
       final data = await ProductController.get.getCartProducts(
         gettedUserCart.cart.keys.map((e) => int.parse(e)).toList(),
       );
-      print('GOT HERE');
+      
       _cartProducts = data.docs;
-      print('GOT HERE 1');
       updateCartAmount();
-      print('GOT HERE 2');
       update([Strings.cartGetBuilderId]);
     } catch (e) {
-      print('objectAAAAAAAAAAA');
       rethrow;
     }
   }
@@ -227,5 +210,11 @@ class CartController extends GetxController {
     } catch (e) {
       rethrow;
     }
+  }
+
+  resetCartController() {
+    _cartAmount = 0;
+    _cartProducts = [];
+    _currentUserCart = null;
   }
 }

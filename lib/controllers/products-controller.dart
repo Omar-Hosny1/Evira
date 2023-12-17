@@ -24,11 +24,9 @@ class ProductController extends GetxController {
     _productRepository = ProductRepository(ProductDS());
   }
 
-  @override
-  void onClose() {
-    // time to close some resources and to do other cleanings
-    print('****************** CLOSED **************');
+  resetProductsController() {
     _prods = [];
+    _isDiscoverProductsSelected = true;
   }
 
   List<Product> get products {

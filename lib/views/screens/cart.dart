@@ -33,7 +33,6 @@ class Cart extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError == true) {
-                print('ERR');
                 return Center(
                   child: Text(
                     formatErrorMessage(

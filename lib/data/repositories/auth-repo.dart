@@ -47,7 +47,7 @@ class AuthRepo {
         final userDataAsMap = (userData as Map);
         userDataAsMap['token'] = token;
         userDataAsMap['tokenExpiresIn'] =
-            DateTime.now().add(Duration(hours: 1)).toIso8601String();
+            DateTime.now().add(const Duration(hours: 1)).toIso8601String();
         final encodedData = json.encode(userDataAsMap);
         await sharedPreferences.setString(
           Strings.userDataKeySharedPrefrences,
@@ -77,9 +77,12 @@ class AuthRepo {
   }
 
   Future<void> signUp(User user) async {
-    await errorHandler(tryLogic: () async {
-      await authDataSource.signUp(user);
-    });
+    await errorHandler(
+      tryLogic: () async {
+        await authDataSource.signUp(user);
+      },
+      secondsToCancel: 30,
+    );
   }
 
   Future<void> resetPassword(String email) async {
@@ -89,9 +92,12 @@ class AuthRepo {
   }
 
   Future<void> updateUserData(User user) async {
-    await errorHandler(tryLogic: () async {
-      await authDataSource.updateUserData(user);
-      await _saveUserDataInPrefs(user, user.getToken!);
-    });
+    await errorHandler(
+      tryLogic: () async {
+        await authDataSource.updateUserData(user);
+        await _saveUserDataInPrefs(user, user.getToken!);
+      },
+      secondsToCancel: 30,
+    );
   }
 }

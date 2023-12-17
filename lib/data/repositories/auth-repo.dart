@@ -81,7 +81,7 @@ class AuthRepo {
       tryLogic: () async {
         await authDataSource.signUp(user);
       },
-      secondsToCancel: 30,
+      secondsToCancel: 45,
     );
   }
 
@@ -97,7 +97,7 @@ class AuthRepo {
         await authDataSource.updateUserData(user);
         await _saveUserDataInPrefs(user, user.getToken!);
       },
-      secondsToCancel: 30,
+      secondsToCancel: 45,
     );
   }
 }

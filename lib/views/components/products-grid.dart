@@ -41,7 +41,11 @@ class ProductsGrid extends StatelessWidget {
       );
     }
     final filteredProducts = controller.filterForYouProducts(products);
-
+    if (filteredProducts.isEmpty) {
+      return Center(
+        child: Text('No Recommended Products'),
+      );
+    }
     return RefreshIndicator(
       onRefresh: () async {
         controller.updateTheUI();

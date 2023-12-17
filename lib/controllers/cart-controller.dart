@@ -13,6 +13,16 @@ class CartController extends GetxController {
   static CartController get get => Get.find();
   late final CartRepo _cartRepo;
   UserCart? _currentUserCart;
+  final Rx<bool> _isAbleToAddOrRemove = true.obs;
+
+  Rx<bool> get isAbleToAddOrRemove {
+    return Rx(_isAbleToAddOrRemove.value);
+  }
+
+  void resetIsAbleToAddOrRemove() {
+    _isAbleToAddOrRemove.value = true;
+  }
+
   List<QueryDocumentSnapshot<Object?>> _cartProducts = [];
   double _cartAmount = 0;
 
@@ -42,10 +52,9 @@ class CartController extends GetxController {
 
   Future<void> addToCart(String productId) async {
     try {
-      print('addToCart CALLED');
+      _isAbleToAddOrRemove.value = false;
       await _cartRepo.addToCartFromRepo(productId);
-      print('************* _currentUserCart ****************');
-      print(_currentUserCart);
+
       if (_currentUserCart == null) {
         await getUserCart();
       }
@@ -59,7 +68,9 @@ class CartController extends GetxController {
 
       updateCartAmount();
       update([Strings.cartGetBuilderId]);
+      _isAbleToAddOrRemove.value = true;
     } catch (e) {
+      _isAbleToAddOrRemove.value = true;
       rethrow;
     }
   }
@@ -73,6 +84,7 @@ class CartController extends GetxController {
     void Function()? onDone,
   }) async {
     try {
+      _isAbleToAddOrRemove.value = false;
       await _cartRepo.removeFromCartPermanently(productId);
       _currentUserCart?.cart.remove(productId);
       _cartProducts.removeWhere(
@@ -88,7 +100,10 @@ class CartController extends GetxController {
       }
       updateCartAmount();
       update([Strings.cartGetBuilderId]);
+      _isAbleToAddOrRemove.value = true;
     } catch (e) {
+      _isAbleToAddOrRemove.value = true;
+
       rethrow;
     }
   }
@@ -98,6 +113,8 @@ class CartController extends GetxController {
     void Function()? onDone,
   }) async {
     try {
+      _isAbleToAddOrRemove.value = false;
+
       await _cartRepo.removeFromCartFromRepo(productId);
       if (_currentUserCart?.cart[productId] == 1) {
         _currentUserCart?.cart.remove(productId);
@@ -116,7 +133,9 @@ class CartController extends GetxController {
       }
       updateCartAmount();
       update([Strings.cartGetBuilderId]);
+      _isAbleToAddOrRemove.value = true;
     } catch (e) {
+      _isAbleToAddOrRemove.value = true;
       rethrow;
     }
   }
@@ -144,10 +163,14 @@ class CartController extends GetxController {
       final data = await ProductController.get.getCartProducts(
         gettedUserCart.cart.keys.map((e) => int.parse(e)).toList(),
       );
+      print('GOT HERE');
       _cartProducts = data.docs;
+      print('GOT HERE 1');
       updateCartAmount();
+      print('GOT HERE 2');
       update([Strings.cartGetBuilderId]);
     } catch (e) {
+      print('objectAAAAAAAAAAA');
       rethrow;
     }
   }
@@ -155,6 +178,7 @@ class CartController extends GetxController {
   void updateCartAmount() {
     if (_cartProducts.isEmpty || _currentUserCart == null) {
       _cartAmount = 0;
+      return;
     }
     double amount = 0;
     for (var i = 0; i < _cartProducts.length; i++) {

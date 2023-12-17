@@ -1,20 +1,15 @@
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
-import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/utils/helpers/snack-bar.dart';
-import 'package:evira/views/components/base/base-button.dart';
+import 'package:evira/views/components/cart-bottom-bar.dart';
 import 'package:evira/views/components/cart-container.dart';
 import 'package:evira/views/components/main-drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
   Cart({super.key});
 
   static const routeName = '/cart';
-  final Rx<bool> _isLoading = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -24,68 +19,7 @@ class Cart extends StatelessWidget {
         appBar: AppBar(
           title: Text('Your Cart'),
         ),
-        bottomNavigationBar: Container(
-          height: 120,
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total Amount',
-                    style: TextStyle(fontSize: 23),
-                  ),
-                  GetBuilder<CartController>(
-                    id: Strings.cartGetBuilderId,
-                    builder: (controller) => Text(
-                      controller.cartAmount.toString(),
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Obx(
-                () => BaseButton(
-                  onPressed: _isLoading.isTrue
-                      ? null
-                      : () async {
-                          errorHandlerInView(tryLogic: () async {
-                            if (CartController.get.cartProducts.length == 0) {
-                              showSnackbar(
-                                SnackbarState.danger,
-                                'Try Add Some Product To Your Cart!',
-                                'Your Cart is Empty!',
-                              );
-                              return;
-                            }
-                            _isLoading.value = true;
-                            await CartController.get.makeOrder();
-                            Get.defaultDialog(
-                                middleText:
-                                    'Your Order Has Been Saved Successfuly...',
-                                radius: 10,
-                                titlePadding: EdgeInsets.only(top: 20),
-                                title: 'Thanks For Dealing With Evira',
-                                custom: const Icon(
-                                  Icons.done_all,
-                                  color: Colors.green,
-                                ));
-                          }, finallyLogic: () {
-                            _isLoading.value = false;
-                          });
-                        },
-                  text: _isLoading.isTrue ? 'Loading...' : 'Checkout Now!',
-                ),
-              ),
-            ],
-          ),
-        ),
+        bottomNavigationBar: CartBottomBar(),
         body: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: Dimens.horizontal_padding,
@@ -99,12 +33,14 @@ class Cart extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               } else if (snapshot.hasError == true) {
+                print('ERR');
                 return Center(
-                    child: Text(
-                  formatErrorMessage(
-                    snapshot.error.toString(),
+                  child: Text(
+                    formatErrorMessage(
+                      snapshot.error.toString(),
+                    ),
                   ),
-                ));
+                );
               }
               return const CartContainer();
             },

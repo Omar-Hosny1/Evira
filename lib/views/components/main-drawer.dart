@@ -1,3 +1,4 @@
+import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/views/components/user-list-tile.dart';
 import 'package:evira/views/screens/cart.dart';
 import 'package:evira/views/screens/home.dart';
@@ -22,6 +23,7 @@ class MainDrawer extends StatelessWidget {
           //   title: const Text('UIIIII'),
           // ),
           ListTile(
+            style: ListTileStyle.drawer,
             onTap: () {
               Get.back(closeOverlays: true);
               if (Get.currentRoute != Home.routeName) {
@@ -52,6 +54,7 @@ class MainDrawer extends StatelessWidget {
             onTap: () {
               Get.back(closeOverlays: true);
               if (Get.currentRoute != Cart.routeName) {
+                CartController.get.resetIsAbleToAddOrRemove();
                 Get.offAllNamed(Cart.routeName);
               }
             },

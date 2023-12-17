@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:flutter/material.dart';
@@ -84,27 +85,27 @@ class CartItem extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Obx(
-                () => IconButton(
+          Obx(
+            () => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
                   icon: Icon(Icons.remove),
-                  onPressed: product.isLoadingStateForCart.isTrue
+                  onPressed: product.isLoadingStateForCart.isTrue ||
+                          CartController.get.isAbleToAddOrRemove.isFalse
                       ? null
                       : () => handleRemoveFromCart(product.quantity.obs),
                 ),
-              ),
-              SizedBox(width: 15, child: Obx(() => buildProductQuantity())),
-              Obx(
-                () => IconButton(
+                SizedBox(width: 15, child: buildProductQuantity()),
+                IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: product.isLoadingStateForCart.isTrue
+                  onPressed: product.isLoadingStateForCart.isTrue ||
+                          CartController.get.isAbleToAddOrRemove.isFalse
                       ? null
                       : () => handleAddToCart(product.quantity.obs),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

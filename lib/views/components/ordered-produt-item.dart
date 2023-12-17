@@ -13,7 +13,7 @@ class OrderedProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed(ProductDetails.routeName, arguments: product.id);
+        Get.toNamed(ProductDetails.routeName, arguments: product);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 3),

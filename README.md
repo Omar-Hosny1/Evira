@@ -76,4 +76,4 @@ Evira is a feature-rich mobile application designed to provide users with a seam
 
 The amalgamation of these features and packages ensures that Evira delivers a robust, user-friendly, and secure shopping platform to its users.
 
-You Can See This Video To Preview What is inside [From Here]([URL](https://drive.google.com/file/d/1BPgv3CxVRUQD1s-gJMlzllOmla2gyz2-/view?usp=sharing)https://drive.google.com/file/d/1BPgv3CxVRUQD1s-gJMlzllOmla2gyz2-/view?usp=sharing)
+You Can See This Video To Preview What is inside From [Here]([URL](https://drive.google.com/file/d/1BPgv3CxVRUQD1s-gJMlzllOmla2gyz2-/view?usp=sharing)https://drive.google.com/file/d/1BPgv3CxVRUQD1s-gJMlzllOmla2gyz2-/view?usp=sharing)

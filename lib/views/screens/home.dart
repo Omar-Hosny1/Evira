@@ -19,6 +19,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProductController.get.updateTheUI();
+    
     return SafeArea(
       child: Scaffold(
         drawer: const MainDrawer(),

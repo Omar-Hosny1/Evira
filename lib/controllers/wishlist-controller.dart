@@ -4,7 +4,6 @@ import 'package:evira/data/data-sources/wishlist-ds.dart';
 import 'package:evira/data/models/firebase-models/user-wishlist.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/wishlist-repo.dart';
-import 'package:evira/utils/constants/strings.dart';
 import 'package:get/get.dart';
 
 class WishlistController extends GetxController {
@@ -51,7 +50,7 @@ class WishlistController extends GetxController {
       return Product.fromJson(element.data() as Map).id == int.parse(productId);
     });
     _currentUserWishlist!.wishlist.remove(productId);
-    update([Strings.wishlistGetBuilderId]);
+    // update([Strings.wishlistGetBuilderId]);
   }
 
   Future<void> addToWishlist(String productId) async {

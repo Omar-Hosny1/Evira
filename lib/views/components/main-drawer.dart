@@ -24,28 +24,36 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             onTap: () {
               Get.back(closeOverlays: true);
-              Get.offAllNamed(Home.routeName);
+              if (Get.currentRoute != Home.routeName) {
+                Get.offAllNamed(Home.routeName);
+              }
             },
             title: const Text('Home'),
           ),
           ListTile(
             onTap: () {
               Get.back(closeOverlays: true);
-              Get.offAllNamed(Orders.routeName);
+              if (Get.currentRoute != Orders.routeName) {
+                Get.offAllNamed(Orders.routeName);
+              }
             },
             title: const Text('Orders'),
           ),
           ListTile(
             onTap: () {
               Get.back(closeOverlays: true);
-              Get.offAllNamed(Wishlist.routeName);
+              if (Get.currentRoute != Wishlist.routeName) {
+                Get.offAllNamed(Wishlist.routeName);
+              }
             },
             title: const Text('Wishlist'),
           ),
           ListTile(
             onTap: () {
               Get.back(closeOverlays: true);
-              Get.offAllNamed(Cart.routeName);
+              if (Get.currentRoute != Cart.routeName) {
+                Get.offAllNamed(Cart.routeName);
+              }
             },
             title: const Text('Cart'),
           ),

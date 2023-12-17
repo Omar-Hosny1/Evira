@@ -7,9 +7,11 @@ class ProductWishlistButton extends StatelessWidget {
   const ProductWishlistButton({
     super.key,
     required this.product,
+    this.withObx = false,
   });
 
   final Product product;
+  final bool withObx;
 
   void _wishlistIconHandler() async {
     if (product.isAddedToWishlist.isTrue == true) {
@@ -38,13 +40,22 @@ class ProductWishlistButton extends StatelessWidget {
       );
     }
 
-    return Obx(
-      () => IconButton(
-        onPressed: product.isLoadingStateForWishlist.isTrue
-            ? null
-            : () => _wishlistIconHandler(),
-        icon: buildIcon(),
-      ),
+    if (withObx == true) {
+      return Obx(
+        () => IconButton(
+          onPressed: product.isLoadingStateForWishlist.isTrue
+              ? null
+              : () => _wishlistIconHandler(),
+          icon: buildIcon(),
+        ),
+      );
+    }
+
+    return IconButton(
+      onPressed: product.isLoadingStateForWishlist.isTrue
+          ? null
+          : () => _wishlistIconHandler(),
+      icon: buildIcon(),
     );
   }
 }

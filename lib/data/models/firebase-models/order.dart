@@ -13,7 +13,10 @@ class Order {
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         products: List<OrderedProduct>.from(
-            json["products"].map((x) => OrderedProduct.fromJson(x))),
+          json["products"].map(
+            (x) => OrderedProduct.fromJson(x),
+          ),
+        ),
         date: json["date"],
         totalPrice: json["total_price"],
       );

@@ -58,9 +58,10 @@ class Cart extends StatelessWidget {
                           errorHandlerInView(tryLogic: () async {
                             if (CartController.get.cartProducts.length == 0) {
                               showSnackbar(
-                                  SnackbarState.danger,
-                                  'Try Add Some Product To Your Cart!',
-                                  'Your Cart is Empty!');
+                                SnackbarState.danger,
+                                'Try Add Some Product To Your Cart!',
+                                'Your Cart is Empty!',
+                              );
                               return;
                             }
                             _isLoading.value = true;

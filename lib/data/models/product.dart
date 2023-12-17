@@ -127,9 +127,11 @@ class Product {
     );
   }
 
-  String formatProductName() {
-    if (name.length > 14) {
-      return '${name.substring(0, 14)}...';
+  String formatProductName({int? subFrom}) {
+    subFrom ??= 14;
+
+    if (name.length > subFrom) {
+      return '${name.substring(0, subFrom)}...';
     }
     return name;
   }

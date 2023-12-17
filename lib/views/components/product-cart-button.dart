@@ -27,36 +27,33 @@ class ProductCartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => BaseButton(
-        buttonStyle: ElevatedButton.styleFrom(
-          elevation: 0.0,
-          shadowColor: Colors.transparent,
-          padding: EdgeInsets.symmetric(vertical: 5),
-          backgroundColor: product.isAddedToCart.isTrue == true
-              ? Colors.transparent
-              : Colors.black,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0),
-            side: BorderSide(
-              color: Colors.black,
-            ),
+    return BaseButton(
+      buttonStyle: ElevatedButton.styleFrom(
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        padding: EdgeInsets.symmetric(vertical: 5),
+        backgroundColor: product.isAddedToCart.isTrue == true
+            ? Colors.transparent
+            : Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(0),
+          side: BorderSide(
+            color: Colors.black,
           ),
         ),
-        textStyle: TextStyle(
-          color: product.isAddedToCart.isTrue == true
-              ? Colors.black
-              : Colors.white,
-        ),
-        text: product.isLoadingStateForCart.isTrue == true
-            ? 'Loading...'
-            : product.isAddedToCart.isTrue == true
-                ? 'Remove Cart'
-                : 'Add To Cart',
-        onPressed: product.isLoadingStateForCart.isTrue
-            ? null
-            : () => cartButtonHandler(),
       ),
+      textStyle: TextStyle(
+        color:
+            product.isAddedToCart.isTrue == true ? Colors.black : Colors.white,
+      ),
+      text: product.isLoadingStateForCart.isTrue == true
+          ? 'Loading...'
+          : product.isAddedToCart.isTrue == true
+              ? 'Remove Cart'
+              : 'Add To Cart',
+      onPressed: product.isLoadingStateForCart.isTrue
+          ? null
+          : () => cartButtonHandler(),
     );
   }
 }

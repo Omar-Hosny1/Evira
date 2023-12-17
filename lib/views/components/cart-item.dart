@@ -65,11 +65,15 @@ class CartItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    product.name,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                  SizedBox(
+                    width: 145,
+                    child: Text(
+                      product.formatProductName(),
+                      softWrap: true,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -91,7 +95,7 @@ class CartItem extends StatelessWidget {
                       : () => handleRemoveFromCart(product.quantity.obs),
                 ),
               ),
-              SizedBox(width: 20, child: Obx(() => buildProductQuantity())),
+              SizedBox(width: 15, child: Obx(() => buildProductQuantity())),
               Obx(
                 () => IconButton(
                   icon: Icon(Icons.add),

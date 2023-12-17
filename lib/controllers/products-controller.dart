@@ -14,7 +14,7 @@ class ProductController extends GetxController {
   static ProductController get get => Get.find();
   bool _isDiscoverProductsSelected = true;
 
-  get isDiscoverProductsSelected {
+  bool get isDiscoverProductsSelected {
     return _isDiscoverProductsSelected;
   }
 

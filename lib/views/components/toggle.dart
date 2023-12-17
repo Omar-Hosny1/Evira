@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 class Toggle extends StatelessWidget {
   Toggle({super.key});
 
-  final _isDiscoverSelected = true.obs;
+  final _isDiscoverSelected = ProductController.get.isDiscoverProductsSelected.obs;
 
   @override
   Widget build(BuildContext context) {

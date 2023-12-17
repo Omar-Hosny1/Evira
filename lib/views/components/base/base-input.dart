@@ -117,6 +117,7 @@ class BaseInput extends StatelessWidget {
           ),
         ),
         hintText: label,
+        label: label != null ? Text(label!) : null,
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.black,

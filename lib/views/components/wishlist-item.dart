@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
+import 'package:evira/views/components/product-wishlist-button.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class WishlistItem extends StatelessWidget {
   final Product product;
@@ -43,22 +43,13 @@ class WishlistItem extends StatelessWidget {
                 ),
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              Text(product.name)
+              SizedBox(
+                width: 15,
+              ),
+              Text(product.formatProductName(subFrom: 18))
             ],
           ),
-          Obx(
-            () => InkWell(
-              onTap: product.isLoadingStateForWishlist.isTrue
-                  ? null
-                  : removeFromWishlistHandler,
-              child: product.isLoadingStateForWishlist.isTrue
-                  ? CircularProgressIndicator()
-                  : Icon(
-                      Icons.remove,
-                      color: Colors.red,
-                    ),
-            ),
-          ),
+          ProductWishlistButton(product: product, withObx: true),
         ],
       ),
     );

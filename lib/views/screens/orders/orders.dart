@@ -1,8 +1,8 @@
 import 'package:evira/controllers/order-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/views/components/main-drawer.dart';
-import 'package:evira/views/components/order-item.dart';
+import 'package:evira/views/components/common/main-drawer.dart';
+import 'package:evira/views/components/orders/order-item.dart';
 import 'package:flutter/material.dart';
 
 class Orders extends StatelessWidget {

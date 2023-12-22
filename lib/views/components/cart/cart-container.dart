@@ -1,7 +1,7 @@
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/views/components/cart-item.dart';
+import 'package:evira/views/components/cart/cart-item.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 

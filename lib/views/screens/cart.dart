@@ -1,9 +1,9 @@
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/views/components/cart-bottom-bar.dart';
-import 'package:evira/views/components/cart-container.dart';
-import 'package:evira/views/components/main-drawer.dart';
+import 'package:evira/views/components/cart/cart-bottom-bar.dart';
+import 'package:evira/views/components/cart/cart-container.dart';
+import 'package:evira/views/components/common/main-drawer.dart';
 import 'package:flutter/material.dart';
 
 class Cart extends StatelessWidget {

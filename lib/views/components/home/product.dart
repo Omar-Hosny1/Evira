@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:evira/views/components/product-cart-button.dart';
-import 'package:evira/views/components/product-wishlist-button.dart';
+import 'package:evira/views/components/home/product-cart-button.dart';
+import 'package:evira/views/components/home/product-wishlist-button.dart';
 import 'package:evira/views/screens/product-details.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../data/models/product.dart';
+import '../../../data/models/product.dart';
 
 class ProductView extends StatelessWidget {
   final Product product;

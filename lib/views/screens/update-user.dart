@@ -7,7 +7,7 @@ import 'package:evira/utils/device/device_utils.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/utils/validations/sign-up-validations.dart';
-import 'package:evira/views/components/back-arrow.dart';
+import 'package:evira/views/components/common/back-arrow.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
 import 'package:flutter/material.dart';

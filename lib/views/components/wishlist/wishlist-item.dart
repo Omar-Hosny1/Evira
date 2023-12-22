@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/helpers/error-handler-view.dart';
-import 'package:evira/views/components/product-wishlist-button.dart';
+import 'package:evira/views/components/home/product-wishlist-button.dart';
 import 'package:flutter/material.dart';
 
 class WishlistItem extends StatelessWidget {

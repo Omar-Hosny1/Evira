@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/utils/constants/dimens.dart';
-import 'package:evira/views/components/cart-btn-handler.dart';
-import 'package:evira/views/components/wishlist-btn-handler.dart';
+import 'package:evira/views/components/cart/cart-btn-handler.dart';
+import 'package:evira/views/components/wishlist/wishlist-btn-handler.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

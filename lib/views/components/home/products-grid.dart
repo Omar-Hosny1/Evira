@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/data/models/product.dart';
-import 'package:evira/views/components/product.dart';
+import 'package:evira/views/components/home/product.dart';
 import 'package:flutter/material.dart';
 
 class ProductsGrid extends StatelessWidget {

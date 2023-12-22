@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
-import 'package:evira/views/components/back-arrow.dart';
+import 'package:evira/views/components/common/back-arrow.dart';
 import 'package:evira/views/screens/update-user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -7,10 +7,10 @@ import 'package:evira/views/components/base/base-input.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// ignore: must_be_immutable
 class ResetPassword extends StatelessWidget {
   ResetPassword({super.key});
-  TextEditingController _controller = TextEditingController();
+
+  final TextEditingController _controller = TextEditingController();
   final _isLoading = false.obs;
 
   void _submit() async {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/data/models/product.dart';
-import 'package:evira/views/components/wishlist-item.dart';
+import 'package:evira/views/components/wishlist/wishlist-item.dart';
 import 'package:flutter/material.dart';
 
 class WishlistContainer extends StatelessWidget {

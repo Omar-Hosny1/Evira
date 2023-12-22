@@ -1,7 +1,7 @@
 import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/utils/constants/dimens.dart';
-import 'package:evira/views/components/back-arrow.dart';
-import 'package:evira/views/components/ordered-produt-item.dart';
+import 'package:evira/views/components/common/back-arrow.dart';
+import 'package:evira/views/components/orders/ordered-produt-item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

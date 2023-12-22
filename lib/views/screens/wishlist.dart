@@ -2,8 +2,8 @@ import 'package:evira/controllers/wishlist-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
-import 'package:evira/views/components/main-drawer.dart';
-import 'package:evira/views/components/wishlist-container.dart';
+import 'package:evira/views/components/common/main-drawer.dart';
+import 'package:evira/views/components/wishlist/wishlist-container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

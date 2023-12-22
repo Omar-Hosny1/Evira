@@ -4,7 +4,7 @@ import 'package:evira/utils/helpers/error-handler-view.dart';
 import 'package:evira/utils/validations/common-validations.dart';
 import 'package:evira/views/components/base/base-button.dart';
 import 'package:evira/views/components/base/base-input.dart';
-import 'package:evira/views/components/reset-password.dart';
+import 'package:evira/views/components/profile/reset-password.dart';
 import 'package:evira/views/screens/auth/sign-up.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

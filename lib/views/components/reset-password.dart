@@ -24,9 +24,11 @@ class ResetPassword extends StatelessWidget {
       );
       return;
     }
+
     await errorHandlerInView(tryLogic: () async {
       _isLoading.value = true;
       await AuthController.get.resetPassword(enteredText);
+      Get.back(closeOverlays: true);
       showSnackbar(
         SnackbarState.success,
         'Check Your Email...',
@@ -34,7 +36,6 @@ class ResetPassword extends StatelessWidget {
       );
     }, finallyLogic: () {
       _isLoading.value = false;
-      Get.back(closeOverlays: true);
     });
   }
 

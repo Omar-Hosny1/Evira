@@ -3,6 +3,7 @@ import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/utils/constants/dimens.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/views/components/common/back-arrow.dart';
+import 'package:evira/views/components/profile/delete-account-card.dart';
 import 'package:evira/views/screens/update-user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,7 @@ import 'package:get/get.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
   static const routeName = '/profile';
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -126,6 +127,7 @@ class Profile extends StatelessWidget {
                         title: Text('Update Your Data'),
                       ),
                     ),
+                    DeleteAccountCard(),
                     Card(
                       child: ListTile(
                         onTap: () async {

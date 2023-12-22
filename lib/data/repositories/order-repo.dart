@@ -6,7 +6,14 @@ import 'package:evira/utils/helpers/error-handler.dart';
 
 class OrderRepo {
   final OrderDS orderDS;
-  OrderRepo({required this.orderDS});
+  OrderRepo._(this.orderDS);
+
+  static OrderRepo? _instance;
+
+  static OrderRepo get instance {
+    _instance ??= OrderRepo._(OrderDS());
+    return _instance!;
+  }
 
   Future<void> addOrderFromRepo(
     List<OrderedProduct> products,
@@ -30,5 +37,15 @@ class OrderRepo {
         gettedUserOrders.data() as Map<String, dynamic>,
       );
     });
+  }
+
+  Future<void> deleteUserOrders() async {
+    await errorHandler(
+      tryLogic: () async {
+        final user = AuthController.get.userData!;
+        await orderDS.deleteUserOrders(user);
+      },
+      secondsToCancel: 45,
+    );
   }
 }

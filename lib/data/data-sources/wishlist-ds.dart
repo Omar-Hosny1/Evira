@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:get/get.dart';
 
 class WishlistDS {
   final CollectionReference _wishlistCollection =
       FirebaseFirestore.instance.collection(Strings.wishlistCollectionName);
-      
+  
   Future<QueryDocumentSnapshot<Object?>?> getUserWishlist(
     String userEmail,
   ) async {
@@ -64,5 +65,13 @@ class WishlistDS {
       print('ERROR ${e.toString()}');
       rethrow;
     }
+  }
+
+  Future<void> deleteUserWishlist(User user) async {
+    final userData = await getUserWishlist(user.getEmail!);
+    if (userData == null) {
+      return;
+    }
+    await _wishlistCollection.doc(userData.id).delete();
   }
 }

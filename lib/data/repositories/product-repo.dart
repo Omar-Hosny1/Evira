@@ -6,7 +6,14 @@ import 'package:evira/utils/helpers/error-handler.dart';
 
 class ProductRepository {
   final ProductDS _productsDataSource;
-  ProductRepository(this._productsDataSource);
+  ProductRepository._(this._productsDataSource);
+
+  static ProductRepository? _instance;
+
+  static ProductRepository get instance {
+    _instance ??= ProductRepository._(ProductDS());
+    return _instance!;
+  }
 
   Stream<QuerySnapshot<Object?>> listenToProducts() {
     return _productsDataSource.listenToProducts();

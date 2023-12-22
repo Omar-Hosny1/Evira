@@ -5,7 +5,14 @@ import 'package:evira/utils/helpers/error-handler.dart';
 
 class CartRepo {
   final CartDS cartDs;
-  CartRepo(this.cartDs);
+  CartRepo._(this.cartDs);
+
+  static CartRepo? _instance;
+
+  static CartRepo get instance {
+    _instance ??= CartRepo._(CartDS());
+    return _instance!;
+  }
 
   Future<void> addToCartFromRepo(String productId) async {
     await errorHandler(tryLogic: () async {
@@ -47,5 +54,15 @@ class CartRepo {
       final userEmail = AuthController.get.userData!.getEmail!;
       await cartDs.cleanUpUserCart(userEmail);
     });
+  }
+
+  Future<void> deleteUserCart() async {
+    await errorHandler(
+      tryLogic: () async {
+        final user = AuthController.get.userData!;
+        await cartDs.deleteUserCart(user);
+      },
+      secondsToCancel: 45,
+    );
   }
 }

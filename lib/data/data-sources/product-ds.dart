@@ -5,15 +5,8 @@ import 'package:evira/utils/constants/strings.dart';
 import './data.dart';
 
 class ProductDS {
-  ProductDS._privateConstructor();
-  static final ProductDS _dataSource = ProductDS._privateConstructor();
   final CollectionReference _productsCollection =
       FirebaseFirestore.instance.collection(Strings.productsCollectionName);
-
-  factory ProductDS() {
-    return _dataSource;
-  }
-
   Stream<QuerySnapshot<Object?>> listenToProducts() {
     return _productsCollection.snapshots();
   }

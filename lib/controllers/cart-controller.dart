@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/order-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
-import 'package:evira/data/data-sources/cart-ds.dart';
 import 'package:evira/data/models/firebase-models/user-cart.dart';
 import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/data/models/product.dart';
@@ -39,7 +38,7 @@ class CartController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    _cartRepo = CartRepo(CartDS());
+    _cartRepo = CartRepo.instance;
   }
 
   Future<void> addToCart(String productId) async {
@@ -149,7 +148,7 @@ class CartController extends GetxController {
       final data = await ProductController.get.getCartProducts(
         gettedUserCart.cart.keys.map((e) => int.parse(e)).toList(),
       );
-      
+
       _cartProducts = data.docs;
       updateCartAmount();
       update([Strings.cartGetBuilderId]);

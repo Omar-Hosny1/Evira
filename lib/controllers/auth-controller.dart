@@ -174,10 +174,15 @@ class AuthController extends GetxController {
   }
 
   Future<void> deleteAccount() async {
-    await _authRepository.deleteAccount();
+    print('GOT HERE 1');
     await CartRepo.instance.deleteUserCart();
+    print('GOT HERE 2');
     await OrderRepo.instance.deleteUserOrders();
+    print('GOT HERE 3');
     await WishlistRepo.instance.deleteUserOrders();
+    print('GOT HERE 4');
+    await _authRepository.deleteAccount();
+    print('GOT HERE 5');
     await _authRepository.cleanUserDataFromSharedPrefs();
 
     resetAllPermenanrControllers();

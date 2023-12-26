@@ -1,6 +1,7 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/cart-ds.dart';
 import 'package:evira/data/models/firebase-models/user-cart.dart';
+import 'package:evira/utils/constants/values.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 
 class CartRepo {
@@ -62,7 +63,7 @@ class CartRepo {
         final user = AuthController.get.userData!;
         await cartDs.deleteUserCart(user);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.medlongOperationsSecondsToCancle,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/order-ds.dart';
 import 'package:evira/data/models/firebase-models/user-orders.dart';
 import 'package:evira/data/models/orderd-product.dart';
+import 'package:evira/utils/constants/values.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 
 class OrderRepo {
@@ -45,7 +46,7 @@ class OrderRepo {
         final user = AuthController.get.userData!;
         await orderDS.deleteUserOrders(user);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.medlongOperationsSecondsToCancle,
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/strings.dart';
+import 'package:evira/utils/constants/values.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -89,7 +90,7 @@ class AuthRepo {
       tryLogic: () async {
         await authDataSource.signUp(user);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.longOperationsSecondsToCancle,
     );
   }
 
@@ -105,7 +106,7 @@ class AuthRepo {
         await authDataSource.updateUserData(user);
         await _saveUserDataInPrefs(user, user.getToken!);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.longOperationsSecondsToCancle,
     );
   }
 
@@ -115,7 +116,7 @@ class AuthRepo {
         final user = AuthController.get.userData!;
         await authDataSource.deleteAccount(user);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.medlongOperationsSecondsToCancle,
     );
   }
 }

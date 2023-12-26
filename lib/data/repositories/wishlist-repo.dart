@@ -1,5 +1,6 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/wishlist-ds.dart';
+import 'package:evira/utils/constants/values.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import '../models/firebase-models/user-wishlist.dart';
 
@@ -50,7 +51,7 @@ class WishlistRepo {
         final user = AuthController.get.userData!;
         await wishlistDS.deleteUserWishlist(user);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.medlongOperationsSecondsToCancle,
     );
   }
 }

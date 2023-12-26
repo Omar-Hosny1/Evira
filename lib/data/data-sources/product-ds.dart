@@ -33,11 +33,6 @@ class ProductDS {
     da.forEach((key, value) async {
       await _productsCollection.add(value);
     });
-    // ignore: unused_local_variable
-    // for (var i = 1; i < 104; i++) {
-    //   print(i);
-    //   print(da[i.toString()]);
-    // }
   }
 
   Future<QuerySnapshot<Object?>> getWishlistProducts(List<int> ids) async {

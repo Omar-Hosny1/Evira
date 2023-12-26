@@ -21,8 +21,6 @@ class ProductDS {
   }
 
   Stream<QuerySnapshot<Object?>> getForYouProducts(String gender, int weight) {
-    print(' ***************** getForYouProducts **************');
-    print(gender);
     return _productsCollection
         .where('gender', isEqualTo: gender)
         .get()
@@ -36,20 +34,12 @@ class ProductDS {
   }
 
   Future<QuerySnapshot<Object?>> getWishlistProducts(List<int> ids) async {
-    print('************* ids ***************');
-    print(ids);
     final data = await _productsCollection.where('id', whereIn: ids).get();
-    print('************* getWishlistProducts ****************');
-    print(data.docs.length);
     return data;
   }
 
   Future<QuerySnapshot<Object?>> getCartProducts(List<int> ids) async {
-    print('************* ids ***************');
-    print(ids);
     final data = await _productsCollection.where('id', whereIn: ids).get();
-    print('************* getCartProducts ****************');
-    print(data.docs.length);
     return data;
   }
 }

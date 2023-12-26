@@ -64,8 +64,6 @@ class AuthDS {
     // User Doc Operation
     final currentUserDocDatAndId =
         await getUserDatafromFireStore(user.getEmail!);
-    print('................... currentUserDoc');
-    print(currentUserDocDatAndId);
     final userDocId = currentUserDocDatAndId[1] as String;
 
     await _usersCollection.doc(userDocId).set(user.toJsonToFireStore());

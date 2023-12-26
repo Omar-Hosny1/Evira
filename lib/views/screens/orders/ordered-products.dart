@@ -12,8 +12,7 @@ class OrderedProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<OrderedProduct> products = Get.arguments;
-    print(products.length);
-    print(products.length);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

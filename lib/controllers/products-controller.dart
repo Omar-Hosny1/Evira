@@ -56,7 +56,6 @@ class ProductController extends GetxController {
   }
 
   Stream<QuerySnapshot<Object?>> getCurrentProducts() {
-    print('Stream<QuerySnapshot<Object?>> getCurrentProducts Called');
     if (_isDiscoverProductsSelected == true) {
       return _listenAndGetAllProducts();
     }
@@ -98,13 +97,11 @@ class ProductController extends GetxController {
   }
 
   void showForYouProducts() {
-    print('showForYouProducts CALLED');
     _isDiscoverProductsSelected = false;
     update([Strings.productsGetBuilderId]);
   }
 
   void updateTheUI() {
-    print('***************** updateTheUI RAN ********************');
     update([Strings.productsGetBuilderId]);
   }
 

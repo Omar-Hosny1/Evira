@@ -22,8 +22,6 @@ class ProductRepository {
   Future<Product?> getProductById(int id) async {
     final product =
         await _productsDataSource.getProductById(id) as Map<dynamic, dynamic>?;
-    print('********* GETTED PROD ***************');
-    print(product);
     if (product == null) {
       return null;
     }

@@ -15,24 +15,19 @@ class OrderDS {
     List<OrderedProduct> products,
     double totalAmount,
   ) async {
-    print('SO ON');
     try {
       final FSO.Order thePreparedOrder = FSO.Order(
         date: DateTime.now().toIso8601String(),
         products: products,
         totalPrice: totalAmount,
       );
-      print('SO ON 1');
       var userOrders = await getOrders(userEmail);
 
       if (userOrders != null) {
         final currentOrders = UserOrders.fromJson(
           userOrders.data() as Map<String, dynamic>,
         );
-        print('SO ON 2');
         currentOrders.orders[DateTime.now().toString()] = thePreparedOrder;
-        print(currentOrders.toJson());
-
         await _orderCollection.doc(userOrders.id).set(currentOrders.toJson());
         return;
       }

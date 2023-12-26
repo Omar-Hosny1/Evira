@@ -31,7 +31,7 @@ class AuthController extends GetxController {
     // time to close some resources and to do other cleanings
     userData = null;
     _authTimer = null;
-    print('****************** CLOSED **************');
+    ('****************** CLOSED **************');
   }
 
   AuthController() {
@@ -70,8 +70,8 @@ class AuthController extends GetxController {
       await _authRepository.updateUserData(user);
       await _getUserDataFromPrefsAndSetCurrentUserData();
       update([Strings.userListenersGetBuilderId]);
-      print('................. user.toJson() ................');
-      print(user.toJson());
+      ('................. user.toJson() ................');
+      (user.toJson());
     } catch (e) {
       rethrow;
     }
@@ -79,14 +79,14 @@ class AuthController extends GetxController {
 
   Future<void> _getUserDataFromPrefsAndSetCurrentUserData() async {
     final getedUserData = await _authRepository.getUserDataFromSharedPrefs();
-    print('***************** getedUserData *****************');
-    print(getedUserData);
+    ('***************** getedUserData *****************');
+    (getedUserData);
     userData = getedUserData;
     _autoLogOut(DateTime.parse(getedUserData!.getTokenExpiresIn!));
 
     update([Strings.userListenersGetBuilderId]);
-    print('****************** userData ******************');
-    print(userData!.getUserData());
+    ('****************** userData ******************');
+    (userData!.getUserData());
   }
 
   bool wasSignedIn(User? user) {
@@ -174,15 +174,15 @@ class AuthController extends GetxController {
   }
 
   Future<void> deleteAccount() async {
-    print('GOT HERE 1');
+    ('GOT HERE 1');
     await CartRepo.instance.deleteUserCart();
-    print('GOT HERE 2');
+    ('GOT HERE 2');
     await OrderRepo.instance.deleteUserOrders();
-    print('GOT HERE 3');
+    ('GOT HERE 3');
     await WishlistRepo.instance.deleteUserOrders();
-    print('GOT HERE 4');
+    ('GOT HERE 4');
     await _authRepository.deleteAccount();
-    print('GOT HERE 5');
+    ('GOT HERE 5');
     await _authRepository.cleanUserDataFromSharedPrefs();
 
     resetAllPermenanrControllers();

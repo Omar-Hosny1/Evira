@@ -21,9 +21,6 @@ Future<T> errorHandler<T>(
       );
     });
   } on FirebaseAuthException catch (e) {
-    print('******************** Firebase Error Message ********************');
-    print(e.code);
-    print(e.message);
     var errMsg = 'Something Went Wrong';
     switch (e.code) {
       case 'email-already-exists':
@@ -49,8 +46,6 @@ Future<T> errorHandler<T>(
     }
     throw Exception(errMsg);
   } on FirebaseException catch (e) {
-    print('******************** Firebase Error Message ********************');
-    print(e.message);
     if (e.message == 'network-request-failed') {
       throw Exception('Check Your Network And Try Aganin Later...');
     }
@@ -58,8 +53,6 @@ Future<T> errorHandler<T>(
   } on SocketException {
     throw Exception('No Internet Connection');
   } catch (e) {
-    print(e.runtimeType);
-    print('...................... e.runtimeType');
     rethrow;
   }
 }

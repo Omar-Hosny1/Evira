@@ -22,10 +22,7 @@ class AuthRepo {
   Future<void> cleanUserDataFromSharedPrefs() async {
     await errorHandler(tryLogic: () async {
       final sharedPreferences = await SharedPreferences.getInstance();
-      final isRemoved =
-          await sharedPreferences.remove(Strings.userDataKeySharedPrefrences);
-      print('************* sharedPreferences.remove isRemoved *************');
-      print(isRemoved);
+      await sharedPreferences.remove(Strings.userDataKeySharedPrefrences);
     });
   }
 
@@ -35,11 +32,8 @@ class AuthRepo {
       Strings.userDataKeySharedPrefrences,
     );
     if (getedUserData == null) {
-      print('************* CANT FIND USER DATA *************');
       return null;
     }
-    print('******************* GETTED USER DATA *******************');
-    print(User.fromJson(json.decode(getedUserData)).getUserData());
     return User.fromJson(json.decode(getedUserData));
   }
 
@@ -49,7 +43,6 @@ class AuthRepo {
     bool? isSignIn,
   }) async {
     await errorHandler(tryLogic: () async {
-      print('************_saveUserDataInPrefs Called ************');
       final sharedPreferences = await SharedPreferences.getInstance();
 
       if (isSignIn == true) {

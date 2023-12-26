@@ -174,23 +174,15 @@ class CartController extends GetxController {
 
   List<OrderedProduct> _prepareOrderProducts() {
     final List<OrderedProduct> result = [];
-    try {
-      for (var i = 0; i < _cartProducts.length; i++) {
-        final currentProduct = _cartProducts[i].data() as Map<String, dynamic>;
-        final currentProductQuantity =
-            _currentUserCart?.cart[currentProduct['id'].toString()];
-        print(_currentUserCart?.cart);
-        print(' ................. currentProductQuantity ....................');
-        print(currentProductQuantity);
-        final orderedProduct = OrderedProduct.fromJson(
-          currentProduct,
-          quantity: currentProductQuantity,
-        );
-        print(orderedProduct);
-        result.add(orderedProduct);
-      }
-    } catch (e) {
-      print(e.toString());
+    for (var i = 0; i < _cartProducts.length; i++) {
+      final currentProduct = _cartProducts[i].data() as Map<String, dynamic>;
+      final currentProductQuantity =
+          _currentUserCart?.cart[currentProduct['id'].toString()];
+      final orderedProduct = OrderedProduct.fromJson(
+        currentProduct,
+        quantity: currentProductQuantity,
+      );
+      result.add(orderedProduct);
     }
     return result;
   }
@@ -198,9 +190,7 @@ class CartController extends GetxController {
   Future<void> makeOrder() async {
     try {
       final orderdProducts = _prepareOrderProducts();
-      print('GOT HERE');
       await OrderController.get.addOrder(orderdProducts, _cartAmount);
-      print('GOT HERE');
       await _cartRepo.cleanUpUserCart();
       _currentUserCart?.cart = {};
       _cartProducts = [];

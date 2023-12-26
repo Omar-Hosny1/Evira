@@ -18,15 +18,11 @@ class WishlistRepo {
   Future<UserWishlist?> getUserWishlistFromRepo() async {
     return await errorHandler<UserWishlist?>(tryLogic: () async {
       final userEmail = AuthController.get.userData!.getEmail!;
-      print('****************** USER EMAIL ***************');
-      print(userEmail);
       final userWishlistDoc = await wishlistDS.getUserWishlist(userEmail);
       if (userWishlistDoc == null) {
         return null;
       }
       final userWishlistData = userWishlistDoc.data() as Map<String, dynamic>;
-      print('*************************** UserWishlist ***************** ');
-      print(UserWishlist.fromJson(userWishlistData).toJson());
       return UserWishlist.fromJson(userWishlistData);
     });
   }

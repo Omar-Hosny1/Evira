@@ -10,14 +10,9 @@ class CartDS {
   Future<void> addToCart(String userEmail, String productId) async {
     try {
       final userCart = await getUserCart(userEmail);
-      print('******************* addToCart CALLED ********************');
-      // Has Wishlist
       if (userCart != null) {
-        print('****************** HAS Cart ******************');
         final currentCart = (userCart.data()
             as Map)[Strings.productsMapKeyForCartDocument] as Map;
-        print('****************** currentCart ******************');
-        print(currentCart);
         if (currentCart[productId] != null) {
           final updatedCart = {
             ...currentCart,
@@ -29,14 +24,11 @@ class CartDS {
           return;
         }
         final updatedCart = {...currentCart, productId: 1};
-        print('****************** updatedCart ******************');
-        print(updatedCart);
         await _cartCollection.doc(userCart.id).update(
           {Strings.productsMapKeyForCartDocument: updatedCart},
         );
         return;
       }
-      print('*************** ADDING ***************');
       await _cartCollection.add({
         Strings.userEmailKeyForCartDocument: userEmail,
         Strings.productsMapKeyForCartDocument: {productId: 1},
@@ -76,18 +68,13 @@ class CartDS {
       if (userCart == null) {
         return;
       }
-      print('****************** HAS Cart ******************');
       final currentCart = (userCart.data()
           as Map)[Strings.productsMapKeyForCartDocument] as Map;
-      print('****************** currentCart ******************');
-      print(currentCart);
       if (currentCart[productId] == null) {
         return;
       }
       if (currentCart[productId] == 1) {
         currentCart.remove(productId);
-        print('****************** currentCart AFTER DELETE ******************');
-        print(currentCart);
         await _cartCollection.doc(userCart.id).update(
           {Strings.productsMapKeyForCartDocument: currentCart},
         );
@@ -110,8 +97,6 @@ class CartDS {
       if (userQuerySnapshot.docs.length.isEqual(0)) {
         return null;
       }
-      print('******************* userQuerySnapshot *******************');
-      print(userQuerySnapshot.docs[0].data());
       return userQuerySnapshot.docs[0];
     } catch (e) {
       rethrow;

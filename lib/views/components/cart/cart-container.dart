@@ -12,8 +12,6 @@ class CartContainer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Widget buildCart(CartController controller) {
-      print('0000000000000000000 controller.cartProducts.length');
-      print(controller.cartProducts.length);
       if (controller.cartProducts.isEmpty) {
         return const Center(
           child: Text('Your Cart is Empty'),

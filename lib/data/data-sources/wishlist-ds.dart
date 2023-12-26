@@ -17,8 +17,6 @@ class WishlistDS {
       if (userQuerySnapshot.docs.length.isEqual(0)) {
         return null;
       }
-      print('******************* userQuerySnapshot *******************');
-      print(userQuerySnapshot.docs[0].data());
       return userQuerySnapshot.docs[0];
     } catch (e) {
       rethrow;
@@ -62,7 +60,6 @@ class WishlistDS {
         {Strings.productsMapKeyForWishlistDocument: currentWishlist},
       );
     } catch (e) {
-      print('ERROR ${e.toString()}');
       rethrow;
     }
   }

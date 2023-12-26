@@ -203,7 +203,6 @@ class SignUp extends StatelessWidget {
                       dropDownItems: Strings.gendersArray,
                       onChange: (val) {
                         _enteredUserData.gender = val.toLowerCase();
-                        print(val);
                       }),
                   SizedBox(
                     height: 10,

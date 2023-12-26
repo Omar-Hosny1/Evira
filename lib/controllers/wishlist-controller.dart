@@ -29,7 +29,6 @@ class WishlistController extends GetxController {
   Future<void> getUserWishlist() async {
     final userWishlist = await _wishlistRepo.getUserWishlistFromRepo();
     if (userWishlist == null || userWishlist.wishlist.isEmpty) {
-      print('******************** userWishlist is Null ********************');
       return;
     }
     _currentUserWishlist = userWishlist;
@@ -37,8 +36,6 @@ class WishlistController extends GetxController {
       userWishlist.wishlist.keys.map((e) => int.parse(e)).toList(),
     );
     _wishlistProducts = data.docs;
-    print('*************** previewed _wishlistProducts ***********');
-    print(_wishlistProducts);
   }
 
   Future<void> removeFromWishlist(

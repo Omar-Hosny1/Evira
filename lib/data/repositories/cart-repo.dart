@@ -44,8 +44,6 @@ class CartRepo {
         return null;
       }
       final userCartData = userCartDoc.data() as Map<String, dynamic>;
-      print('*************************** UserCart ***************** ');
-      print(UserCart.fromJson(userCartData).toJson());
       return UserCart.fromJson(userCartData);
     });
   }

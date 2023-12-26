@@ -1,4 +1,3 @@
-import 'package:evira/data/data-sources/order-ds.dart';
 import 'package:evira/data/models/firebase-models/user-orders.dart';
 import 'package:evira/data/models/orderd-product.dart';
 import 'package:evira/data/repositories/order-repo.dart';
@@ -11,7 +10,7 @@ class OrderController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _orderRepo = OrderRepo(orderDS: OrderDS());
+    _orderRepo = OrderRepo.instance;
   }
 
   Future<void> addOrder(

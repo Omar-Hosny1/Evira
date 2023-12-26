@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/products-controller.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
-import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/data/repositories/auth-repo.dart';
+import 'package:evira/data/repositories/cart-repo.dart';
+import 'package:evira/data/repositories/order-repo.dart';
+import 'package:evira/data/repositories/wishlist-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:evira/utils/helpers/snack-bar.dart';
 import 'package:evira/views/screens/auth/sign-in.dart';
@@ -33,7 +35,7 @@ class AuthController extends GetxController {
   }
 
   AuthController() {
-    _authRepository = AuthRepo(authDataSource: AuthDS());
+    _authRepository = AuthRepo.instance;
   }
 
   Future<void> signUp(User user) async {
@@ -87,25 +89,31 @@ class AuthController extends GetxController {
     print(userData!.getUserData());
   }
 
+  bool wasSignedIn(User? user) {
+    if (user == null ||
+        user.getTokenExpiresIn == null ||
+        user.getToken == null) {
+      return false;
+    }
+    final expiresIn = DateTime.parse(user.getTokenExpiresIn!);
+
+    if (expiresIn.isBefore(DateTime.now())) {
+      return false;
+    }
+    return true;
+  }
+
   Future<String> getInitialRoute() async {
     try {
       final gettedUserDataFromShared =
           await _authRepository.getUserDataFromSharedPrefs();
-      if (gettedUserDataFromShared == null ||
-          gettedUserDataFromShared.getTokenExpiresIn == null ||
-          gettedUserDataFromShared.getToken == null) {
+      if (wasSignedIn(gettedUserDataFromShared) == false) {
         await _authRepository.cleanUserDataFromSharedPrefs();
-        return SignUp.routeName;
-      }
 
-      final expiresIn =
-          DateTime.parse(gettedUserDataFromShared.getTokenExpiresIn!);
-
-      if (expiresIn.isBefore(DateTime.now())) {
-        await _authRepository.cleanUserDataFromSharedPrefs();
         resetAllPermenanrControllers();
         return SignUp.routeName;
       }
+
       await _getUserDataFromPrefsAndSetCurrentUserData();
       await ProductController.get.fetchCartAndWishlistData();
       return Home.routeName;
@@ -149,6 +157,7 @@ class AuthController extends GetxController {
     ProductController.get.resetProductsController();
     CartController.get.resetCartController();
     WishlistController.get.resetWishlistController();
+    resetAuthController();
   }
 
   Future<void> logOut() async {
@@ -157,5 +166,26 @@ class AuthController extends GetxController {
     Get.offAllNamed(SignUp.routeName);
     userData = null;
     _authTimer = null;
+  }
+
+  resetAuthController() {
+    userData = null;
+    _authTimer = null;
+  }
+
+  Future<void> deleteAccount() async {
+    print('GOT HERE 1');
+    await CartRepo.instance.deleteUserCart();
+    print('GOT HERE 2');
+    await OrderRepo.instance.deleteUserOrders();
+    print('GOT HERE 3');
+    await WishlistRepo.instance.deleteUserOrders();
+    print('GOT HERE 4');
+    await _authRepository.deleteAccount();
+    print('GOT HERE 5');
+    await _authRepository.cleanUserDataFromSharedPrefs();
+
+    resetAllPermenanrControllers();
+    Get.offAllNamed(SignUp.routeName);
   }
 }

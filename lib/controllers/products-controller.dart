@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/controllers/cart-controller.dart';
 import 'package:evira/controllers/wishlist-controller.dart';
-import 'package:evira/data/data-sources/product-ds.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/product-repo.dart';
 import 'package:evira/utils/constants/strings.dart';
@@ -21,7 +20,7 @@ class ProductController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    _productRepository = ProductRepository(ProductDS());
+    _productRepository = ProductRepository.instance;
   }
 
   resetProductsController() {

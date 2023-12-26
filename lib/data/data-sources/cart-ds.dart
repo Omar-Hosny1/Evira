@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/strings.dart';
 import 'package:get/get.dart';
 
@@ -132,5 +133,13 @@ class CartDS {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> deleteUserCart(User user) async {
+    final userData = await getUserCart(user.getEmail!);
+    if (userData == null) {
+      return;
+    }
+    await _cartCollection.doc(userData.id).delete();
   }
 }

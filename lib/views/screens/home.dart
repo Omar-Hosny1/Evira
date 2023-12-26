@@ -67,7 +67,7 @@ class Home extends StatelessWidget {
                       AsyncSnapshot<QuerySnapshot> snapshot,
                     ) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
@@ -83,7 +83,7 @@ class Home extends StatelessWidget {
                       final data = snapshot.data?.docs;
 
                       if (data == null || data.isEmpty) {
-                        return Center(child: Text('No Products Found'));
+                        return const Center(child: Text('No Products Found'));
                       }
 
                       return ProductsGrid(

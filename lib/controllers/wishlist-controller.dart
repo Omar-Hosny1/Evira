@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evira/controllers/products-controller.dart';
-import 'package:evira/data/data-sources/wishlist-ds.dart';
 import 'package:evira/data/models/firebase-models/user-wishlist.dart';
 import 'package:evira/data/models/product.dart';
 import 'package:evira/data/repositories/wishlist-repo.dart';
@@ -18,7 +17,7 @@ class WishlistController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _wishlistRepo = WishlistRepo(wishlistDS: WishlistDS());
+    _wishlistRepo = WishlistRepo.instance;
   }
 
   UserWishlist? get currentUserWishlist {

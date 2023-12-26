@@ -1,14 +1,23 @@
 import 'dart:convert';
 
+import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/auth-ds.dart';
 import 'package:evira/data/models/user.dart';
 import 'package:evira/utils/constants/strings.dart';
+import 'package:evira/utils/constants/values.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
   final AuthDS authDataSource;
-  AuthRepo({required this.authDataSource});
+  AuthRepo._(this.authDataSource);
+
+  static AuthRepo? _instance;
+
+  static AuthRepo get instance {
+    _instance ??= AuthRepo._(AuthDS());
+    return _instance!;
+  }
 
   Future<void> cleanUserDataFromSharedPrefs() async {
     await errorHandler(tryLogic: () async {
@@ -81,7 +90,7 @@ class AuthRepo {
       tryLogic: () async {
         await authDataSource.signUp(user);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.longOperationsSecondsToCancle,
     );
   }
 
@@ -97,7 +106,17 @@ class AuthRepo {
         await authDataSource.updateUserData(user);
         await _saveUserDataInPrefs(user, user.getToken!);
       },
-      secondsToCancel: 45,
+      secondsToCancel: Values.longOperationsSecondsToCancle,
+    );
+  }
+
+  Future<void> deleteAccount() async {
+    await errorHandler(
+      tryLogic: () async {
+        final user = AuthController.get.userData!;
+        await authDataSource.deleteAccount(user);
+      },
+      secondsToCancel: Values.medlongOperationsSecondsToCancle,
     );
   }
 }

@@ -5,15 +5,8 @@ import 'package:evira/utils/constants/strings.dart';
 import './data.dart';
 
 class ProductDS {
-  ProductDS._privateConstructor();
-  static final ProductDS _dataSource = ProductDS._privateConstructor();
   final CollectionReference _productsCollection =
       FirebaseFirestore.instance.collection(Strings.productsCollectionName);
-
-  factory ProductDS() {
-    return _dataSource;
-  }
-
   Stream<QuerySnapshot<Object?>> listenToProducts() {
     return _productsCollection.snapshots();
   }
@@ -40,11 +33,6 @@ class ProductDS {
     da.forEach((key, value) async {
       await _productsCollection.add(value);
     });
-    // ignore: unused_local_variable
-    // for (var i = 1; i < 104; i++) {
-    //   print(i);
-    //   print(da[i.toString()]);
-    // }
   }
 
   Future<QuerySnapshot<Object?>> getWishlistProducts(List<int> ids) async {

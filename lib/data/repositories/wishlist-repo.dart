@@ -1,11 +1,19 @@
 import 'package:evira/controllers/auth-controller.dart';
 import 'package:evira/data/data-sources/wishlist-ds.dart';
+import 'package:evira/utils/constants/values.dart';
 import 'package:evira/utils/helpers/error-handler.dart';
 import '../models/firebase-models/user-wishlist.dart';
 
 class WishlistRepo {
   final WishlistDS wishlistDS;
-  WishlistRepo({required this.wishlistDS});
+  WishlistRepo._(this.wishlistDS);
+
+  static WishlistRepo? _instance;
+
+  static WishlistRepo get instance {
+    _instance ??= WishlistRepo._(WishlistDS());
+    return _instance!;
+  }
 
   Future<UserWishlist?> getUserWishlistFromRepo() async {
     return await errorHandler<UserWishlist?>(tryLogic: () async {
@@ -35,5 +43,15 @@ class WishlistRepo {
       final userEmail = AuthController.get.userData!.getEmail!;
       await wishlistDS.addToWishlist(userEmail, productId);
     });
+  }
+
+  Future<void> deleteUserOrders() async {
+    await errorHandler(
+      tryLogic: () async {
+        final user = AuthController.get.userData!;
+        await wishlistDS.deleteUserWishlist(user);
+      },
+      secondsToCancel: Values.medlongOperationsSecondsToCancle,
+    );
   }
 }

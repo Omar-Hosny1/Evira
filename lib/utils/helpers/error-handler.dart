@@ -12,7 +12,7 @@ String formatErrorMessage(String errMsg) {
 Future<T> errorHandler<T>(
     {required Future<T> Function() tryLogic, int? secondsToCancel}) async {
   try {
-    secondsToCancel ??= 10;
+    secondsToCancel ??= 17;
     return await tryLogic().timeout(Duration(seconds: secondsToCancel),
         onTimeout: () {
       throw FirebaseException(

@@ -15,7 +15,6 @@ class OrderDS {
     List<OrderedProduct> products,
     double totalAmount,
   ) async {
-    try {
       final FSO.Order thePreparedOrder = FSO.Order(
         date: DateTime.now().toIso8601String(),
         products: products,
@@ -36,13 +35,9 @@ class OrderDS {
         email: userEmail,
       );
       await _orderCollection.add(newUserOrders.toJson());
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<QueryDocumentSnapshot<Object?>?> getOrders(String userEmail) async {
-    try {
       final userQuerySnapshot = await _orderCollection
           .where(Strings.userEmailKeyForOrderDocument, isEqualTo: userEmail)
           .get();
@@ -50,9 +45,6 @@ class OrderDS {
         return null;
       }
       return userQuerySnapshot.docs[0];
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<void> deleteUserOrders(User user) async {

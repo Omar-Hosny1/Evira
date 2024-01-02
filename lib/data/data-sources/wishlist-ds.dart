@@ -10,7 +10,6 @@ class WishlistDS {
   Future<QueryDocumentSnapshot<Object?>?> getUserWishlist(
     String userEmail,
   ) async {
-    try {
       final userQuerySnapshot = await _wishlistCollection
           .where(Strings.userEmailKeyForWishlistDocument, isEqualTo: userEmail)
           .get();
@@ -18,13 +17,10 @@ class WishlistDS {
         return null;
       }
       return userQuerySnapshot.docs[0];
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<void> addToWishlist(String userEmail, String productId) async {
-    try {
+    
       final userWishlist = await getUserWishlist(userEmail);
       if (userWishlist != null) {
         final currentWishlist = (userWishlist.data()
@@ -42,13 +38,9 @@ class WishlistDS {
         Strings.userEmailKeyForWishlistDocument: userEmail,
         Strings.productsMapKeyForWishlistDocument: {productId: true},
       });
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<void> removeFromWishlist(String userEmail, String productId) async {
-    try {
       final userWishlist = await getUserWishlist(userEmail);
       if (userWishlist == null) {
         return;
@@ -59,9 +51,6 @@ class WishlistDS {
       await _wishlistCollection.doc(userWishlist.id).update(
         {Strings.productsMapKeyForWishlistDocument: currentWishlist},
       );
-    } catch (e) {
-      rethrow;
-    }
   }
 
   Future<void> deleteUserWishlist(User user) async {
